@@ -1,0 +1,5 @@
+target/
+.idea/
+demo/
+node_modules/
+frontend/js/src/main/resources/bundle.js

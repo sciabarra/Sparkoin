@@ -1,0 +1,19 @@
+spark-master:
+  image: sparkoin/spark:1
+  domainname: loc
+  ports:
+    - "8081:8080"
+    - "7077:7077"
+  command: bash master.sh
+
+spark-slave:
+  image: sparkoin/spark:1
+  domainname: loc
+  command: bash slave.sh
+
+zeppelin:
+  image: sparkoin/zeppelin:1
+  domainname: loc
+  command: bash zeppelin.sh
+  ports:
+    - "8080:8080"

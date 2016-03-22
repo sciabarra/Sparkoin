@@ -1,0 +1,37 @@
+spark0:
+  hostname: spark0 
+  extends:
+    file: backend/services/spark.yml
+    service: spark-master 
+
+spark1:
+  hostname: spark1 
+  extends:
+    file: backend/services/spark.yml
+    service: spark-slave
+  links:
+    - "spark0:spark-master.loc"
+
+zeppelin:
+  hostname: zeppelin
+  extends: 
+    file: backend/services/spark.yml
+    service: zeppelin
+  links: 
+    - "spark0:spark-master.loc"
+  volumes:
+    - "./notebook:/app/zeppelin/notebook"
+ 
+kafka0:
+  hostname: kafka0
+  extends:
+    file: backend/services/kafka.yml
+    service: zookeeper
+
+kafka1:
+  hostname: kafka1
+  links:
+    - "kafka0:zookeeper.loc"
+  extends:
+    file: backend/services/kafka.yml
+    service: kafka

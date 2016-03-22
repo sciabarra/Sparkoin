@@ -1,0 +1,4 @@
+IP=${2:-192.168.99.10}
+cd backend/services
+sh 1-download.sh
+sh 2-build.sh $IP

@@ -1,0 +1,13 @@
+zookeeper:
+  image: sparkoin/kafka:1
+  command: bash zookeper.sh
+  domainname: loc
+  ports:
+    - "2181:2181"
+
+kafka:
+  image: sparkoin/kafka:1
+  command: bash kafka.sh
+  domainname: loc
+  ports:
+    - "9092:9092"
