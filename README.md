@@ -2,6 +2,8 @@
 
 This is sparkoin, an engine to analyze the Blockchain with Spark
 
+Current status of the project is very early development. Nothing usable yet.
+
 ## Install
 
 So far, it is all tested only on OSX with Docker Toolbox 
