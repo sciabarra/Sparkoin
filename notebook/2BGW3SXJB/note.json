@@ -1,0 +1,106 @@
+{
+  "paragraphs": [
+    {
+      "text": "%cassandra\ncreate keyspace test with replication\u003d {\u0027class\u0027: \u0027SimpleStrategy\u0027, \u0027replication_factor\u0027 : 1};\n",
+      "dateUpdated": "Mar 23, 2016 9:13:33 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1458751179346_-176307162",
+      "id": "20160323-163939_1240555093",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "com.datastax.driver.core.exceptions.AlreadyExistsException: Keyspace test already exists\n\tat com.datastax.driver.core.exceptions.AlreadyExistsException.copy(AlreadyExistsException.java:85)\n\tat com.datastax.driver.core.DefaultResultSetFuture.extractCauseFromExecutionException(DefaultResultSetFuture.java:269)\n\tat com.datastax.driver.core.DefaultResultSetFuture.getUninterruptibly(DefaultResultSetFuture.java:183)\n\tat com.datastax.driver.core.AbstractSession.execute(AbstractSession.java:52)\n\tat org.apache.zeppelin.cassandra.EnhancedSession.execute(EnhancedSession.scala:104)\n\tat org.apache.zeppelin.cassandra.InterpreterLogic$$anonfun$8.apply(InterpreterLogic.scala:151)\n\tat org.apache.zeppelin.cassandra.InterpreterLogic$$anonfun$8.apply(InterpreterLogic.scala:151)\n\tat scala.collection.immutable.List.map(List.scala:273)\n\tat org.apache.zeppelin.cassandra.InterpreterLogic.interpret(InterpreterLogic.scala:151)\n\tat org.apache.zeppelin.cassandra.CassandraInterpreter.interpret(CassandraInterpreter.java:304)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:300)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:169)\n\tat org.apache.zeppelin.scheduler.ParallelScheduler$JobRunner.run(ParallelScheduler.java:157)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)\n\tat java.lang.Thread.run(Thread.java:745)\nCaused by: com.datastax.driver.core.exceptions.AlreadyExistsException: Keyspace test already exists\n\tat com.datastax.driver.core.exceptions.AlreadyExistsException.copy(AlreadyExistsException.java:85)\n\tat com.datastax.driver.core.Responses$Error.asException(Responses.java:104)\n\tat com.datastax.driver.core.DefaultResultSetFuture.onSet(DefaultResultSetFuture.java:118)\n\tat com.datastax.driver.core.RequestHandler.setFinalResult(RequestHandler.java:183)\n\tat com.datastax.driver.core.RequestHandler.access$2300(RequestHandler.java:45)\n\tat com.datastax.driver.core.RequestHandler$SpeculativeExecution.setFinalResult(RequestHandler.java:748)\n\tat com.datastax.driver.core.RequestHandler$SpeculativeExecution.onSet(RequestHandler.java:573)\n\tat com.datastax.driver.core.Connection$Dispatcher.channelRead0(Connection.java:991)\n\tat com.datastax.driver.core.Connection$Dispatcher.channelRead0(Connection.java:913)\n\tat io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:105)\n\tat io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:339)\n\tat io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:324)\n\tat io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:254)\n\tat io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:339)\n\tat io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:324)\n\tat io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:103)\n\tat io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:339)\n\tat io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:324)\n\tat io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:242)\n\tat io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:339)\n\tat io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:324)\n\tat io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:847)\n\tat io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:131)\n\tat io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:511)\n\tat io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:468)\n\tat io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:382)\n\tat io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:354)\n\tat io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:111)\n\t... 1 more\nCaused by: com.datastax.driver.core.exceptions.AlreadyExistsException: Keyspace test already exists\n\tat com.datastax.driver.core.Responses$Error$1.decode(Responses.java:69)\n\tat com.datastax.driver.core.Responses$Error$1.decode(Responses.java:37)\n\tat com.datastax.driver.core.Message$ProtocolDecoder.decode(Message.java:213)\n\tat com.datastax.driver.core.Message$ProtocolDecoder.decode(Message.java:204)\n\tat io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:89)\n\t... 13 more\n"
+      },
+      "dateCreated": "Mar 23, 2016 4:39:39 PM",
+      "dateStarted": "Mar 23, 2016 9:13:08 PM",
+      "dateFinished": "Mar 23, 2016 9:13:08 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%cassandra\nuse test; \ncreate table t(i int primary key);",
+      "dateUpdated": "Mar 23, 2016 9:14:47 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1458751210195_-1747759587",
+      "id": "20160323-164010_987924147",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\n\n\u003cdiv class\u003d\"container\"\u003e\n\u003cdiv class\u003d\"row text-center\"\u003e\n\u003ch4\u003eNo Result\u003c/h4\u003e\n\u003c/div\u003e\n\u003cbr/\u003e\n    \u003cdiv class\u003d\"row\"\u003e\n    \u003cdiv class\u003d\"col-md-3\"\u003e\u003c/div\u003e\n    \u003cdiv class\u003d\"col-md-6 col-offset-md-3 table-responsive table-bordered\"\u003e\n        \u003ctable class\u003d\"table\"\u003e\n            \u003ccaption\u003e\u003ch5\u003eLast query execution info\u003c/h5\u003e\u003c/caption\u003e\n            \u003cthead\u003e\n                \u003ctr\u003e\n                    \u003cth\u003eInfo\u003c/th\u003e\n                    \u003cth\u003eValue\u003c/th\u003e\n                \u003c/tr\u003e\n            \u003c/thead\u003e\n            \u003ctbody\u003e\n                \u003ctr\u003e\n                    \u003ctd\u003eStatement\u003c/td\u003e\n                    \u003ctd\u003ecreate table t(i int primary key);\u003c/td\u003e\n                \u003c/tr\u003e\n                \u003ctr\u003e\n                    \u003ctd\u003eAchieved Consistency\u003c/td\u003e\n                    \u003ctd\u003eN/A\u003c/td\u003e\n                \u003c/tr\u003e\n                \u003ctr\u003e\n                    \u003ctd\u003eTried Hosts\u003c/td\u003e\n                    \u003ctd\u003ecassandra.loc172.17.0.6:9042\u003c/td\u003e\n                \u003c/tr\u003e\n                \u003ctr\u003e\n                    \u003ctd\u003eQueried Hosts\u003c/td\u003e\n                    \u003ctd\u003ecassandra.loc172.17.0.6:9042\u003c/td\u003e\n                \u003c/tr\u003e\n                \u003ctr\u003e\n                    \u003ctd\u003eSchema In Agreement\u003c/td\u003e\n                    \u003ctd\u003etrue\u003c/td\u003e\n                \u003c/tr\u003e\n            \u003c/tbody\u003e\n        \u003c/table\u003e\n    \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e"
+      },
+      "dateCreated": "Mar 23, 2016 4:40:10 PM",
+      "dateStarted": "Mar 23, 2016 9:14:47 PM",
+      "dateFinished": "Mar 23, 2016 9:14:48 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1458767606510_-625898401",
+      "id": "20160323-211326_279644101",
+      "dateCreated": "Mar 23, 2016 9:13:26 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Cassandra Test",
+  "id": "2BGW3SXJB",
+  "angularObjects": {
+    "2BGU13NK9": [],
+    "2BFHBE472": [],
+    "2BE4T2Q8M": [],
+    "2BGJUR4UV": [],
+    "2BDKBE2WW": [],
+    "2BG2JFGD9": [],
+    "2BDR6QZVE": [],
+    "2BFNFGNR7": [],
+    "2BEGZ6XGZ": [],
+    "2BE58PESV": [],
+    "2BF3AYM5P": [],
+    "2BE4DDT7M": [],
+    "2BGKAPPSH": [],
+    "2BGU8X4T3": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

@@ -1,0 +1,6 @@
+zeppelin:
+  image: sparkoin/zeppelin:1
+  domainname: loc
+  command: bash zeppelin.sh
+  ports:
+    - "8080:8080"

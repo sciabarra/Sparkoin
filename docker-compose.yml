@@ -4,24 +4,14 @@ spark0:
     file: backend/services/spark.yml
     service: spark-master 
 
-spark1:
-  hostname: spark1 
-  extends:
-    file: backend/services/spark.yml
-    service: spark-slave
-  links:
-    - "spark0:spark-master.loc"
+#spark1:
+#  hostname: spark1
+#  extends:
+#    file: backend/services/spark.yml
+#    service: spark-slave
+#  links:
+#    - "spark0:spark-master.loc"
 
-zeppelin:
-  hostname: zeppelin
-  extends: 
-    file: backend/services/spark.yml
-    service: zeppelin
-  links: 
-    - "spark0:spark-master.loc"
-  volumes:
-    - "./notebook:/app/zeppelin/notebook"
- 
 kafka0:
   hostname: kafka0
   extends:
@@ -35,3 +25,23 @@ kafka1:
   extends:
     file: backend/services/kafka.yml
     service: kafka
+
+cassandra0:
+  hostname: cassandra0
+  extends:
+    file: backend/services/cassandra.yml
+    service: cassandra
+
+zeppelin:
+  hostname: zeppelin
+  extends: 
+    file: backend/services/zeppelin.yml
+    service: zeppelin
+  links: 
+    - "spark0:spark-master.loc"
+    - "cassandra0:cassandra.loc"
+    - "kafka0:zookeper.loc"
+    - "kafka1:kafka.loc"
+  volumes:
+    - "./notebook:/app/zeppelin/notebook"
+ 

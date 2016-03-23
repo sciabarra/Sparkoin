@@ -33,5 +33,6 @@ It will start:
 - kafka in port 9092 with zookeper in port 2818
 - spark in port 7077 with the UI in port 8081
 - zeppelin in port 8080
+- cassandra in port 9042 and 9160
 
 

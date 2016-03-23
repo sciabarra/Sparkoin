@@ -1,8 +1,42 @@
 {
   "paragraphs": [
     {
-      "text": "2+2",
-      "dateUpdated": "Mar 22, 2016 4:12:27 PM",
+      "text": "%dep\nz.reset()\nz.load(\"org.apache.spark:spark-streaming-kafka_2.10:1.6.1\")\nz.load(\"org.apache.kafka:kafka-clients:0.8.2.1\")",
+      "dateUpdated": "Mar 22, 2016 6:26:45 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1458669253901_2010639288",
+      "id": "20160322-175413_2005770718",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res0: org.apache.zeppelin.spark.dep.Dependency \u003d org.apache.zeppelin.spark.dep.Dependency@2080a44c\n"
+      },
+      "dateCreated": "Mar 22, 2016 5:54:13 PM",
+      "dateStarted": "Mar 22, 2016 6:26:45 PM",
+      "dateFinished": "Mar 22, 2016 6:26:57 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import _root_.kafka.serializer.StringDecoder\nimport org.apache.spark.streaming._\nimport org.apache.spark.streaming.kafka._\n\nval ssc \u003d new StreamingContext(sc, Seconds(2))\n\nval kafkaParams \u003d Map[String, String](\"metadata.broker.list\" -\u003e \"kafka1:9092\")\n\nval topicsSet \u003d \"hello\".split(\",\").toSet\n\nval messages \u003d KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](\n      ssc, kafkaParams, topicsSet)\n      \nmessages.foreach { rdd \u003d\u003e\n  println(rdd)\n}\nssc.start()",
+      "dateUpdated": "Mar 22, 2016 7:19:42 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -27,46 +61,11 @@
       "result": {
         "code": "SUCCESS",
         "type": "TEXT",
-        "msg": "res0: Int \u003d 4\n"
+        "msg": "import _root_.kafka.serializer.StringDecoder\nimport org.apache.spark.streaming._\nimport org.apache.spark.streaming.kafka._\nssc: org.apache.spark.streaming.StreamingContext \u003d org.apache.spark.streaming.StreamingContext@29e94819\nkafkaParams: scala.collection.immutable.Map[String,String] \u003d Map(metadata.broker.list -\u003e kafka1:9092)\ntopicsSet: scala.collection.immutable.Set[String] \u003d Set(hello)\nmessages: org.apache.spark.streaming.dstream.InputDStream[(String, String)] \u003d org.apache.spark.streaming.kafka.DirectKafkaInputDStream@153e2968\nwarning: there were 1 deprecation warning(s); re-run with -deprecation for details\nKafkaRDD[0] at createDirectStream at \u003cconsole\u003e:77\n"
       },
       "dateCreated": "Mar 22, 2016 3:14:20 PM",
-      "dateStarted": "Mar 22, 2016 4:12:27 PM",
-      "dateFinished": "Mar 22, 2016 4:12:58 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "3*3",
-      "dateUpdated": "Mar 22, 2016 4:13:06 PM",
-      "config": {
-        "colWidth": 12.0,
-        "graph": {
-          "mode": "table",
-          "height": 300.0,
-          "optionOpen": false,
-          "keys": [],
-          "values": [],
-          "groups": [],
-          "scatter": {}
-        },
-        "enabled": true,
-        "editorMode": "ace/mode/scala",
-        "tableHide": false
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "jobName": "paragraph_1458659666711_-1125096237",
-      "id": "20160322-151426_1290028241",
-      "result": {
-        "code": "SUCCESS",
-        "type": "TEXT",
-        "msg": "res2: Int \u003d 9\n"
-      },
-      "dateCreated": "Mar 22, 2016 3:14:26 PM",
-      "dateStarted": "Mar 22, 2016 4:13:07 PM",
-      "dateFinished": "Mar 22, 2016 4:13:07 PM",
+      "dateStarted": "Mar 22, 2016 7:19:42 PM",
+      "dateFinished": "Mar 22, 2016 7:19:46 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -76,31 +75,33 @@
         "params": {},
         "forms": {}
       },
-      "jobName": "paragraph_1458663186976_1847063596",
-      "id": "20160322-161306_388081044",
-      "dateCreated": "Mar 22, 2016 4:13:06 PM",
+      "jobName": "paragraph_1458672872183_1476173207",
+      "id": "20160322-185432_1713867549",
+      "dateCreated": "Mar 22, 2016 6:54:32 PM",
       "status": "READY",
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "Test",
+  "name": "Kafka Streaming",
   "id": "2BGZ5A8ES",
   "angularObjects": {
-    "2BFWFZJ1V": [],
-    "2BG8S5FJC": [],
-    "2BENB1CYG": [],
-    "2BEJY7URW": [],
-    "2BFE9ZJNV": [],
-    "2BGZ8PUPN": [],
-    "2BGDYM1AE": [],
-    "2BFT8RNGM": [],
-    "2BETKJCZ8": [],
-    "2BE5TJ663": [],
-    "2BGDJ16JP": [],
-    "2BDYDHKS2": [],
-    "2BH3JMQ6T": [],
-    "2BE36R5MT": []
+    "2BGU13NK9": [],
+    "2BFHBE472": [],
+    "2BE4T2Q8M": [],
+    "2BGJUR4UV": [],
+    "2BDKBE2WW": [],
+    "2BG2JFGD9": [],
+    "2BDR6QZVE": [],
+    "2BFNFGNR7": [],
+    "2BEGZ6XGZ": [],
+    "2BE58PESV": [],
+    "2BF3AYM5P": [],
+    "2BE4DDT7M": [],
+    "2BGKAPPSH": [],
+    "2BGU8X4T3": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }
