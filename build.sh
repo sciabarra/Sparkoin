@@ -1,5 +1,7 @@
+if which docker-machine >/dev/null
+then eval $(docker-machine env sparkoin)
+fi
 docker-compose kill && docker-compose rm
-IP=${1:-192.168.99.99}
-cd backend/services
+cd services
 sh 1-download.sh
-sh 2-build.sh $IP
+sh 2-build.sh 

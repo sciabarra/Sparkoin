@@ -1,5 +1,5 @@
 FROM sparkoin/java:1
-ADD zeppelin-0.5.6-incubating-bin-all.tgz .
+ADD zeppelin-*-bin-all.tgz .
 COPY zeppelin.sh /app/
 RUN mv zeppelin-* zeppelin 
 COPY guava-*.jar /app/zeppelin/interpreter/cassandra

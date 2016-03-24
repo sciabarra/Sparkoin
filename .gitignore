@@ -1,6 +1,10 @@
+*.tgz
+*.tar.gz
+*.zip
+*.jar
+services/java/ip.txt
 target/
 .idea/
-demo/
-node_modules/
-frontend/js/src/main/resources/bundle.js
-backend/services/kafka/ip.txt
+.classpath
+.settings/
+.project

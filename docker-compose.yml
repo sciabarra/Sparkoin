@@ -1,13 +1,13 @@
 spark0:
   hostname: spark0 
   extends:
-    file: backend/services/spark.yml
+    file: services/spark.yml
     service: spark-master 
 
 #spark1:
 #  hostname: spark1
 #  extends:
-#    file: backend/services/spark.yml
+#    file: services/spark.yml
 #    service: spark-slave
 #  links:
 #    - "spark0:spark-master.loc"
@@ -15,7 +15,7 @@ spark0:
 kafka0:
   hostname: kafka0
   extends:
-    file: backend/services/kafka.yml
+    file: services/kafka.yml
     service: zookeeper
 
 kafka1:
@@ -23,19 +23,19 @@ kafka1:
   links:
     - "kafka0:zookeeper.loc"
   extends:
-    file: backend/services/kafka.yml
+    file: services/kafka.yml
     service: kafka
 
 cassandra0:
   hostname: cassandra0
   extends:
-    file: backend/services/cassandra.yml
+    file: services/cassandra.yml
     service: cassandra
 
 zeppelin:
   hostname: zeppelin
   extends: 
-    file: backend/services/zeppelin.yml
+    file: services/zeppelin.yml
     service: zeppelin
   links: 
     - "spark0:spark-master.loc"

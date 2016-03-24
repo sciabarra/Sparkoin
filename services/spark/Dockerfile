@@ -1,5 +1,5 @@
 FROM sparkoin/java:1
-ADD spark-1.6.1-bin-hadoop2.6.tgz .
+ADD spark-*.tgz .
 COPY master.sh slave.sh /app/
 RUN mv spark-* spark  ; chown -Rvf app:app /app
 USER app

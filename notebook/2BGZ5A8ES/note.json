@@ -2,7 +2,7 @@
   "paragraphs": [
     {
       "text": "%dep\nz.reset()\nz.load(\"org.apache.spark:spark-streaming-kafka_2.10:1.6.1\")\nz.load(\"org.apache.kafka:kafka-clients:0.8.2.1\")",
-      "dateUpdated": "Mar 22, 2016 6:26:45 PM",
+      "dateUpdated": "Mar 24, 2016 1:53:52 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -26,11 +26,11 @@
       "result": {
         "code": "SUCCESS",
         "type": "TEXT",
-        "msg": "res0: org.apache.zeppelin.spark.dep.Dependency \u003d org.apache.zeppelin.spark.dep.Dependency@2080a44c\n"
+        "msg": "res0: org.apache.zeppelin.spark.dep.Dependency \u003d org.apache.zeppelin.spark.dep.Dependency@6ed98959\n"
       },
       "dateCreated": "Mar 22, 2016 5:54:13 PM",
-      "dateStarted": "Mar 22, 2016 6:26:45 PM",
-      "dateFinished": "Mar 22, 2016 6:26:57 PM",
+      "dateStarted": "Mar 24, 2016 1:53:52 PM",
+      "dateFinished": "Mar 24, 2016 1:54:23 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
