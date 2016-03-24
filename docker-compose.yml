@@ -44,4 +44,6 @@ zeppelin:
     - "kafka1:kafka.loc"
   volumes:
     - "./notebook:/app/zeppelin/notebook"
+  ports:
+    - "80:8080"
  

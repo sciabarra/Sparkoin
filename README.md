@@ -1,4 +1,4 @@
-# Sparkoin v0.1
+# Easy Zeppelin-Spark-Cassandra-Kafka with Docker
 
 A docker enviroment with Spark, Cassandra, Kafka under Docker.
 
@@ -60,10 +60,14 @@ Then execute:
 ```
 docker-compose up
 ```
+
 It will start:
 
-- kafka in port 9092 with zookeper in port 2818
+- zeppelin in port 80
 - spark in port 7077 with the UI in port 8081
-- zeppelin in port 8080
 - cassandra in port 9042 and 9160
+- kafka in port 9092 with zookeper in port 2818
+
+Access zeppelin with http://192.168.99.99 and start to play. 
+
 
