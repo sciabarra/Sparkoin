@@ -3,3 +3,4 @@ target/
 demo/
 node_modules/
 frontend/js/src/main/resources/bundle.js
+backend/services/kafka/ip.txt
