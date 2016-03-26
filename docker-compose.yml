@@ -46,14 +46,3 @@ zeppelin:
     - "./notebook:/app/zeppelin/notebook"
   ports:
     - "80:8080"
- 
-bs0:
-   hostname: bs0
-   domainname: loc
-   image: sparkoin/bitcoinserver:1
-   ports:
-     - "9091:9091"
-     - "9092:9092"
-     - "9093:9093"
-     - "9094:9094"
-     - "8333:8333"

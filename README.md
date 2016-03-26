@@ -50,5 +50,10 @@ It will start in background (omit -d if you want a foreground start):
 - cassandra in port 9042 and 9160
 - kafka in port 9092 with zookeper in port 2818
 
+
 Access zeppelin with http://192.168.99.99 and start to play. 
 
+
+# What is next
+
+Check README.md in backend for status

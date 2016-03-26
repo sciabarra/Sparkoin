@@ -25,8 +25,8 @@ object SparkConsumerTest extends App {
   val messages = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
     ssc, kafkaParams, topicsSet)
 
-  //messages.count()
-  //messages.print()
+  messages.count()
+  messages.print()
 
   messages.foreachRDD { rdd =>
     println(rdd)
