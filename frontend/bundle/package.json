@@ -1,0 +1,16 @@
+{
+  "name": "bundle",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:sciabarra/Sparkoin.git"
+  },
+  "dependencies": {
+    "browserify": "13.0.0",
+    "jquery-browserify": "1.8.1",
+    "lodash": "4.3.0"
+  },
+  "scripts": {
+    "bundle": "node broserify.js"
+  }
+}

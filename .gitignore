@@ -1,10 +1,11 @@
+services/java/ip.txt
 *.tgz
 *.tar.gz
 *.zip
 *.jar
-services/java/ip.txt
-target/
-.idea/
 .classpath
-.settings/
 .project
+target/
+node_modules/
+.idea/
+.settings/

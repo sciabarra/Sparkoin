@@ -1,18 +1,16 @@
 import sbt.Keys._
 
-name := "Sparkoin"
+name := "sparkoin"
 
 organization := "com.sciabarra.michele"
 
 val r = project.in(file("."))
 
-val b = project.in(file("backend"))
-
 val akkaHttpVersion = "2.0.3"
 
 lazy val f = crossProject.in(file("frontend")).
   settings(
-    name := "jgh-front",
+    name := "sparkoin-front",
     scalaVersion := "2.11.7",
     libraryDependencies ++= Seq(
       "com.lihaoyi" %%% "upickle" % "0.2.8")
@@ -32,11 +30,10 @@ lazy val f = crossProject.in(file("frontend")).
   jsSettings(
     libraryDependencies ++= Seq(
       "org.scala-js" %%% "scalajs-dom" % "0.8.2"
+      //"be.doeraene" %%% "scalajs-jquery" % "0.8.1"
     ),
     persistLauncher in Compile := true,
     jsDependencies ++= Seq(
-      //ProvidedJS / "skulpt.min.js",
-      //ProvidedJS / "skulpt-stdlib.js",
       ProvidedJS / "bundle.js")
   ).enablePlugins(SbtWeb)
 
@@ -48,17 +45,6 @@ lazy val bundle = project.in(file("frontend") / "bundle")
 
 addCommandAlias("bundle", "bundle/bundle")
 
-addCommandAlias("rs", "fJVM/reStart")
+addCommandAlias("rs", "; fJVM/assets ; fJVM/reStart")
 
 addCommandAlias("fo", "fJS/fastOptJS")
-
-scalaVersion := "2.10.5"
-
-libraryDependencies ++= Seq(
-    "org.apache.kafka" % "kafka-clients" % "0.8.2.1"
-  , "org.apache.spark" %% "spark-core" % "1.6.1"
-  , "org.apache.spark" %% "spark-streaming" % "1.6.1"
-  , "org.apache.spark" %% "spark-streaming-kafka" % "1.6.1"
-  //, "ch.qos.logback" % "logback-classic" % "1.1.6"
-)
-
