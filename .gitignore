@@ -1,4 +1,6 @@
 services/java/ip.txt
+frontend/js/src/main/resources/bundle.js
+.idea/
 *.tgz
 *.tar.gz
 *.zip
