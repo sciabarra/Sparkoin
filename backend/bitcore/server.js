@@ -15,6 +15,7 @@ var configuration = {
     ]
 };
 
+var last = -1
 var node = new Node(configuration);
 
 node.start(function () {
@@ -30,29 +31,32 @@ node.on('error', function (err) {
     console.error(err);
 });
 
+/*
 node.services.bitcoind.on('tx', function (txInfo) {
     console.log("tx " + JSON.stringify(txInfo))
 })
-node.services.bitcoind.on('tip', function (blockHash) {
-    console.log("tip " + JSON.stringify(blockHash))
-    node.services.bitcoind.getBlock(blockHash, function (err, blockBuffer) {
-        if (err) {
-            throw err;
-        }
-        var block = bitcore.Block.fromBuffer(blockBuffer);
-        console.log(block);
-/*
-        for (var i in block.transactions) {
-          var transaction = block.transactions[i];
-          console.log(transaction.toJSON()) 
-        }
-*/
-        console.log("===========")
-    });
-  
 
-})
 node.services.bitcoind.on('txleave', function (txLeaveInfo) {
     console.log("txleave " + JSON.stringify(txLeaveInfo))
 })
+*/
+
+node.services.bitcoind.on('tip', function (height) {
+    console.log("tip " +height)
+    while(last < height) {
+       ++last;
+       node.services.bitcoind.getBlock(last, function (err, blockBuffer) {
+        if (err) throw err; 
+        var block = bitcore.Block.fromBuffer(blockBuffer);
+        //console.log(last+":"+block);
+        for (var i in block.transactions) {
+          var transaction = block.transactions[i];
+          console.log(transaction.toJSON()) 
+          console.log("---------------")
+        }
+      })
+   }
+});
+  
+
 
