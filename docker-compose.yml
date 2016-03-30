@@ -3,14 +3,8 @@ spark0:
   extends:
     file: services/spark.yml
     service: spark-master 
-
-#spark1:
-#  hostname: spark1
-#  extends:
-#    file: services/spark.yml
-#    service: spark-slave
-#  links:
-#    - "spark0:spark-master.loc"
+  ports:
+    - "8180:8080"
 
 kafka0:
   hostname: kafka0
@@ -31,18 +25,24 @@ cassandra0:
   extends:
     file: services/cassandra.yml
     service: cassandra
+  ports:
+    - "8080:8080"
+    - "9160:9160"
+    - "9042:9042"
+  environment:
+    JAVA_OPTS: -Ddefault.host=cassandra0:9160
 
 zeppelin:
   hostname: zeppelin
-  extends: 
+  extends:
     file: services/zeppelin.yml
     service: zeppelin
-  links: 
+  links:
     - "spark0:spark-master.loc"
     - "cassandra0:cassandra.loc"
     - "kafka0:zookeper.loc"
     - "kafka1:kafka.loc"
   volumes:
-    - "./notebook:/app/zeppelin/notebook"
-  ports:
-    - "80:8080"
+   - "./notebook:/app/zeppelin/notebook"
+
+

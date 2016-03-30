@@ -1,35 +1,32 @@
-# Easy Zeppelin-Spark-Cassandra-Kafka with Docker, v0.2
+#  Sparkoin
 
-A docker enviroment with Spark, Cassandra, Kafka under Docker.
+Apache Spark-based Bitcoin blockchain analyzer.
 
-## Install
-
-Tested under OSX 10.10 and Windows 7 with Docker Toolbox 1.10.3
+NOTE: work in progress - nothing usabe yet
 
 ### Prerequisites
 
+Tested under OSX 10.10 and Windows 7 with Docker Toolbox 1.10.3
+
+Install Docker Toolbox.
+
 On windows you have also to download wget for win32 and place it in the PATH.
 
-Unfortunately Zookeeper requires a fixed ip, so we need to deploy the entire systen in a fixed ip.
-
-This is a problem with Docker Toolbox since it usually assigns a new IP.
-
-To avoid this problem, the script ./configure.sh create a virtual machine and give it an alias that is kept.
-
+Execute the install scripts at the docker toolbox prompt (use bash also on windows).
 
 ### Installation
 
-Fist time you use the kit, type 
+First, configure.
 
 ```
 sh configure 192.168.99.99
 ```
 
-You can use any ip in the range 192.168.99.2 - 192.168.99.99
+If you use docker toolbox, you can use any ip in the range 192.168.99.2 - 192.168.99.99
 
-This will create a virtual machine and will set an IP alias for further installation.
+Otherwise in a live docker installation you have to use the "real" IP.
 
-The execute 
+Then
 
 ```
 sh build.sh
@@ -46,14 +43,11 @@ sh start.sh -d
 It will start in background (omit -d if you want a foreground start):
 
 - zeppelin in port 80
-- spark in port 7077 with the UI in port 8081
-- cassandra in port 9042 and 9160
+- spark in port 7077 with the UI in port 8180
+- cassandra in port 9042 and 9160 
+- helenos in port 8080, user admin pass admin.
 - kafka in port 9092 with zookeper in port 2818
+- sparknotebook in port 9000
 
+Note: CQL queries do not work - use zeppelin
 
-Access zeppelin with http://192.168.99.99 and start to play. 
-
-
-# What is next
-
-Check README.md in backend for status

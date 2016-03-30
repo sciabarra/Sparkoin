@@ -1,5 +1,6 @@
 import java.util.Properties
 
+import org.apache.kafka.clients.producer.{ProducerRecord, KafkaProducer}
 import org.apache.log4j.{Level, Logger}
 import _root_.kafka.serializer.StringDecoder
 import org.apache.spark.streaming._
@@ -12,7 +13,7 @@ import scala.util.Random
 /**
   * Created by msciab on 25/03/16.
   */
-object KafkaProducerSparkConsumerTest extends App {
+object KafkaToSparkTest extends App {
 
   val producer = new Thread {
 
@@ -30,8 +31,9 @@ object KafkaProducerSparkConsumerTest extends App {
     var n = 0
     val producer = new KafkaProducer[String, String](props)
 
-    def run(): Unit = {
-      while (true) {
+    var running = true
+    override def run() {
+      while (running) {
         n = n + 1
         val rec = new ProducerRecord[String, String]("sequence", n + ":" + Math.abs(rnd.nextLong))
         producer.send(rec)
@@ -68,7 +70,7 @@ object KafkaProducerSparkConsumerTest extends App {
   Thread.sleep(20000)
   ssc.stop()
 
-  thread.stop()
+  producer.running = false
 
   //ssc.awaitTermination()
 }

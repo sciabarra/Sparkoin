@@ -30,7 +30,6 @@ lazy val f = crossProject.in(file("frontend")).
   jsSettings(
     libraryDependencies ++= Seq(
       "org.scala-js" %%% "scalajs-dom" % "0.8.2"
-      //"be.doeraene" %%% "scalajs-jquery" % "0.8.1"
     ),
     persistLauncher in Compile := true,
     jsDependencies ++= Seq(
@@ -48,3 +47,5 @@ addCommandAlias("bundle", "bundle/bundle")
 addCommandAlias("rs", "; fJVM/assets ; fJVM/reStart")
 
 addCommandAlias("fo", "fJS/fastOptJS")
+
+val s = project.in(file("backend")/"spark")

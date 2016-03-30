@@ -5,6 +5,7 @@ frontend/js/src/main/resources/bundle.js
 *.tar.gz
 *.zip
 *.jar
+*.war
 .classpath
 .project
 target/

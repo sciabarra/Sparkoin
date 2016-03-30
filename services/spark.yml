@@ -10,4 +10,5 @@ spark-slave:
   image: sparkoin/spark:1
   domainname: loc
   command: bash slave.sh
-
+  ports:
+    - "8082:8080"
