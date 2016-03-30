@@ -2,7 +2,7 @@
   "paragraphs": [
     {
       "text": "%cassandra\ncreate keyspace IF NOT EXISTS sparkoin with replication= {'class': 'SimpleStrategy', 'replication_factor' : 1};\n",
-      "dateUpdated": "Mar 30, 2016 9:24:48 AM",
+      "dateUpdated": "Mar 30, 2016 11:51:20 AM",
       "config": {
         "colWidth": 12,
         "graph": {
@@ -26,16 +26,17 @@
       "jobName": "paragraph_1459261208534_-1899279037",
       "id": "20160329-142008_507888902",
       "dateCreated": "Mar 29, 2016 2:20:08 PM",
-      "dateStarted": "Mar 30, 2016 8:37:50 AM",
-      "dateFinished": "Mar 30, 2016 8:37:50 AM",
+      "dateStarted": "Mar 30, 2016 11:51:20 AM",
+      "dateFinished": "Mar 30, 2016 11:51:20 AM",
       "status": "FINISHED",
       "errorMessage": "",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:14"
+      "$$hashKey": "object:14",
+      "focus": true
     },
     {
-      "text": "%cassandra\nCREATE TYPE IF NOT EXISTS sparkoin.tx_input (\n  previous_tx_hash varchar,\n  previous_tx_id int,\n  script_len smallint,\n  scriptSig varchar,\n  sequence_no int\n);\nCREATE TYPE IF NOT EXISTS sparkoin.tx_output (\n  value bigint,\n  script_len smallint,\n  scriptSig varchar,\n);\nCREATE TABLE IF NOT EXISTS sparkoin.tx(\n    tx_id int primary key,\n    version_no int,\n    in_counter smallint,\n    tx_in_list list<FROZEN <tx_input>>,\n    out_counter\tsmallint,\n    tx_out_list list<FROZEN <tx_output>>,\n    lock_time int\n);",
-      "dateUpdated": "Mar 30, 2016 9:24:48 AM",
+      "text": "%cassandra\nCREATE TYPE IF NOT EXISTS sparkoin.tx_input (\n  previous_tx_hash varchar,\n  previous_tx_id int,\n  script_len smallint,\n  script_sig tuple<varchar,varchar>,\n  sequence_no int\n);",
+      "dateUpdated": "Mar 30, 2016 11:54:41 AM",
       "config": {
         "colWidth": 12,
         "graph": {
@@ -50,7 +51,7 @@
         "enabled": true,
         "editorMode": "ace/mode/scala",
         "editorHide": false,
-        "tableHide": false
+        "tableHide": true
       },
       "settings": {
         "params": {},
@@ -59,15 +60,15 @@
       "jobName": "paragraph_1459261208539_-1901202781",
       "id": "20160329-142008_387490433",
       "dateCreated": "Mar 29, 2016 2:20:08 PM",
-      "dateStarted": "Mar 30, 2016 8:37:50 AM",
-      "dateFinished": "Mar 30, 2016 8:37:50 AM",
+      "dateStarted": "Mar 30, 2016 11:51:24 AM",
+      "dateFinished": "Mar 30, 2016 11:51:24 AM",
       "status": "FINISHED",
       "errorMessage": "",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:15"
+      "$$hashKey": "object:15",
+      "focus": true
     },
     {
-      "dateUpdated": "Mar 30, 2016 9:24:48 AM",
       "config": {
         "colWidth": 12,
         "graph": {
@@ -80,26 +81,87 @@
           "scatter": {}
         },
         "enabled": true,
-        "tableHide": false,
-        "editorHide": false
+        "editorHide": false,
+        "tableHide": true
       },
       "settings": {
         "params": {},
         "forms": {}
       },
-      "jobName": "paragraph_1459327022867_-1395703565",
-      "id": "20160330-083702_1517228564",
-      "dateCreated": "Mar 30, 2016 8:37:02 AM",
-      "dateStarted": "Mar 30, 2016 8:37:50 AM",
-      "dateFinished": "Mar 30, 2016 8:37:50 AM",
+      "jobName": "paragraph_1459338592982_723158110",
+      "id": "20160330-114952_1395455098",
+      "dateCreated": "Mar 30, 2016 11:49:52 AM",
       "status": "FINISHED",
-      "errorMessage": "",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:16",
-      "focus": true
+      "focus": true,
+      "$$hashKey": "object:136",
+      "dateUpdated": "Mar 30, 2016 11:54:17 AM",
+      "dateFinished": "Mar 30, 2016 11:50:22 AM",
+      "dateStarted": "Mar 30, 2016 11:50:22 AM",
+      "errorMessage": "",
+      "text": "%cassandra\nCREATE TYPE IF NOT EXISTS sparkoin.tx_output (\n  value bigint,\n  script_len smallint,\n  script_pub_key varchar,\n);"
+    },
+    {
+      "config": {
+        "colWidth": 12,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459338884055_-932463500",
+      "id": "20160330-115444_267929740",
+      "dateCreated": "Mar 30, 2016 11:54:44 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "focus": true,
+      "$$hashKey": "object:257",
+      "text": "%cassandra\nCREATE TABLE IF NOT EXISTS sparkoin.tx(\n    tx_id int primary key,\n    version_no int,\n    in_counter smallint,\n    tx_in_list list<FROZEN <tx_input>>,\n    out_counter\tsmallint,\n    tx_out_list list<FROZEN <tx_output>>,\n    lock_time int\n);",
+      "dateUpdated": "Mar 30, 2016 11:55:10 AM",
+      "dateFinished": "Mar 30, 2016 11:55:10 AM",
+      "dateStarted": "Mar 30, 2016 11:55:10 AM",
+      "errorMessage": ""
+    },
+    {
+      "config": {
+        "colWidth": 12,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459338910454_-1120575064",
+      "id": "20160330-115510_174458246",
+      "dateCreated": "Mar 30, 2016 11:55:10 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500,
+      "focus": true,
+      "$$hashKey": "object:276",
+      "errorMessage": ""
     }
   ],
-  "name": "Cassandra Test",
+  "name": "Cassandra Schema",
   "id": "2BEZFGG77",
   "angularObjects": {
     "2BGU13NK9": [],
