@@ -5,6 +5,10 @@ spark0:
     service: spark-master 
   ports:
     - "8180:8080"
+  links:
+    - "cassandra0:cassandra.loc"
+    - "kafka0:zookeper.loc"
+    - "kafka1:kafka.loc"
 
 kafka0:
   hostname: kafka0
