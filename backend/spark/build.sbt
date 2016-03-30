@@ -9,6 +9,7 @@ libraryDependencies ++= Seq(
   , "org.apache.spark" %% "spark-core" % "1.6.1"
   , "org.apache.spark" %% "spark-streaming" % "1.6.1"
   , "org.apache.spark" %% "spark-streaming-kafka" % "1.6.1"
+  , "com.datastax.spark" % "spark-cassandra-connector_2.10" % "1.5.0"
   //, "ch.qos.logback" % "logback-classic" % "1.1.6"
 )
 

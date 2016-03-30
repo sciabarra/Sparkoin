@@ -42,7 +42,7 @@ zeppelin:
     - "cassandra0:cassandra.loc"
     - "kafka0:zookeper.loc"
     - "kafka1:kafka.loc"
-  volumes:
-   - "./notebook:/app/zeppelin/notebook"
+#  volumes:
+#   - "./notebook:/app/zeppelin/notebook"
 
 
