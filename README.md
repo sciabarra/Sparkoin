@@ -2,7 +2,9 @@
 
 Apache Spark-based Bitcoin blockchain analyzer.
 
-NOTE: work in progress - nothing usabe yet
+NOTE: work in progress - use at your own risk
+
+No guarantee it does anything useful, works or even compile.
 
 ### Prerequisites
 
@@ -12,19 +14,23 @@ Install Docker Toolbox.
 
 On windows you have also to download wget for win32 and place it in the PATH.
 
-Execute the install scripts at the docker toolbox prompt (use bash also on windows).
+Open the docker bash prompt and use the bash shell (also on windows).
 
-### Installation
+You also need: a JDK, NVM and SBT, all available in the path.
 
-First, configure.
+### Installation of the services
 
-```
-sh configure 192.168.99.99
-```
+First, configure. You have to tell the ip where your want docker to answer. 
 
 If you use docker toolbox, you can use any ip in the range 192.168.99.2 - 192.168.99.99
 
 Otherwise in a live docker installation you have to use the "real" IP.
+
+Example:
+
+```
+sh configure 192.168.99.99
+```
 
 Then
 
@@ -51,3 +57,8 @@ It will start in background (omit -d if you want a foreground start):
 
 Note: CQL queries do not work - use zeppelin
 
+### Execute the tests
+
+Execute test-producer.sh to produce transaction from bitcoin to kafka.
+
+Execute test-consumer.sh to consume transactions with Spark.
