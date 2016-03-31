@@ -1,3 +1,5 @@
 #!/bin/bash
 sleep 5
-node server.js
+while true
+do node server.js | tee /tmp/server.log
+done

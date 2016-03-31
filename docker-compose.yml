@@ -47,6 +47,8 @@ bitcore:
   links:
    - "kafka0:zookeeper.loc"
   restart: always
+  volumes:
+    - "./services/bitcore/server.js:/app/server.js"
 
 zeppelin:
   hostname: zeppelin

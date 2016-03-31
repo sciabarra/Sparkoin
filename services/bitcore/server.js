@@ -1,3 +1,5 @@
+var process = require("process")
+var fs = require("fs")
 var bitcore = require("bitcore")
 var index = require('bitcore-node');
 var Node = index.Node;
@@ -15,6 +17,8 @@ var configuration = {
         }
     ]
 };
+
+fs.writeFile("server.pid", process.pid)
 
 var node = new Node(configuration);
 
