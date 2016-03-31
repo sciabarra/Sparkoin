@@ -9,12 +9,14 @@ spark0:
     - "cassandra0:cassandra.loc"
     - "kafka0:zookeper.loc"
     - "kafka1:kafka.loc"
+  restart: always
 
 kafka0:
   hostname: kafka0
   extends:
     file: services/kafka.yml
     service: zookeeper
+  restart: always
 
 kafka1:
   hostname: kafka1
@@ -23,6 +25,7 @@ kafka1:
   extends:
     file: services/kafka.yml
     service: kafka
+  restart: always
 
 cassandra0:
   hostname: cassandra0
@@ -35,6 +38,15 @@ cassandra0:
     - "9042:9042"
   environment:
     JAVA_OPTS: -Ddefault.host=cassandra0:9160
+  restart: always
+
+bitcore:
+  hostname: bitcore
+  domainname: loc
+  image: sparkoin/bitcore:1
+  links:
+   - "kafka0:zookeeper.loc"
+  restart: always
 
 zeppelin:
   hostname: zeppelin
@@ -46,7 +58,7 @@ zeppelin:
     - "cassandra0:cassandra.loc"
     - "kafka0:zookeper.loc"
     - "kafka1:kafka.loc"
-#  volumes:
-#   - "./notebook:/app/zeppelin/notebook"
+  volumes:
+   - "./notebook:/app/zeppelin/notebook"
 
 

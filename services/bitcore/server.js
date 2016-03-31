@@ -6,7 +6,7 @@ var Bitcoin = index.services.Bitcoin;
 // configure and start bitcon
 var configuration = {
     datadir: '/app/bitcore/data',
-    network: 'livenet',
+    network: process.env.BITCOIN_NETWORK,
     services: [
         {
             name: 'bitcoind',
@@ -31,7 +31,7 @@ node.on('ready', function () {
 
 var kafka = require('kafka-node'),
     Producer = kafka.Producer,
-    client = new kafka.Client("192.168.99.99:2181"),
+    client = new kafka.Client(process.env.KAFKA_CONNECT),
     producer = new Producer(client);
 
 producer.on('ready', function () {
@@ -62,7 +62,7 @@ function loadTransactions() {
                 );
             }
             producer.send(payloads, function (err, data) {
-                console.log(data);
+                //console.log(data);
                 loadTransactions()
             });
         })

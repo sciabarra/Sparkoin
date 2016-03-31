@@ -1,10 +1,12 @@
 #  Sparkoin
 
-Apache Spark-based Bitcoin blockchain analyzer.
+Spark-based Bitcoin Blockchain Analyzer, aka BigData for BitCoin.
+
+[![Gitter](https://badges.gitter.im/sciabarra/Sparkoin.svg)](https://gitter.im/sciabarra/Sparkoin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 NOTE: work in progress - use at your own risk
 
-No guarantee it does anything useful, works or even compile.
+No guarantee (yet) it does anything useful, works or even compile.
 
 ### Prerequisites
 
@@ -54,11 +56,10 @@ It will start in background (omit -d if you want a foreground start):
 - helenos in port 8080, user admin pass admin.
 - kafka in port 9092 with zookeper in port 2818
 - sparknotebook in port 9000
+- bitcore sending transactions to kafka
 
 Note: CQL queries do not work - use zeppelin
 
 ### Execute the tests
 
-Execute test-producer.sh to produce transaction from bitcoin to kafka.
-
-Execute test-consumer.sh to consume transactions with Spark.
+Execute test-spark.sh to consume transactions with Spark.
