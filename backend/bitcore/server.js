@@ -3,12 +3,7 @@ var index = require('bitcore-node');
 var Node = index.Node;
 var Bitcoin = index.services.Bitcoin;
 
-var kafka = require('kafka-node'),
-    Producer = kafka.Producer,
-    client = new kafka.Client("192.168.99.99:2181"),
-    producer = new Producer(client);
-
-
+// configure and start bitcon
 var configuration = {
     datadir: '/app/bitcore/data',
     network: 'livenet',
@@ -21,7 +16,6 @@ var configuration = {
     ]
 };
 
-var last = -1
 var node = new Node(configuration);
 
 node.start(function () {
@@ -33,17 +27,60 @@ node.on('ready', function () {
     console.log('Bitcoin Node Ready');
 });
 
+// configure and start kafka
+
+var kafka = require('kafka-node'),
+    Producer = kafka.Producer,
+    client = new kafka.Client("192.168.99.99:2181"),
+    producer = new Producer(client);
+
 producer.on('ready', function () {
-    //producer.createTopics(['tx'], true, function (err, data) {
-    //   console.log("Topic Created");
-    //});
+    producer.createTopics(['tx'], true, function (err, data) {
+        console.log("Topic Created");
+    });
 })
 
-node.on('error', function (err) {
-    console.error(err);
+
+// load transactions
+var currentBlock = -1
+var currentHeight = -1
+
+function loadTransactions() {
+    if (currentBlock < currentHeight) {
+        ++currentBlock;
+        node.services.bitcoind.getBlock(currentBlock, function (err, blockBuffer) {
+            if (err) throw err;
+            var block = bitcore.Block.fromBuffer(blockBuffer);
+            console.log(block);
+            payloads = []
+            for (var i in block.transactions) {
+                var transaction = block.transactions[i];
+                var data = JSON.stringify(transaction.toJSON());
+                //console.log(data);
+                payloads.push(
+                    {topic: 'tx', messages: [data]}
+                );
+            }
+            producer.send(payloads, function (err, data) {
+                console.log(data);
+                loadTransactions()
+            });
+        })
+    }
+}
+
+
+node.services.bitcoind.on('tip', function (height) {
+    console.log("tip " + height)
+    currentHeight = height
+    loadTransactions()
 });
 
 /*
+ node.on('error', function (err) {
+ console.error(err);
+ });
+
  node.services.bitcoind.on('tx', function (txInfo) {
  console.log("tx " + JSON.stringify(txInfo))
  })
@@ -53,38 +90,6 @@ node.on('error', function (err) {
  })
  */
 
-node.services.bitcoind.on('tip', function (height) {
-    console.log("tip " + height)
-    while (last < height) {
-        ++last;
-        node.services.bitcoind.getBlock(last, function (err, blockBuffer) {
-            if (err) throw err;
-            var block = bitcore.Block.fromBuffer(blockBuffer);
-            console.log(block);
-
-            if (last == 1) {
-                payloads = [
-                    {topic: 'tx', messages: ['hi' + last]}
-                ];
-                producer.send({topic: 'tx', messages: ['hi' + i]}, function (err, data) {
-                    console.log(data);
-                });
-            }
-
-            for (var i in block.transactions) {
-                var transaction = block.transactions[i];
-                var data = JSON.stringify(transaction.toJSON());
-                console.log(data);
-                payloads = [
-                    {topic: 'tx', messages: [data]}
-                ];
-                producer.send(payloads, function (err, data) {
-                    console.log(data);
-                });
-            }
-        })
-    }
-});
   
 
 
