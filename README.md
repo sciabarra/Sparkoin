@@ -8,6 +8,8 @@ NOTE: work in progress - use at your own risk
 
 No guarantee (yet) it does anything useful, works or even compile.
 
+If you are developing please also check  README-DEVEL.mv
+
 ### Prerequisites
 
 Tested under OSX 10.10 and Windows 7 with Docker Toolbox 1.10.3
