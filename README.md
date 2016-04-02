@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/sciabarra/Sparkoin.png?label=ready&title=Ready)](https://waffle.io/sciabarra/Sparkoin)
 #  Sparkoin
 
 Spark-based Bitcoin Blockchain Analyzer, aka BigData for BitCoin.
