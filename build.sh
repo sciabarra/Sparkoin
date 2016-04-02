@@ -1,5 +1,6 @@
 if which docker-machine >/dev/null
-then eval $(docker-machine env sparkoin)
+then docker-machine start sparkoin
+     eval $(docker-machine env sparkoin)
 fi
 docker-compose kill && docker-compose rm
 cd services
