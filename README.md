@@ -4,6 +4,8 @@ Spark-based Bitcoin Blockchain Analyzer, aka BigData for BitCoin.
 
 [![Gitter](https://badges.gitter.im/sciabarra/Sparkoin.svg)](https://gitter.im/sciabarra/Sparkoin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
+[![Stories in Ready](https://badge.waffle.io/sciabarra/Sparkoin.png?label=ready&title=Ready)](http://waffle.io/sciabarra/Sparkoin)
+
 NOTE: work in progress - use at your own risk
 
 No guarantee (yet) it does anything useful, works or even compile.
