@@ -1,1 +1,0 @@
-sbt "s/runMain KafkaCat"

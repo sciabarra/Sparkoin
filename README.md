@@ -8,11 +8,11 @@ NOTE: work in progress - use at your own risk
 
 No guarantee (yet) it does anything useful, works or even compile.
 
-If you are developing please also check  README-DEVEL.mv
+If you are developing please also check  README-DEVEL.md
 
 ### Prerequisites
 
-Tested under OSX 10.10 and Windows 7 with Docker Toolbox 1.10.3
+Tested under OSX 10.10 and Windows 7/10 with Docker Toolbox 1.10.3
 
 Install Docker Toolbox.
 
@@ -20,7 +20,7 @@ On windows you have also to download wget for win32 and place it in the PATH.
 
 Open the docker bash prompt and use the bash shell (also on windows).
 
-You also need: a JDK, NVM and SBT, all available in the path.
+You also need: a JDK 1.8, Node 4.2 (or Node Version Manager)  and SBT, all available in the path.
 
 ### Installation of the services
 
@@ -47,7 +47,7 @@ It will download all the required software and create the docker images.
 Then execute:
 
 ```
-sh start.sh -d
+sh start-services.sh -d
 ```
 
 It will start in background (omit -d if you want a foreground start):
@@ -55,13 +55,13 @@ It will start in background (omit -d if you want a foreground start):
 - zeppelin in port 80
 - spark in port 7077 with the UI in port 8180
 - cassandra in port 9042 and 9160 
-- helenos in port 8080, user admin pass admin.
 - kafka in port 9092 with zookeper in port 2818
-- sparknotebook in port 9000
 - bitcore sending transactions to kafka
+- mongodb on port 27017
 
-Note: CQL queries do not work - use zeppelin
+### Execute Apps
 
-### Execute the tests
+`start-frontend.sh` will start a frontend app, currently a sample application using mongodb
 
-Execute test-spark.sh to consume transactions with Spark.
+`start-jobs.sh` execute the spark jobs, currently a sample spark application showing what it is received in kafka
+

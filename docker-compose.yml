@@ -63,4 +63,7 @@ zeppelin:
   volumes:
    - "./notebook:/app/zeppelin/notebook"
 
-
+mongo:
+   image: mongo:latest
+   ports:
+     - "27017:27017"
