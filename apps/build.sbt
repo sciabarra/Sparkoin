@@ -1,26 +1,87 @@
-name := """Sparkoin"""
+import sbt.Keys._
+import sbt.Project.projectToRef
 
-version := "1.0-SNAPSHOT"
+// a special crossProject for configuring a JS/JVM/shared structure
+lazy val shared = (crossProject.crossType(CrossType.Pure) in file("shared"))
+  .settings(
+    scalaVersion := Settings.versions.scala,
+    libraryDependencies ++= Settings.sharedDependencies.value
+  )
+  // set up settings specific to the JS project
+  .jsConfigure(_ enablePlugins ScalaJSPlay)
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val sharedJVM = shared.jvm.settings(name := "sharedJVM")
 
-scalaVersion := "2.11.7"
+lazy val sharedJS = shared.js.settings(name := "sharedJS")
 
-libraryDependencies ++= Seq(cache, ws)
+// use eliding to drop some debug code in the production build
+lazy val elideOptions = settingKey[Seq[String]]("Set limit for elidable functions")
 
-resolvers += "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
+// instantiate the JS project for SBT with some additional settings
+lazy val client: Project = (project in file("client"))
+  .settings(
+    name := "client",
+    version := Settings.version,
+    scalaVersion := Settings.versions.scala,
+    scalacOptions ++= Settings.scalacOptions,
+    libraryDependencies ++= Settings.scalajsDependencies.value,
+    // by default we do development build, no eliding
+    elideOptions := Seq(),
+    scalacOptions ++= elideOptions.value,
+    jsDependencies ++= Settings.jsDependencies.value,
+    // RuntimeDOM is needed for tests
+    jsDependencies += RuntimeDOM % "test",
+    // yes, we want to package JS dependencies
+    skip in packageJSDependencies := false,
+    // use Scala.js provided launcher code to start the client app
+    persistLauncher := true,
+    persistLauncher in Test := false,
+    // use uTest framework for tests
+    testFrameworks += new TestFramework("utest.runner.Framework")
+  )
+  .enablePlugins(ScalaJSPlugin, ScalaJSPlay)
+  .dependsOn(sharedJS)
 
-libraryDependencies ++= Seq(
-  "org.reactivemongo" %% "play2-reactivemongo" % "0.12.0-SNAPSHOT" changing(),
-  "org.webjars" %% "webjars-play" % "2.4.0",
-  "org.webjars" % "bootstrap" % "3.3.5",
-  "org.webjars" % "bootswatch-united" % "3.3.4+1",
-  "org.webjars" % "html5shiv" % "3.7.0",
-  "org.webjars" % "respond" % "1.4.2"
-)
+// Client projects (just one in this case)
+lazy val clients = Seq(client)
 
-routesGenerator := InjectedRoutesGenerator
+// instantiate the JVM project for SBT with some additional settings
+lazy val server = (project in file("server"))
+  .settings(
+    name := "server",
+    version := Settings.version,
+    scalaVersion := Settings.versions.scala,
+    scalacOptions ++= Settings.scalacOptions,
+    libraryDependencies ++= Settings.jvmDependencies.value,
+    commands += ReleaseCmd,
+    // connect to the client project
+    scalaJSProjects := clients,
+    pipelineStages := Seq(scalaJSProd, digest, gzip),
+    // compress CSS
+    LessKeys.compress in Assets := true
+  )
+  .enablePlugins(PlayScala)
+  .disablePlugins(PlayLayoutPlugin) // use the standard directory layout instead of Play's custom
+  .aggregate(clients.map(projectToRef): _*)
+  .dependsOn(sharedJVM)
 
-pipelineStages := Seq(rjs)
- 
-val spark = project.in(file("spark"))
+// Command for building a release
+lazy val ReleaseCmd = Command.command("release") {
+  state => "set elideOptions in client := Seq(\"-Xelide-below\", \"WARNING\")" ::
+    "client/clean" ::
+    "client/test" ::
+    "server/clean" ::
+    "server/test" ::
+    "server/dist" ::
+    "set elideOptions in client := Seq()" ::
+    state
+}
+
+// lazy val root = (project in file(".")).aggregate(client, server)
+
+// loads the Play server project at sbt startup
+onLoad in Global := (Command.process("project server", _: State)) compose (onLoad in Global).value
+
+
+// jobs spark subproject
+lazy val jobs = project.in(file("jobs"))

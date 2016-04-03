@@ -1,2 +1,2 @@
 cd apps
-sbt "spark/runMain KafkaCat"
+sbt "jobs/runMain KafkaCat"
