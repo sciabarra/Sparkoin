@@ -49,6 +49,8 @@ bitcore:
   restart: always
   volumes:
     - "./services/bitcore/server.js:/app/server.js"
+  environment:
+    BITCOIN_NETWORK: livenet
 
 zeppelin:
   hostname: zeppelin

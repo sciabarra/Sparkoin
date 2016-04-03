@@ -32,11 +32,6 @@ object KafkaCat extends App {
 
   messages.print()
 
-  /*
-  messages.foreachRDD { rdd =>
-    println(rdd)
-  }*/
-
   ssc.start()
   ssc.awaitTermination()
 }

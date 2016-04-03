@@ -55,14 +55,14 @@ function loadTransactions() {
         node.services.bitcoind.getBlock(currentBlock, function (err, blockBuffer) {
             if (err) throw err;
             var block = bitcore.Block.fromBuffer(blockBuffer);
-            console.log(block);
+            //console.log(block);
             payloads = []
             for (var i in block.transactions) {
                 var transaction = block.transactions[i];
                 var data = JSON.stringify(transaction.toJSON());
                 //console.log(data);
                 payloads.push(
-                    {topic: 'tx', messages: [data]}
+                    {topic: 'tx', messages: data}
                 );
             }
             producer.send(payloads, function (err, data) {
@@ -73,24 +73,25 @@ function loadTransactions() {
     }
 }
 
-
 node.services.bitcoind.on('tip', function (height) {
     console.log("tip " + height)
     currentHeight = height
     loadTransactions()
 });
 
+
 /*
+node.services.bitcoind.on('tx', function (txInfo) {
+    console.log("tx " + txInfo.hash)
+    loadSingleTransaction()
+});
+
  node.on('error', function (err) {
- console.error(err);
+     console.error(err);
  });
 
- node.services.bitcoind.on('tx', function (txInfo) {
- console.log("tx " + JSON.stringify(txInfo))
- })
-
  node.services.bitcoind.on('txleave', function (txLeaveInfo) {
- console.log("txleave " + JSON.stringify(txLeaveInfo))
+    console.log("txleave " + JSON.stringify(txLeaveInfo))
  })
  */
 
