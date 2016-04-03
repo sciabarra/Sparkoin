@@ -1,3 +1,9 @@
+shared:
+  hostname: shared
+  image: sparkoin/shared:1
+  volumes:
+     - "./shared:/app/shared"
+
 spark0:
   hostname: spark0 
   extends:
@@ -10,13 +16,15 @@ spark0:
     - "kafka0:zookeper.loc"
     - "kafka1:kafka.loc"
   restart: always
-
+  volumes_from: [ "shared" ]
+   
 kafka0:
   hostname: kafka0
   extends:
     file: services/kafka.yml
     service: zookeeper
   restart: always
+  volumes_from: [ "shared" ]
 
 kafka1:
   hostname: kafka1
@@ -26,6 +34,7 @@ kafka1:
     file: services/kafka.yml
     service: kafka
   restart: always
+  volumes_from: [ "shared" ]
 
 cassandra0:
   hostname: cassandra0
@@ -37,8 +46,11 @@ cassandra0:
     - "9160:9160"
     - "9042:9042"
   environment:
-    JAVA_OPTS: -Ddefault.host=cassandra0:9160
+    JAVA_OPTS: -Ddefault.host=cassandra0:9160 -Dfile.encoding=UTF8
+    CQLSH_HOST: cassandra0
+    PS1: "\\u@\\h:\\w\\$$ "
   restart: always
+  volumes_from: [ "shared" ]
 
 bitcore:
   hostname: bitcore
@@ -49,6 +61,7 @@ bitcore:
   restart: always
   volumes:
     - "./services/bitcore/server.js:/app/server.js"
+  volumes_from: [ "shared" ]
 
 zeppelin:
   hostname: zeppelin
@@ -62,3 +75,6 @@ zeppelin:
     - "kafka1:kafka.loc"
   volumes:
    - "./notebook:/app/zeppelin/notebook"
+  volumes_from: [ "shared" ]
+
+

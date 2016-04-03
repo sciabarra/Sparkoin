@@ -6,21 +6,19 @@
 
 # DEVEL WITH SCALA
 
-Import the project apps
+Install an IDE (IntelliJ recommended) and SBT
 
-# DEVEL WITH BITCORE
+Import the project apps and go coding...
+
+# DEVEL WITH NODE
+
+You do not need to install node.
 
 You can edit the services/bitcore/server.js from the outside of the container.
 
-You can then enter in the container, read the log in /tmp/server.log.
+You can then enter in the container, with the script "docker-enter.sh <service>"
 
-You can restart the server with kill -9 $(cat server.pid)
+- Read the log with `tail -f /tmp/server.log`.
+- Restart the server with `kill -9 $(cat server.pid)`
 
-# TEST
-
-```
-test-spark.sh <topic> 
-```
-
-Execute a tester app that will read kafka for the tx topic
 

@@ -1,5 +1,6 @@
 #!/bin/bash
 docker build -t sparkoin/java:1 java
+docker build -t sparkoin/shared:1 shared
 docker build -t sparkoin/spark:1 spark
 docker build -t sparkoin/kafka:1 kafka
 docker build -t sparkoin/cassandra:1 cassandra
