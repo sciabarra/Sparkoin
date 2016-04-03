@@ -1,4 +1,5 @@
 #!/bin/bash
+source /etc/profile.d/java.sh
 mkdir /app/cassandra/logs
 touch /app/cassandra/logs/system.log
 sed -i -e "s/start_rpc: false/start_rpc: true/" /app/cassandra/conf/cassandra.yaml

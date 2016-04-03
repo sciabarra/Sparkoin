@@ -1,16 +1,18 @@
 shared:
   hostname: shared
-  image: sparkoin/shared:1
+  image: sparkoin/shared:2
   volumes:
-     - "./shared:/app/shared"
+     - "./notebook:/app/zeppelin/notebook"
+     - "./apps:/app/apps"
 
 spark0:
   hostname: spark0 
-  extends:
-    file: services/spark.yml
-    service: spark-master 
+  image: sparkoin/spark:2
+  domainname: loc
   ports:
     - "8180:8080"
+    - "7077:7077"
+  command: bash master.sh
   links:
     - "cassandra0:cassandra.loc"
     - "kafka0:zookeper.loc"
@@ -20,27 +22,34 @@ spark0:
    
 kafka0:
   hostname: kafka0
-  extends:
-    file: services/kafka.yml
-    service: zookeeper
+  image: sparkoin/kafka:2
+  command: bash zookeper.sh
+  domainname: loc
+  ports:
+    - "2181:2181"
   restart: always
   volumes_from: [ "shared" ]
 
 kafka1:
   hostname: kafka1
+  domainname: loc
+  image: sparkoin/kafka:2
+  command: bash kafka.sh
   links:
     - "kafka0:zookeeper.loc"
-  extends:
-    file: services/kafka.yml
-    service: kafka
+  ports:
+    - "9092:9092"
   restart: always
   volumes_from: [ "shared" ]
 
 cassandra0:
   hostname: cassandra0
-  extends:
-    file: services/cassandra.yml
-    service: cassandra
+  image: sparkoin/cassandra:2
+  domainname: loc
+  expose:
+   - "9042"
+   - "9160"
+   - "8080"
   ports:
     - "8080:8080"
     - "9160:9160"
@@ -48,33 +57,33 @@ cassandra0:
   environment:
     JAVA_OPTS: -Ddefault.host=cassandra0:9160 -Dfile.encoding=UTF8
     CQLSH_HOST: cassandra0
-    PS1: "\\u@\\h:\\w\\$$ "
   restart: always
   volumes_from: [ "shared" ]
 
 bitcore:
   hostname: bitcore
   domainname: loc
-  image: sparkoin/bitcore:1
+  image: sparkoin/bitcore:2
   links:
    - "kafka0:zookeeper.loc"
   restart: always
   volumes:
     - "./services/bitcore/server.js:/app/server.js"
+  environment:
+    BITCOIN_NETWORK: livenet
   volumes_from: [ "shared" ]
 
 zeppelin:
   hostname: zeppelin
-  extends:
-    file: services/zeppelin.yml
-    service: zeppelin
+  image: sparkoin/zeppelin:2
+  domainname: loc
+  command: bash zeppelin.sh
+  ports:
+    - "80:8080"
   links:
     - "spark0:spark-master.loc"
     - "cassandra0:cassandra.loc"
     - "kafka0:zookeper.loc"
     - "kafka1:kafka.loc"
-  volumes:
-   - "./notebook:/app/zeppelin/notebook"
   volumes_from: [ "shared" ]
-
 

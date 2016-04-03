@@ -59,11 +59,15 @@ It will start in background (omit -d if you want a foreground start):
 - cassandra in port 9042 and 9160 
 - kafka in port 9092 with zookeper in port 2818
 - bitcore sending transactions to kafka
-- mongodb on port 27017
 
 ### Execute Apps
 
-`start-frontend.sh` will start a frontend app, currently a sample application using mongodb
+`cql.sh -f sparkcoin.cql` will create the schema in cassandra
 
-`start-jobs.sh` execute the spark jobs, currently a sample spark application showing what it is received in kafka
+`start-jobs.sh <job>` execute a  spark job
+
+- KafkaKat will simply dump transactions as they arrive
+- ImportTransactions will import transactions in Cassandra
+
+`start-frontend.sh` will start a frontend app
 
