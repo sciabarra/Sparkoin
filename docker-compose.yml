@@ -2,8 +2,11 @@ shared:
   hostname: shared
   image: sparkoin/shared:2
   volumes:
-     - "./notebook:/app/zeppelin/notebook"
+     - "./apps/etc/notebook:/app/zeppelin/notebook"
      - "./apps:/app/apps"
+     - "./data/bitcore:/app/data"
+     - "./data/cassandra:/var/lib/cassandra"
+     
 
 spark0:
   hostname: spark0 
