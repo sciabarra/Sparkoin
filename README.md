@@ -10,7 +10,7 @@ NOTE: work in progress - use at your own risk
 
 No guarantee (yet) it does anything useful, works or even compile.
 
-If you are developing please also check  README-DEVEL.md
+If you are developing please also check  [development documentatin](DEVEL.md).
 
 ### Prerequisites
 
@@ -26,7 +26,7 @@ You also need: a JDK 1.8, Node 4.2 (or Node Version Manager)  and SBT, all avail
 
 ### Installation of the services
 
-First, configure. You have to tell the ip where your want docker to answer. 
+First, configure. You have to tell the ip where your want docker to answer.
 
 If you use docker toolbox, you can use any ip in the range 192.168.99.2 - 192.168.99.99
 
@@ -56,7 +56,7 @@ It will start in background (omit -d if you want a foreground start):
 
 - zeppelin in port 80
 - spark in port 7077 with the UI in port 8180
-- cassandra in port 9042 and 9160 
+- cassandra in port 9042 and 9160
 - kafka in port 9092 with zookeper in port 2818
 - bitcore sending transactions to kafka
 
@@ -70,4 +70,3 @@ It will start in background (omit -d if you want a foreground start):
 - ImportTransactions will import transactions in Cassandra
 
 `start-frontend.sh` will start a frontend app
-
