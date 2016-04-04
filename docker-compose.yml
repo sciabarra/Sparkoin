@@ -6,7 +6,7 @@ shared:
      - "./apps:/app/apps"
 
 spark0:
-  hostname: spark0 
+  hostname: spark0
   image: sparkoin/spark:2
   domainname: loc
   ports:
@@ -19,7 +19,7 @@ spark0:
     - "kafka1:kafka.loc"
   restart: always
   volumes_from: [ "shared" ]
-   
+
 kafka0:
   hostname: kafka0
   image: sparkoin/kafka:2
@@ -69,9 +69,10 @@ bitcore:
   restart: always
   volumes:
     - "./services/bitcore/server.js:/app/server.js"
-  environment:
-    BITCOIN_NETWORK: livenet
   volumes_from: [ "shared" ]
+#default is livenet, change here to switch to testnet 
+#  environment:
+#    BITCOIN_NETWORK: testnet
 
 zeppelin:
   hostname: zeppelin
@@ -86,4 +87,3 @@ zeppelin:
     - "kafka0:zookeper.loc"
     - "kafka1:kafka.loc"
   volumes_from: [ "shared" ]
-

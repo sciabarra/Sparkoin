@@ -1,10 +1,11 @@
 FROM nodesource/jessie:4.2.6
-RUN useradd -d /app -m app  
-WORKDIR /app
-USER app
-COPY package.json /app/
-RUN npm install 
-COPY bitcore.sh server.js /app/
-ENV BITCOIN_NETWORK=testnet
+ENV BITCOIN_NETWORK=livenet
 ENV KAFKA_CONNECT=zookeeper.loc
+RUN apt-get update && apt-get install dos2unix
+RUN useradd -d /app -m app
+WORKDIR /app
+COPY package.json bitcore.sh restart.sh  /app/
+RUN npm install 
+RUN chown -R /app app ; dos2unix /app/*.sh
+USER app
 CMD bash bitcore.sh

@@ -1,3 +1,8 @@
+# master
+
+- fixed issue with windows
+- moved node code outside of folder
+
 # 0.0.9
 
 - refactored the build to stop using alpine (does not work with volumes!)
@@ -9,4 +14,3 @@
 
 - created this changelog
 - changed the sample frontent to http://ochrons.github.io/scalajs-spa-tutorial/
-
