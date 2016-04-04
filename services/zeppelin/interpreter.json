@@ -27,7 +27,7 @@
       "group": "spark",
       "properties": {
         "spark.cores.max": "",
-        "master": "spark://spark-master.loc:7077",
+        "master": "spark://spark.loc:7077",
         "zeppelin.spark.maxResult": "1000",
         "zeppelin.dep.localrepo": "local-repo",
         "spark.app.name": "Zeppelin",

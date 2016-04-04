@@ -2,51 +2,60 @@ shared:
   hostname: shared
   image: sparkoin/shared:2
   volumes:
-     - "./apps/etc/notebook:/app/zeppelin/notebook"
      - "./apps:/app/apps"
-     - "./data/bitcore:/app/data"
-     - "./data/cassandra:/var/lib/cassandra"
-     
+     - "./apps/etc/notebook:/app/zeppelin/notebook"
 
-spark0:
-  hostname: spark0
-  image: sparkoin/spark:2
+zookeeper:
+  hostname: zookeeper
   domainname: loc
-  ports:
-    - "8180:8080"
-    - "7077:7077"
-  command: bash master.sh
-  links:
-    - "cassandra0:cassandra.loc"
-    - "kafka0:zookeper.loc"
-    - "kafka1:kafka.loc"
-  restart: always
-  volumes_from: [ "shared" ]
-
-kafka0:
-  hostname: kafka0
   image: sparkoin/kafka:2
   command: bash zookeper.sh
-  domainname: loc
   ports:
     - "2181:2181"
   restart: always
   volumes_from: [ "shared" ]
 
-kafka1:
-  hostname: kafka1
+kafka:
+  hostname: kafka
   domainname: loc
   image: sparkoin/kafka:2
   command: bash kafka.sh
   links:
-    - "kafka0:zookeeper.loc"
+    - "zookeeper:zookeeper.loc"
+  expose:
+    - 9092
   ports:
     - "9092:9092"
   restart: always
   volumes_from: [ "shared" ]
 
-cassandra0:
-  hostname: cassandra0
+bitcore:
+  hostname: bitcore
+  domainname: loc
+  image: sparkoin/bitcore:2
+  links:
+   - "zookeeper:zookeeper.loc"
+   - "kafka:kafka.loc"
+  restart: always
+  volumes_from: [ "shared" ]
+
+spark:
+  hostname: spark
+  domainname: loc
+  image: sparkoin/spark:2
+  ports:
+    - "8180:8080"
+    - "7077:7077"
+  command: bash master.sh
+  links:
+    - "cassandra:cassandra.loc"
+    - "zookeeper:zookeper.loc"
+    - "kafka:kafka.loc"
+  restart: always
+  volumes_from: [ "shared" ]
+
+cassandra:
+  hostname: cassandra
   image: sparkoin/cassandra:2
   domainname: loc
   expose:
@@ -58,35 +67,21 @@ cassandra0:
     - "9160:9160"
     - "9042:9042"
   environment:
-    JAVA_OPTS: -Ddefault.host=cassandra0:9160 -Dfile.encoding=UTF8
-    CQLSH_HOST: cassandra0
+    JAVA_OPTS: -Ddefault.host=cassandra:9160 -Dfile.encoding=UTF8
+    CQLSH_HOST: cassandra
   restart: always
   volumes_from: [ "shared" ]
-
-bitcore:
-  hostname: bitcore
-  domainname: loc
-  image: sparkoin/bitcore:2
-  links:
-   - "kafka0:zookeeper.loc"
-  restart: always
-  volumes:
-    - "./services/bitcore/server.js:/app/server.js"
-  volumes_from: [ "shared" ]
-#default is livenet, change here to switch to testnet 
-#  environment:
-#    BITCOIN_NETWORK: testnet
 
 zeppelin:
   hostname: zeppelin
-  image: sparkoin/zeppelin:2
   domainname: loc
-  command: bash zeppelin.sh
+  image: sparkoin/zeppelin:2
   ports:
     - "80:8080"
-  links:
-    - "spark0:spark-master.loc"
-    - "cassandra0:cassandra.loc"
-    - "kafka0:zookeper.loc"
-    - "kafka1:kafka.loc"
   volumes_from: [ "shared" ]
+  links:
+    - "spark:spark.loc"
+    - "cassandra:cassandra.loc"
+    - "zookeeper:zookeper.loc"
+    - "kafka:kafka.loc"
+  command: bash zeppelin.sh

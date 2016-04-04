@@ -1,5 +1,7 @@
-# master
+# 0.0.10
 
+- refactored docker-compose to allow for scaling
+- refactored code layout
 - fixed issue with windows
 - moved node code outside of folder
 
