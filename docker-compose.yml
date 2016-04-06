@@ -3,7 +3,7 @@ shared:
   image: sparkoin/shared:2
   volumes:
      - "./apps:/app/apps"
-     - "./apps/etc/notebook:/app/zeppelin/notebook"
+     - "./apps/zeppelin:/app/zeppelin/notebook"
 
 zookeeper:
   hostname: zookeeper
