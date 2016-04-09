@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "bitcore": "^3.0.0",
+    "bitcore-lib": "^0.13.14",
+    "bitcore-node": "^2.1.0",
+    "kafka-node": "^0.3.2"
+  }
+}

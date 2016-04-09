@@ -1,0 +1,8 @@
+spark1:
+  hostname: spark1
+  extends:
+    file: services/spark.yml
+    service: spark-slave
+  links:
+    - "spark0:spark-master.loc"
+

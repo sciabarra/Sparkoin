@@ -1,35 +1,44 @@
-# Easy Zeppelin-Spark-Cassandra-Kafka with Docker, v0.2
+#  Sparkoin
 
-A docker enviroment with Spark, Cassandra, Kafka under Docker.
+Spark-based Bitcoin Blockchain Analyzer, aka BigData for BitCoin.
 
-## Install
+[![Gitter](https://badges.gitter.im/sciabarra/Sparkoin.svg)](https://gitter.im/sciabarra/Sparkoin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Tested under OSX 10.10 and Windows 7 with Docker Toolbox 1.10.3
+[![Stories in Ready](https://badge.waffle.io/sciabarra/Sparkoin.png?label=ready&title=Ready)](http://waffle.io/sciabarra/Sparkoin)
+
+NOTE: work in progress - use at your own risk
+
+No guarantee (yet) it does anything useful, works or even compile.
+
+If you are developing please also check  [development documentatin](DEVEL.md).
 
 ### Prerequisites
 
+Tested under OSX 10.10 and Windows 7/10 with Docker Toolbox 1.10.3
+
+Install Docker Toolbox.
+
 On windows you have also to download wget for win32 and place it in the PATH.
 
-Unfortunately Zookeeper requires a fixed ip, so we need to deploy the entire systen in a fixed ip.
+Open the docker bash prompt and use the bash shell (also on windows).
 
-This is a problem with Docker Toolbox since it usually assigns a new IP.
+You also need: a JDK 1.8, Node 4.2 (or Node Version Manager)  and SBT, all available in the path.
 
-To avoid this problem, the script ./configure.sh create a virtual machine and give it an alias that is kept.
+### Installation of the services
 
+First, configure. You have to tell the ip where your want docker to answer.
 
-### Installation
+If you use docker toolbox, you can use any ip in the range 192.168.99.2 - 192.168.99.99
 
-Fist time you use the kit, type 
+Otherwise in a live docker installation you have to use the "real" IP.
+
+Example:
 
 ```
 sh configure 192.168.99.99
 ```
 
-You can use any ip in the range 192.168.99.2 - 192.168.99.99
-
-This will create a virtual machine and will set an IP alias for further installation.
-
-The execute 
+Then
 
 ```
 sh build.sh
@@ -40,20 +49,24 @@ It will download all the required software and create the docker images.
 Then execute:
 
 ```
-sh start.sh -d
+sh start-services.sh -d
 ```
 
 It will start in background (omit -d if you want a foreground start):
 
 - zeppelin in port 80
-- spark in port 7077 with the UI in port 8081
+- spark in port 7077 with the UI in port 8180
 - cassandra in port 9042 and 9160
 - kafka in port 9092 with zookeper in port 2818
+- bitcore sending transactions to kafka
 
+### Execute Apps
 
-Access zeppelin with http://192.168.99.99 and start to play. 
+`cql.sh -f sparkcoin.cql` will create the schema in cassandra
 
+`start-jobs.sh <job>` execute a  spark job
 
-# What is next
+- KafkaKat will simply dump transactions as they arrive
+- ImportTransactions will import transactions in Cassandra
 
-Check README.md in backend for status
+`start-frontend.sh` will start a frontend app

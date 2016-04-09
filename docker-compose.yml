@@ -1,48 +1,87 @@
-spark0:
-  hostname: spark0 
-  extends:
-    file: services/spark.yml
-    service: spark-master 
+shared:
+  hostname: shared
+  image: sparkoin/shared:2
+  volumes:
+     - "./apps:/app/apps"
+     - "./apps/zeppelin:/app/zeppelin/notebook"
 
-#spark1:
-#  hostname: spark1
-#  extends:
-#    file: services/spark.yml
-#    service: spark-slave
-#  links:
-#    - "spark0:spark-master.loc"
+zookeeper:
+  hostname: zookeeper
+  domainname: loc
+  image: sparkoin/kafka:2
+  command: bash zookeper.sh
+  ports:
+    - "2181:2181"
+  restart: always
+  volumes_from: [ "shared" ]
 
-kafka0:
-  hostname: kafka0
-  extends:
-    file: services/kafka.yml
-    service: zookeeper
-
-kafka1:
-  hostname: kafka1
+kafka:
+  hostname: kafka
+  domainname: loc
+  image: sparkoin/kafka:2
+  command: bash kafka.sh
   links:
-    - "kafka0:zookeeper.loc"
-  extends:
-    file: services/kafka.yml
-    service: kafka
+    - "zookeeper:zookeeper.loc"
+  expose:
+    - 9092
+  ports:
+    - "9092:9092"
+  restart: always
+  volumes_from: [ "shared" ]
 
-cassandra0:
-  hostname: cassandra0
-  extends:
-    file: services/cassandra.yml
-    service: cassandra
+bitcore:
+  hostname: bitcore
+  domainname: loc
+  image: sparkoin/bitcore:2
+  links:
+   - "zookeeper:zookeeper.loc"
+   - "kafka:kafka.loc"
+  restart: always
+  volumes_from: [ "shared" ]
+
+spark:
+  hostname: spark
+  domainname: loc
+  image: sparkoin/spark:2
+  ports:
+    - "8180:8080"
+    - "7077:7077"
+  command: bash master.sh
+  links:
+    - "cassandra:cassandra.loc"
+    - "zookeeper:zookeper.loc"
+    - "kafka:kafka.loc"
+  restart: always
+  volumes_from: [ "shared" ]
+
+cassandra:
+  hostname: cassandra
+  image: sparkoin/cassandra:2
+  domainname: loc
+  expose:
+   - "9042"
+   - "9160"
+   - "8080"
+  ports:
+    - "8080:8080"
+    - "9160:9160"
+    - "9042:9042"
+  environment:
+    JAVA_OPTS: -Ddefault.host=cassandra:9160 -Dfile.encoding=UTF8
+    CQLSH_HOST: cassandra
+  restart: always
+  volumes_from: [ "shared" ]
 
 zeppelin:
   hostname: zeppelin
-  extends: 
-    file: services/zeppelin.yml
-    service: zeppelin
-  links: 
-    - "spark0:spark-master.loc"
-    - "cassandra0:cassandra.loc"
-    - "kafka0:zookeper.loc"
-    - "kafka1:kafka.loc"
-  volumes:
-    - "./notebook:/app/zeppelin/notebook"
+  domainname: loc
+  image: sparkoin/zeppelin:2
   ports:
     - "80:8080"
+  volumes_from: [ "shared" ]
+  links:
+    - "spark:spark.loc"
+    - "cassandra:cassandra.loc"
+    - "zookeeper:zookeper.loc"
+    - "kafka:kafka.loc"
+  command: bash zeppelin.sh

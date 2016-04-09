@@ -1,4 +1,9 @@
+java/amm
+java/sbt
 *.zip
 *.tar.gz
 *.tgz
 *.jar
+*.war
+*.jar
+
