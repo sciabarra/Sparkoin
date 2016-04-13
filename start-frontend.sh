@@ -1,1 +1,0 @@
-cd  apps ; sbt run

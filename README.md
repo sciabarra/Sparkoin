@@ -54,7 +54,7 @@ sh start-services.sh -d
 
 It will start in background (omit -d if you want a foreground start):
 
-- zeppelin in port 80
+- jupyter with toree in port 80
 - spark in port 7077 with the UI in port 8180
 - cassandra in port 9042 and 9160
 - kafka in port 9092 with zookeper in port 2818
@@ -69,4 +69,3 @@ It will start in background (omit -d if you want a foreground start):
 - KafkaKat will simply dump transactions as they arrive
 - ImportTransactions will import transactions in Cassandra
 
-`start-frontend.sh` will start a frontend app

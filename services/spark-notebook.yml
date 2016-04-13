@@ -1,4 +1,0 @@
-sparknotebook:
-   image: andypetrella/spark-notebook:0.6.3-scala-2.10.5-spark-1.6.1-hadoop-2.7.2-with-hive-with-parquet
-   ports:
-     - 9000:9000
