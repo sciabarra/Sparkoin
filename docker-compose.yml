@@ -3,7 +3,6 @@ shared:
   image: sparkoin/shared:2
   volumes:
      - "./apps:/app/apps"
-     - "./apps/zeppelin:/app/zeppelin/notebook"
 
 zookeeper:
   hostname: zookeeper
@@ -12,8 +11,8 @@ zookeeper:
   ports:
     - "2181:2181"
   restart: always
-  volumes_from: [ "shared" ]
   command: bash zookeper.sh
+  volumes_from: [ "shared" ]
 
 kafka:
   hostname: kafka
@@ -26,8 +25,8 @@ kafka:
   ports:
     - "9092:9092"
   restart: always
-  volumes_from: [ "shared" ]
   command: bash kafka.sh
+  volumes_from: [ "shared" ]
 
 bitcore:
   hostname: bitcore
@@ -78,9 +77,9 @@ jupyter:
   image: sparkoin/jupyter:2
   ports:
     - "80:8888"
+  links:
+    - "spark:spark.loc"
+    - "cassandra:cassandra.loc"
+    - "zookeeper:zookeper.loc"
+    - "kafka:kafka.loc"
   volumes_from: [ "shared" ]
-  #links:
-  #  - "spark:spark.loc"
-  #  - "cassandra:cassandra.loc"
-  #  - "zookeeper:zookeper.loc"
-  #  - "kafka:kafka.loc"
