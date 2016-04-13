@@ -1,3 +1,7 @@
+# 0.0.11
+
+- replaced zeppelin with juypter
+
 # 0.0.10
 
 - refactored docker-compose to allow for scaling
