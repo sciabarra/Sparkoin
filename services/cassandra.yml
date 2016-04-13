@@ -1,7 +1,0 @@
-cassandra:
-  image: sparkoin/cassandra:1
-  domainname: loc
-  expose:
-   - "9042"
-   - "9160"
-   - "8080"
