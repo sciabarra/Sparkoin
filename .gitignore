@@ -6,6 +6,7 @@ frontend/js/src/main/resources/bundle.js
 *.zip
 *.jar
 *.war
+*.iml
 .classpath
 .project
 target/
