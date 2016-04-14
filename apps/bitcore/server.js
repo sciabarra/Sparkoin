@@ -7,7 +7,7 @@ var Bitcoin = index.services.Bitcoin;
 
 // configure and start bitcon
 var configuration = {
-    datadir: '/app/bitcore/data',
+    datadir: '/app/data/bitcore',
     network: process.env.BITCOIN_NETWORK,
     services: [
         {

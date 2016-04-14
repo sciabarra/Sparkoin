@@ -1,3 +1,7 @@
+# 0.0.12
+
+*5 volumized data for bitcore, kafka and cassandra
+
 # 0.0.11
 
 - replaced zeppelin with juypter
