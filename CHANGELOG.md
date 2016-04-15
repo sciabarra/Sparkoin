@@ -1,8 +1,13 @@
 # 0.0.12
 
-* cleanup scripts
-* jupyter external folder
 *5 volumized data for bitcore, kafka and cassandra
+Data for bitcore, kafka and cassandra is in volumes so it is preserved.
+
+* cleanup scripts
+There are now scripts in services to reset volumes and drop all the images.
+
+* jupyter external folder
+Jupyter by defaults saves notebooks in apps/jupyter
 
 # 0.0.11
 
