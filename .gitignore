@@ -1,5 +1,6 @@
 services/java/ip.txt
 frontend/js/src/main/resources/bundle.js
+apps/jupyter/.ipynb_checkpoints/
 .idea/
 *.tgz
 *.tar.gz

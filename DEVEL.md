@@ -5,7 +5,6 @@
 - tag the master when you got a feature working (v0.0.x for now)
 - update always documentation (README.md, DEVEL.md and the CHANGELOG.md)
 
-
 # Prerequisites for Devel
 
 In addition to the prerequisites, you also need: a JDK 1.8,  SBT, all available in the path, and an IDE (Intellij preferred)
@@ -19,6 +18,18 @@ example `./enter.sh cass` , `./enter.sh bitcore`
 In the vms there is `sbt`, `amm` (scala shell)
 
 The apps folder is accessible under /app/apps
+
+## SERVICES SCRIPT
+
+There is now a script to reset volumes if you want to remove all data. It is
+
+./services/reset-volumes.sh
+
+There is also a script to remove all the images (but not the volumes):
+
+./services/remove-images.sh
+
+Both asks for confirmation. 
 
 # DEVEL WITH SCALA
 

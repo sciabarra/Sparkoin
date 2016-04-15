@@ -33,6 +33,8 @@ bitcore:
   volumes: 
     - "bitcore:/app/data/bitcore" 
     - "./apps/bitcore:/app/apps/bitcore"
+  environment:
+    - BITCORE_NETWORK=testnet
 
 spark:
   hostname: spark
@@ -82,6 +84,7 @@ jupyter:
     - "zookeeper:zookeper.loc"
     - "kafka:kafka.loc"
   volumes:
+    - "./apps/jupyter:/app/apps/jupyter"
     - "cassandra:/app/data/cassandra"
     - "bitcore:/app/data/bitcore" 
     - "kafka:/app/data/kafka" 
