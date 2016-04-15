@@ -1,7 +1,7 @@
 # 0.0.12
 
 * cleanup scripts
-* juypyter external folder
+* jupyter external folder
 *5 volumized data for bitcore, kafka and cassandra
 
 # 0.0.11
