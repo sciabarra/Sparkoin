@@ -1,11 +1,13 @@
 services/java/ip.txt
 frontend/js/src/main/resources/bundle.js
+apps/jupyter/.ipynb_checkpoints/
 .idea/
 *.tgz
 *.tar.gz
 *.zip
 *.jar
 *.war
+*.iml
 .classpath
 .project
 target/
@@ -13,3 +15,4 @@ node_modules/
 .idea/
 .settings/
 attic/
+docker-compose.override.yml

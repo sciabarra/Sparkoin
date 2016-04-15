@@ -14,15 +14,19 @@ If you are developing please also check  [development documentatin](DEVEL.md).
 
 ### Prerequisites
 
-Tested under OSX 10.10 and Windows 7/10 with Docker Toolbox 1.10.3
+Tested under 
+- OSX 10.10  with Docker Toolbox 1.10.3
+- Windows 10 with Docker Toolbox 1.10.3
+- CoreOS with Docker 1.9.1
 
-Install Docker Toolbox.
+First, on Windows and Mac, Install Docker Toolbox.
 
 On windows you have also to download wget for win32 and place it in the PATH.
 
 Open the docker bash prompt and use the bash shell (also on windows).
 
-You also need: a JDK 1.8, Node 4.2 (or Node Version Manager)  and SBT, all available in the path.
+You also need: a JDK 1.8, and SBT, all available in the path.
+Node 4.2 (or Node Version Manager)  
 
 ### Installation of the services
 
@@ -32,10 +36,12 @@ If you use docker toolbox, you can use any ip in the range 192.168.99.2 - 192.16
 
 Otherwise in a live docker installation you have to use the "real" IP.
 
+You can also optionally specify the size of the virtual box image you are going to create. If you want to import the whole Blockchain and store it in Cassandra you need at least 200 GB.
+
 Example:
 
 ```
-sh configure 192.168.99.99
+sh configure 192.168.99.99 2000000
 ```
 
 Then

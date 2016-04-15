@@ -6,4 +6,4 @@ java/sbt
 *.jar
 *.war
 *.jar
-
+uid.txt

@@ -2,7 +2,7 @@
 machine=${1:?container}
 command=${2:-/bin/bash}
 shift 2
-if which docker-machine >/dev/null
+if which docker-machine 2>/dev/null
 then eval $(docker-machine env sparkoin)
 fi
 id=$(docker ps | grep $machine | awk '{print $1}' | head -1)
