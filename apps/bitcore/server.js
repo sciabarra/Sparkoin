@@ -39,8 +39,8 @@ var kafka = require('kafka-node'),
     producer = new Producer(client);
 
 producer.on('ready', function () {
-    producer.createTopics(['tx'], true, function (err, data) {
-        console.log("Topic Created");
+    producer.createTopics(['tx', "block"], true, function (err, data) {
+        console.log("Topics Created");
     });
 })
 
@@ -82,6 +82,8 @@ function loadTransactions() {
                     {topic: 'tx', messages: data}
                 );
             }
+            var blockData = JSON.stringify(block.toJSON());
+            payloads.push({topic: 'block', messages: blockData});
             producer.send(payloads, function (err, data) {
                 //console.log(data);
                 loadTransactions()

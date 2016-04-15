@@ -1,5 +1,4 @@
-create keyspace IF NOT EXISTS sparkoin with replication= {'class': 'SimpleStrategy', 'replication_factor' : 1};
-
+CREATE KEYSPACE IF NOT EXISTS sparkoin with replication= {'class': 'SimpleStrategy', 'replication_factor' : 1};
 
 CREATE TYPE IF NOT EXISTS sparkoin.tx_input (
   previous_tx_hash varchar,
