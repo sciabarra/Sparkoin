@@ -82,8 +82,9 @@ function loadTransactions() {
                     {topic: 'tx', messages: data}
                 );
             }
-            var blockData = JSON.stringify(block.toJSON());
-            payloads.push({topic: 'block', messages: blockData});
+            console.log(block.header)
+            var blockHeader = JSON.stringify(block.header.toJSON());
+            payloads.push({topic: 'block', messages: blockHeader});
             producer.send(payloads, function (err, data) {
                 //console.log(data);
                 loadTransactions()

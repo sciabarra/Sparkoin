@@ -58,7 +58,10 @@ object ImportTransactions extends App {
     ssc, kafkaParams, blockTopicsSet)
 
   blockMessages.foreachRDD { rdd =>
-    print(rdd)
+      rdd.foreach { record => {
+        println(record)
+      }
+    }
   }
 
 
