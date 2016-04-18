@@ -16,3 +16,6 @@ node_modules/
 .settings/
 attic/
 docker-compose.override.yml
+kafka/
+cassandra/
+bitcore/
