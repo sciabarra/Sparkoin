@@ -1,3 +1,7 @@
+# 0.0.13
+
+- rewritten  jupyter build
+
 # 0.0.12
 
 * cleanup scripts
