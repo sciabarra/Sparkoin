@@ -18,11 +18,15 @@ object ImportTransactions extends App {
   val sc = new SparkContext(conf)
   val ssc = new StreamingContext(sc, Milliseconds(500))
 
+  case class BlockHeader(hash: String, version: Int, prev_hash: String, merkle_root: String, time: Long, bits: Long, nonce: Long)
+
+  case class Block(block_id: String, block_height: Int, tx_number: Int, difficulty: Double, header: BlockHeader)
+
   case class TxInput(previous_tx_hash: String, output_tx_id: Long, script_sig: String, sequence_no: Long)
 
   case class TxOutput(value: Long, script_pub_key: String)
 
-  case class Tx(tx_id: String, version_no: Int, tx_in_list: List[TxInput], tx_out_list: List[TxOutput], lock_time: Int)
+  case class Tx(tx_id: String, block_id:String, version_no: Int, tx_in_list: List[TxInput], tx_out_list: List[TxOutput], lock_time: Int)
 
   implicit val formats = Serialization.formats(ShortTypeHints(List(classOf[TxInput], classOf[TxOutput]))) +
     FieldSerializer[Tx](
@@ -33,13 +37,17 @@ object ImportTransactions extends App {
       renameFrom("prevTxId", "previous_tx_hash") orElse renameFrom("outputIndex", "output_tx_id") orElse renameFrom("script", "script_sig") orElse renameFrom("sequenceNumber", "sequence_no") orElse renameFrom("nlocktime", "lock_time")) +
     FieldSerializer[TxOutput](
       renameTo("value", "satoshis") orElse renameTo("script_pub_key", "script"),
-      renameFrom("satoshis", "value") orElse renameFrom("script", "script_pub_key"))
+      renameFrom("satoshis", "value") orElse renameFrom("script", "script_pub_key")) +
+    FieldSerializer[BlockHeader](
+      renameTo("prev_hash", "prevHash") orElse renameTo("merkle_root", "merkleRoot"),
+      renameFrom("prevHash", "prev_hash") orElse renameFrom("merkleRoot", "merkle_root"))
+
 
 
   val kafkaParams = Map[String, String]("metadata.broker.list" -> "192.168.99.99:9092")
 
   val txTopicsSet = "tx".split(",").toSet
-  val blockTopicsSet = "tx".split(",").toSet
+  val blockTopicsSet = "block".split(",").toSet
 
   val txMessages = KafkaUtils.createDirectStream[Array[Byte], String, DefaultDecoder, StringDecoder](
     ssc, kafkaParams, txTopicsSet)
@@ -51,17 +59,25 @@ object ImportTransactions extends App {
 
   mapped.foreachRDD { rdd =>
     //print(rdd)
-    rdd.saveToCassandra("sparkoin", "tx", SomeColumns("tx_id", "version_no", "tx_in_list", "tx_out_list", "lock_time"))
+    rdd.saveToCassandra("sparkoin", "tx", SomeColumns("tx_id", "block_id", "version_no", "tx_in_list", "tx_out_list", "lock_time"))
   }
 
   val blockMessages = KafkaUtils.createDirectStream[Array[Byte], String, DefaultDecoder, StringDecoder](
     ssc, kafkaParams, blockTopicsSet)
 
-  blockMessages.foreachRDD { rdd =>
-      rdd.foreach { record => {
-        println(record)
+  var mappedBlocks = blockMessages.map { case (key, msg) =>
+    read[Block](msg)
+  }
+
+  mappedBlocks.foreachRDD { rdd =>
+    rdd.saveToCassandra("sparkoin", "block", SomeColumns("block_id", "block_height", "tx_number", "difficulty", "header"))
+
+/*
+    rdd.foreach { record => {
+        println("block header: " + record)
       }
     }
+*/
   }
 
 

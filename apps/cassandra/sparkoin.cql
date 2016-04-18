@@ -19,3 +19,24 @@ CREATE TABLE IF NOT EXISTS sparkoin.tx(
     tx_out_list list<FROZEN <tx_output>>,
     lock_time int
 );
+
+ALTER TABLE sparkoin.tx ADD block_id varchar;
+
+CREATE TYPE IF NOT EXISTS sparkoin.block_header (
+  hash varchar,
+  version int,
+  prev_hash varchar,
+  merkle_root varchar,
+  time bigint,
+  bits bigint,
+  nonce bigint
+);
+
+CREATE TABLE IF NOT EXISTS sparkoin.block(
+    block_id varchar primary key,
+    block_height bigint,
+    tx_number int,
+    difficulty float,
+    header FROZEN<block_header>
+);
+

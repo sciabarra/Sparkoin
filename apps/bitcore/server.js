@@ -70,21 +70,32 @@ function loadTransactions() {
         node.services.bitcoind.getBlock(currentBlock, function (err, blockBuffer) {
             if (err) throw err;
             var block = bitcore.Block.fromBuffer(blockBuffer);
-            //console.log(block);
             countBlocksInInterval(5000)
             payloads = []
+
+            var blockHeader = block.header.toJSON()
+            console.log("currentBlock:" + currentBlock)
+            var blockData = {
+                block_id: blockHeader.hash,
+                block_height: currentBlock,
+                tx_number: block.transactions.length,
+                difficulty: block.header.getDifficulty(),
+                header: blockHeader
+            }
+
+            payloads.push({topic: 'block', messages: JSON.stringify(blockData)});
+
             for (var i in block.transactions) {
                 ++countTransactions;
-                var transaction = block.transactions[i];
-                var data = JSON.stringify(transaction.toJSON());
+                var transaction = block.transactions[i].toJSON();
+                transaction["block_id"] = blockHeader.hash
+                var data = JSON.stringify(transaction);
                 //console.log(data);
                 payloads.push(
                     {topic: 'tx', messages: data}
                 );
             }
-            console.log(block.header)
-            var blockHeader = JSON.stringify(block.header.toJSON());
-            payloads.push({topic: 'block', messages: blockHeader});
+
             producer.send(payloads, function (err, data) {
                 //console.log(data);
                 loadTransactions()

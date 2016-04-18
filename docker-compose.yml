@@ -34,7 +34,7 @@ bitcore:
     - "bitcore:/app/data/bitcore" 
     - "./apps/bitcore:/app/apps/bitcore"
   environment:
-    - BITCORE_NETWORK=testnet
+    BITCORE_NETWORK: testnet
 
 spark:
   hostname: spark
