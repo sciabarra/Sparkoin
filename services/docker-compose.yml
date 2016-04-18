@@ -1,0 +1,8 @@
+jupyter:
+  hostname: jupyter
+  domainname: loc
+  image: sparkoin/jupyter:4
+  ports:
+    - "80:8888"
+  volumes:
+    - ./apps/jupyter:/home/jovyan/work
