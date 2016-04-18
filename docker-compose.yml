@@ -34,7 +34,7 @@ bitcore:
     - "bitcore:/app/data/bitcore" 
     - "./apps/bitcore:/app/apps/bitcore"
   environment:
-    - BITCOIN_NETWORK=testnet
+    BITCORE_NETWORK: testnet
 
 spark:
   hostname: spark
@@ -75,7 +75,7 @@ cassandra:
 jupyter:
   hostname: jupyter
   domainname: loc
-  image: sparkoin/jupyter:4
+  image: sparkoin/jupyter:2
   ports:
     - "80:8888"
   links:
@@ -88,4 +88,3 @@ jupyter:
     - "cassandra:/app/data/cassandra"
     - "bitcore:/app/data/bitcore" 
     - "kafka:/app/data/kafka" 
-
