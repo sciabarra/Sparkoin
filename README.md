@@ -6,8 +6,8 @@ Spark-based Bitcoin Blockchain Analyzer, aka BigData for BitCoin.
 
 [![Stories in Ready](https://badge.waffle.io/sciabarra/Sparkoin.png?label=ready&title=Ready)](http://waffle.io/sciabarra/Sparkoin)
 
-![<img src="msciab.jpg">](http://www.linkedin.com/in/msciab "Michele Sciabarra")
-![<img src="ale.jpg">](http://www.linkedin.com/in/alessandromongelli "Alessandro Mongelli")
+![<img src="https://raw.githubusercontent.com/sciabarra/Sparkoin/master/msciab.jpg">](http://www.linkedin.com/in/msciab "Michele Sciabarra")
+![<img src="https://raw.githubusercontent.com/sciabarra/Sparkoin/master/ale.jpg">](http://www.linkedin.com/in/alessandromongelli "Alessandro Mongelli")
 
 ## Status
 
