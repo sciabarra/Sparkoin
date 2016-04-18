@@ -1,6 +1,6 @@
 # 0.0.13
 
-- rewritten  jupyter build
+* rewritten  jupyter build
 
 # 0.0.12
 
