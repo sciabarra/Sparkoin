@@ -6,13 +6,16 @@ Spark-based Bitcoin Blockchain Analyzer, aka BigData for BitCoin.
 
 [![Stories in Ready](https://badge.waffle.io/sciabarra/Sparkoin.png?label=ready&title=Ready)](http://waffle.io/sciabarra/Sparkoin)
 
-NOTE: work in progress - use at your own risk
+![<img src="msciab.jpg">](http://www.linkedin.com/in/msciab "Michele Sciabarra")
+![<img src="ale.jpg">](http://www.linkedin.com/in/alessandromongelli "Alessandro Mongelli")
 
-No guarantee (yet) it does anything useful, works or even compile.
+## Status
+
+Work in progress - not yet usable.
 
 If you are developing please also check  [development documentatin](DEVEL.md).
 
-### Prerequisites
+## Prerequisites
 
 Tested under 
 - OSX 10.10  with Docker Toolbox 1.10.3
