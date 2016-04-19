@@ -75,7 +75,7 @@ cassandra:
 jupyter:
   hostname: jupyter
   domainname: loc
-  image: sparkoin/jupyter:2
+  image: sparkoin/jupyter:4
   ports:
     - "80:8888"
   links:
