@@ -54,3 +54,7 @@ You can restart the server with `./restart.sh`
 After restart, it will show the logs on console continuosly.
 
 When you need to chang someting, just ^c, then `up` then `enter`.
+
+To suspend node, './restart.sh off'
+
+To restart, './restart.sh on'
