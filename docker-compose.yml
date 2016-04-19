@@ -35,6 +35,8 @@ bitcore:
     - "./apps/bitcore:/app/apps/bitcore"
   environment:
     BITCORE_NETWORK: testnet
+  ports: [ "5858:5858" ]
+    
 
 spark:
   hostname: spark
