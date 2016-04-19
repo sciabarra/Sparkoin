@@ -40,3 +40,6 @@ CREATE TABLE IF NOT EXISTS sparkoin.block(
     header FROZEN<block_header>
 );
 
+ALTER TYPE sparkoin.tx_input ADD address varchar;
+ALTER TYPE sparkoin.tx_output ADD address varchar;
+

@@ -70,11 +70,10 @@ function loadTransactions() {
         node.services.bitcoind.getBlock(currentBlock, function (err, blockBuffer) {
             if (err) throw err;
             var block = bitcore.Block.fromBuffer(blockBuffer);
-            countBlocksInInterval(5000)
+            countBlocksInInterval(10000)
             payloads = []
 
             var blockHeader = block.header.toJSON()
-            console.log("currentBlock:" + currentBlock)
             var blockData = {
                 block_id: blockHeader.hash,
                 block_height: currentBlock,
@@ -87,10 +86,39 @@ function loadTransactions() {
 
             for (var i in block.transactions) {
                 ++countTransactions;
-                var transaction = block.transactions[i].toJSON();
-                transaction["block_id"] = blockHeader.hash
-                var data = JSON.stringify(transaction);
-                //console.log(data);
+                var transaction = block.transactions[i];
+                var outputs = []
+                var inputs = []
+                for (var io in transaction.outputs) {
+                    var output = transaction.outputs[io]
+                    var script = output.script
+                    var address = script.toAddress()
+                    outputs.push({
+                        script_pub_key: script.toString(),
+                        address:address.toString(),
+                        value: output.satoshis})
+                }
+                for (var ii in transaction.inputs) {
+                    if (! transaction.isCoinbase()) {
+                        var input = transaction.inputs[ii]
+                        var script = input.script
+                        var address = script.toAddress()
+                        var prevTxId = input.toObject().prevTxId
+                        inputs.push({
+                            previous_tx_hash: prevTxId,
+                            output_tx_id: input.outputIndex,
+                            sequence_no: input.sequenceNumber,
+                            script_sig: script.toString(),
+                            address:address.toString()})
+                    }
+                }
+                //console.log(transaction)
+                transactionData = transaction.toJSON()
+                transactionData["block_id"] = blockHeader.hash
+                transactionData["tx_out_list"] = outputs
+                transactionData["tx_in_list"] = inputs
+                var data = JSON.stringify(transactionData);
+                //console.log(transactionData)
                 payloads.push(
                     {topic: 'tx', messages: data}
                 );
