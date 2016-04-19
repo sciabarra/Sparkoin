@@ -45,16 +45,18 @@ Import the project apps and go coding...
 
 You do not need to install node.
 
-You can edit the apps/etc/node/server.js from the outside of the container.
+You can edit the apps/etc/node/server.js from the outside of the container. After editing you need to restart, as follows.
 
-You can then enter in the container, with the script "enter.sh <service>"
+You can use the control script to restart:
 
-You can restart the server with `./restart.sh`
+- `./restart-bitcore.sh` to restart bitcore inside the container and pick the changes
+- `./restart-bitcore.sh on` to restart bitcore and remove debug
+- `./restart-bitcore.sh off` to stop bitcore until restart
+- `./restart-bitcore.sh debug` to put bitcore in debug until another restart
 
-After restart, it will show the logs on console continuosly.
+Debugger is accessible in port 5858
 
-When you need to chang someting, just ^c, then `up` then `enter`.
+## MAINTENANCE 
 
-To suspend node, './restart.sh off'
+You can then enter in the containers with the script "enter.sh <service>"
 
-To restart, './restart.sh on'

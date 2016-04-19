@@ -9,5 +9,5 @@ then touch /tmp/server.debug
      rm /tmp/server.off 2>/dev/null
 fi
 if test -e server.pid
-then kill -9 $(cat server.pid) ; rm server.pid
+then kill $(cat server.pid) ; rm server.pid
 fi
