@@ -1,13 +1,15 @@
 #!/bin/bash
-if test "$1" == "off"
-then touch /tmp/server.off
-elif test "$1" == "on"
-then rm -f /tmp/server.off 2>/dev/null
-     rm -f /tmp/server.debug 2>/dev/null
-elif test "$1" == "debug"
-then touch /tmp/server.debug
-     rm /tmp/server.off 2>/dev/null
-fi
-if test -e server.pid
-then kill $(cat server.pid) ; rm server.pid
-fi
+case $1 in
+
+stop)    touch /tmp/server.off ;;
+restart) touch /tmp/server.restart ;;
+start)   touch /tmp/server.restart ; rm -f /tmp/server.{off,d
+ebug} 2>/dev/null ;;
+kill)    kill -9 $(cat /app/server.pid) ;;
+debug) 
+       touch /tmp/server.debug
+       touch /tmp/server.restart
+       rm /tmp/server.off 2>/dev/null
+;;
+*) echo "usage: {stop|start|restart|debug}" ;;
+esac

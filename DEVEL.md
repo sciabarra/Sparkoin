@@ -31,6 +31,8 @@ There is also a script to remove all the images (but not the volumes):
 
 Both asks for confirmation. 
 
+You can then enter in the containers with the script "enter.sh <service>"
+
 # DEVEL WITH SCALA
 
 In your host machine, install an IDE (IntelliJ recommended) and SBT
@@ -47,16 +49,7 @@ You do not need to install node.
 
 You can edit the apps/etc/node/server.js from the outside of the container. After editing you need to restart, as follows.
 
-You can use the control script to restart:
+You can use the bitcore control script to restart it, to put in debug mode or kill if it gets stuck
 
-- `./restart-bitcore.sh` to restart bitcore inside the container and pick the changes
-- `./restart-bitcore.sh on` to restart bitcore and remove debug
-- `./restart-bitcore.sh off` to stop bitcore until restart
-- `./restart-bitcore.sh debug` to put bitcore in debug until another restart
-
-Debugger is accessible in port 5858
-
-## MAINTENANCE 
-
-You can then enter in the containers with the script "enter.sh <service>"
+When enabled, debugger is accessible in port 5858
 

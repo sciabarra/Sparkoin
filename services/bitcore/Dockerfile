@@ -7,8 +7,8 @@ RUN useradd -d /app -m app ; mkdir -p /app/bitcore/data
 WORKDIR /app
 COPY package.json /app/
 RUN npm install 
-COPY bitcore.sh restart.sh  /app/
-RUN dos2unix /app/*.sh ; chmod +x /app/*.sh ; chown -Rvf app /app 
+COPY bitcore.sh control.sh  /app/
+RUN dos2unix /app/*.sh ; chmod +x /app/*.sh ; chown -Rf app /app 
 EXPOSE 5858
 USER app
 CMD bash bitcore.sh

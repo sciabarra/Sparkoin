@@ -31,8 +31,8 @@ bitcore:
    - "kafka:kafka.loc"
   restart: always
   volumes: 
-    - "bitcore:/app/data/bitcore" 
     - "./apps/bitcore:/app/apps/bitcore"
+    - "bitcore:/app/data/bitcore" 
   environment:
     BITCOIN_NETWORK: testnet
   ports: [ "5858:5858" ]

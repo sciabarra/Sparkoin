@@ -1,3 +1,7 @@
+# 0.0.15
+
+* Debugged and updates the bitcore-control.sh script
+
 # 0.0.14
 
 * blocks and other informations in cassandra
