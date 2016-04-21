@@ -74,10 +74,10 @@ It will start in background (omit -d if you want a foreground start):
 
 ### Execute Apps
 
+- `control-bitcore.sh {start|stop|restart|kill|debug}` controls bitcore.
+
 `cql.sh -f sparkcoin.cql` will create the schema in cassandra
 
 `start-jobs.sh <job>` execute a  spark job
 
-- KafkaKat will simply dump transactions as they arrive
-- ImportTransactions will import transactions in Cassandra
-
+More about this to be added

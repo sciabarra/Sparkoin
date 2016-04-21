@@ -1,10 +1,19 @@
+# 0.0.15
+
+* Debugged and updates the bitcore-control.sh script
+
+# 0.0.14
+
+* blocks and other informations in cassandra
+* stoppable and debuggable node
+
 # 0.0.13
 
 * rewritten  jupyter build
 
 # 0.0.12
 
-*5 volumized data for bitcore, kafka and cassandra
+* #5 volumized data for bitcore, kafka and cassandra
 Data for bitcore, kafka and cassandra is in volumes so it is preserved.
 
 * cleanup scripts

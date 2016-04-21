@@ -19,3 +19,5 @@ docker-compose.override.yml
 ./kafka/
 ./cassandra/
 ./bitcore/
+apps/bitcore/server.pid
+.machine

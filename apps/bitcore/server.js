@@ -58,6 +58,20 @@ function countBlocksInInterval(interval) {
   } else {
     countBlock = countBlock + 1;
   }
+  // check if we need to exit
+  fs.exists('/tmp/server.off', function(exists)  {
+    if(exists) 
+     node.services.bitcoind.stop( 
+       function() { process.exit(0); })
+   })
+   // check need of restart
+   fs.exists('/tmp/server.restart', function(exists)  {
+    if(exists) {
+     try { fs.unlinkSync('/tmp/server.restart') } catch(err) {}
+     node.services.bitcoind.stop( 
+       function() { process.exit(0); })
+    }
+   })
 }
 
 // load transactions
