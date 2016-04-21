@@ -115,6 +115,7 @@ function loadTransactions() {
                 //console.log(transaction)
                 transactionData = transaction.toJSON()
                 transactionData["block_id"] = blockHeader.hash
+                transactionData["block_time"] = blockHeader.time
                 transactionData["tx_out_list"] = outputs
                 transactionData["tx_in_list"] = inputs
                 var data = JSON.stringify(transactionData);

@@ -52,7 +52,14 @@ object ImportTransactions extends App {
 
   mapped.foreachRDD { rdd =>
     //print(rdd)
-    rdd.saveToCassandra("sparkoin", "tx", SomeColumns("tx_id", "block_id", "version_no", "tx_in_list", "tx_out_list", "lock_time"))
+    rdd.saveToCassandra("sparkoin", "tx", SomeColumns("tx_id", "block_id", "block_time", "version_no", "tx_in_list", "tx_out_list", "lock_time"))
+
+    val txOutDetail = rdd.map(tx => tx.tx_out_list.filter(out => out.address != "false").map(out => {
+      def uuid = java.util.UUID.randomUUID.toString
+      new TxOutDetail(uuid, tx.tx_id, out.value, out.address, tx.block_time)
+    }))
+
+    txOutDetail.saveToCassandra("sparkoin", "tx_out_detail")
   }
 
   val blockMessages = KafkaUtils.createDirectStream[Array[Byte], String, DefaultDecoder, StringDecoder](
