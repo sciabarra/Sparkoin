@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     wget \
     build-essential \
     python-dev \
+    python-pip \
     ca-certificates \
     bzip2 \
     unzip \
@@ -68,8 +69,7 @@ RUN conda install --quiet --yes \
 RUN pip install 'jupyterhub==0.5'
 WORKDIR /app/apps/jupyter
 USER root
-#COPY jupyter_notebook_config.py /app/.jupyter/
-
+RUN python2 -m pip install jupyter cql_kernel
 ENV APACHE_SPARK_VERSION 1.6.0
 RUN apt-get -y update && \
     apt-get install -y --no-install-recommends openjdk-7-jre-headless && \
@@ -93,10 +93,9 @@ RUN conda install --quiet --yes \
     'scipy=0.17*' \
     'seaborn=0.7*' \
     'scikit-learn=0.17*' \
-    && conda clean -tipsy
-
-RUN pip install toree
-RUN jupyter toree install --user --kernel_name='Toree'
-USER app
+    && conda clean -tipsy \
+    && pip install toree \
+    && jupyter toree install --user --kernel_name='Toree' \
+    && python2 -m cql_kernel.install  cassandra.loc
 ENTRYPOINT ["tini", "--"]
 CMD jupyter notebook --ip=$(hostname -i) --no-browser

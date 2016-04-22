@@ -34,7 +34,7 @@ bitcore:
     - "./apps/bitcore:/app/apps/bitcore"
     - "bitcore:/app/data/bitcore" 
   environment:
-    BITCOIN_NETWORK: testnet
+    BITCOIN_NETWORK: livenet 
   ports: [ "5858:5858", "3001:3001" ]
     
 

@@ -76,8 +76,12 @@ It will start in background (omit -d if you want a foreground start):
 
 - `control-bitcore.sh {start|stop|restart|kill|debug}` controls bitcore.
 
-`cql.sh -f sparkcoin.cql` will create the schema in cassandra
+`run-cql.sh <args>` execute cql
 
-`start-jobs.sh <job>` execute a  spark job
+in particular:
 
-More about this to be added
+`run-cql.sh -f  sparkcoin.cql` will create the schema in cassandra
+
+`run-jobs.sh <job>` execute a  spark job inside the container
+
+More about this to be added.

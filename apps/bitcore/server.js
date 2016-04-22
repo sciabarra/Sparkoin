@@ -2,8 +2,8 @@ var process = require("process")
 var fs = require("fs")
 var bitcore = require("bitcore")
 var index = require('bitcore-node');
-//var InsightAPI = require('insight-api')
-//var InsightUI = require('insight-ui/bitcore-node')
+var InsightAPI = require('insight-api')
+var InsightUI = require('insight-ui/bitcore-node')
 
 var Node = index.Node;
 var Bitcoin = index.services.Bitcoin;
@@ -34,8 +34,7 @@ var configuration = {
         config: {
             port: 3001
         }
-    }/* available but disabled 
-      , {
+    } , {
         name: 'insight-api',
         module: InsightAPI ,
         config: {}
@@ -43,7 +42,7 @@ var configuration = {
         name: 'insight-ui',
         module: InsightUI ,
         config: {}
-    } */]
+    } ]
 };
 
 fs.writeFile("server.pid", process.pid)
