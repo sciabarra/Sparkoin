@@ -35,7 +35,7 @@ bitcore:
     - "bitcore:/app/data/bitcore" 
   environment:
     BITCOIN_NETWORK: testnet
-  ports: [ "5858:5858" ]
+  ports: [ "5858:5858", "3001:3001" ]
     
 
 spark:

@@ -3,8 +3,8 @@ case $1 in
 
 stop)    touch /tmp/server.off ;;
 restart) touch /tmp/server.restart ;;
-start)   touch /tmp/server.restart ; rm -f /tmp/server.{off,d
-ebug} 2>/dev/null ;;
+start)   touch /tmp/server.restart     
+         rm -f /tmp/server.off /tmp/server.debug 2>/dev/null ;;
 kill)    kill -9 $(cat /app/server.pid) ;;
 debug) 
        touch /tmp/server.debug

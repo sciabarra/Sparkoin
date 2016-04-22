@@ -2,20 +2,48 @@ var process = require("process")
 var fs = require("fs")
 var bitcore = require("bitcore")
 var index = require('bitcore-node');
+//var InsightAPI = require('insight-api')
+//var InsightUI = require('insight-ui/bitcore-node')
+
 var Node = index.Node;
 var Bitcoin = index.services.Bitcoin;
+var Address = index.services.Address;
+var DB = index.services.DB;
+var Web = index.services.Web;
 
 // configure and start bitcon
 var configuration = {
     datadir: '/app/data/bitcore',
     network: process.env.BITCOIN_NETWORK,
     services: [
-        {
-            name: 'bitcoind',
-            module: Bitcoin,
-            config: {}
+     {
+        name: "address",
+        module: Address,
+        config: {}
+    }, {
+        name: 'bitcoind',
+        module: Bitcoin,
+        config: {}
+    }, {
+        name: 'db',
+        module: DB,
+        config: {}
+    }, {
+        name: 'web',
+        module: Web,
+        config: {
+            port: 3001
         }
-    ]
+    }/* available but disabled 
+      , {
+        name: 'insight-api',
+        module: InsightAPI ,
+        config: {}
+    }, {
+        name: 'insight-ui',
+        module: InsightUI ,
+        config: {}
+    } */]
 };
 
 fs.writeFile("server.pid", process.pid)
