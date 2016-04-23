@@ -53,4 +53,13 @@ CREATE TABLE IF NOT EXISTS sparkoin.tx_out_detail(
     when bigint,
 );
 
+CREATE TABLE IF NOT EXISTS sparkoin.offsets(
+    topic varchar,
+    partition smallint,
+    offset bigint,
+    PRIMARY KEY (topic, partition)
+);
+
+INSERT INTO sparkoin.offsets(topic, partition, offset) VALUES ('tx', 0, 0);
+INSERT INTO sparkoin.offsets(topic, partition, offset) VALUES ('block', 0, 0);
 
