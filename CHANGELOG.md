@@ -1,5 +1,7 @@
 # 0.0.16
 
+* new importer
+* updated configurator
 * switched to livenet by default
 * cql kernel
 
