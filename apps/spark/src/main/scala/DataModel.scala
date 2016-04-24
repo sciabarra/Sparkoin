@@ -11,7 +11,9 @@ object DataModel {
 
   case class TxOutput(value: Long, script_pub_key: String, address: String)
 
-  case class Tx(tx_id: String, block_id:String, version_no: Int, tx_in_list: List[TxInput], tx_out_list: List[TxOutput], lock_time: Int)
+  case class Tx(tx_id: String, block_id:String, block_time: Long, version_no: Int, tx_in_list: List[TxInput], tx_out_list: List[TxOutput], lock_time: Int)
+
+  case class TxOutDetail(id:String, tx_id: String, amount: Long, receiver: String, when: Long)
 
 
 

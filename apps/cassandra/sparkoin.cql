@@ -22,6 +22,8 @@ CREATE TABLE IF NOT EXISTS sparkoin.tx(
 
 ALTER TABLE sparkoin.tx ADD block_id varchar;
 
+ALTER TABLE sparkoin.tx ADD block_time varchar;
+
 CREATE TYPE IF NOT EXISTS sparkoin.block_header (
   hash varchar,
   version int,
@@ -42,4 +44,22 @@ CREATE TABLE IF NOT EXISTS sparkoin.block(
 
 ALTER TYPE sparkoin.tx_input ADD address varchar;
 ALTER TYPE sparkoin.tx_output ADD address varchar;
+
+CREATE TABLE IF NOT EXISTS sparkoin.tx_out_detail(
+    id varchar primary key,
+    tx_id varchar,
+    amount bigint,
+    receiver varchar,
+    when bigint,
+);
+
+CREATE TABLE IF NOT EXISTS sparkoin.offsets(
+    topic varchar,
+    partition smallint,
+    offset bigint,
+    PRIMARY KEY (topic, partition)
+);
+
+INSERT INTO sparkoin.offsets(topic, partition, offset) VALUES ('tx', 0, 0);
+INSERT INTO sparkoin.offsets(topic, partition, offset) VALUES ('block', 0, 0);
 

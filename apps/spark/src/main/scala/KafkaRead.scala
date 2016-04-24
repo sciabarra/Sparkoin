@@ -14,7 +14,7 @@ object KafkaRead extends App {
   val conf = new SparkConf().setAppName("Test").setMaster("local")
   val sc = new SparkContext(conf)
 
-  val kafkaParams = Map[String, String]("metadata.broker.list" -> "kafka.loc:9092")
+  val kafkaParams = Map[String, String]("metadata.broker.list" -> "192.168.99.99::9092")
 
   val topicsSet = "tx".split(",").toSet
 
