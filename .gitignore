@@ -21,3 +21,5 @@ docker-compose.override.yml
 /bitcore/
 apps/bitcore/server.pid
 .machine
+apps/spark/project/repo
+apps/spark/project/boot

@@ -1,3 +1,8 @@
+# 0.0.16
+
+* switched to livenet by default
+* cql kernel
+
 # 0.0.15
 
 * Debugged and updates the bitcore-control.sh script
