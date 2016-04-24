@@ -1,5 +1,5 @@
 IP=$(hostname -i)
-UID=$(uid -u)
+UID=$(id -u)
 if which docker-machine 2>/dev/null
 then 
      UID=1000
