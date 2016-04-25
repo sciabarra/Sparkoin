@@ -23,11 +23,10 @@ object ImportTransactionsFromCheckpoint extends App {
       renameTo("prev_hash", "prevHash") orElse renameTo("merkle_root", "merkleRoot"),
       renameFrom("prevHash", "prev_hash") orElse renameFrom("merkleRoot", "merkle_root"))
 
-
   val txTopicsSet = "tx".split(",").toSet
   val blockTopicsSet = "block".split(",").toSet
   val kafkaParams = Map(
-    "metadata.broker.list" -> "192.168.99.99:9092",
+    "metadata.broker.list" -> s"${sys.props("ip.loc")}:9092",
     "auto.offset.reset" -> "smallest"
   )
 

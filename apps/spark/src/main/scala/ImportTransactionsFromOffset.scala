@@ -19,7 +19,11 @@ import org.json4s.jackson.Serialization.read
   */
 object ImportTransactionsFromOffset extends App {
 
-  val conf = new SparkConf(true).set("spark.cassandra.connection.host", "192.168.99.99").set("spark.cassandra.connection.port", "9042").setMaster("local[2]").setAppName("SparkToCassandra")
+  val conf = new SparkConf(true).
+    set("spark.cassandra.connection.host", sys.props("ip.loc")).
+    set("spark.cassandra.connection.port", "9042").
+    setMaster("local[2]").
+    setAppName("SparkToCassandra")
   val sc = new SparkContext(conf)
   val ssc = new StreamingContext(sc, Milliseconds(500))
 

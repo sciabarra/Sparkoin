@@ -1,8 +1,7 @@
-IP=$(hostname -i)
-UID=$(id -u)
+#!/usr/bin/env bash
 if which docker-machine 2>/dev/null
 then 
-     UID=1000
+     MYID=1000
      if test -z "$1" 
      then echo "Please specify your docker IP, in range 192.168.99.X with X\<100 and X\>1" ; exit 1
      else IP="$1"
@@ -15,8 +14,11 @@ then
      docker-machine start sparkoin
      docker-machine ssh sparkoin "echo ifconfig eth1:0 $IP | sudo tee /var/lib/boot2docker/bootlocal.sh"
      docker-machine stop sparkoin ; docker-machine start sparkoin
+else
+    IP=$(hostname -i)
+    MYID=$(id -u)
 fi
-echo $UID >services/java/uid.txt
+echo $MYID >services/java/uid.txt
 echo $IP >services/java/ip.txt
 cp services/java/uid.txt services/jupyter/uid.txt
-echo You can now build your enviroment.
+echo You can now build your enviroment running build.sh

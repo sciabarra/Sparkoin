@@ -23,7 +23,7 @@ object KafkaCat extends App {
   val sc = new SparkContext(conf)
   val ssc = new StreamingContext(sc, Seconds(1))
 
-  val kafkaParams = Map[String, String]("metadata.broker.list" -> "192.168.99.99:9092")
+  val kafkaParams = Map[String, String]("metadata.broker.list" -> s"${sys.props("ip.loc")}:9092")
 
   val topicsSet = "tx".split(",").toSet
 
