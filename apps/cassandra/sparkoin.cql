@@ -63,3 +63,10 @@ CREATE TABLE IF NOT EXISTS sparkoin.offsets(
 INSERT INTO sparkoin.offsets(topic, partition, offset) VALUES ('tx', 0, 0);
 INSERT INTO sparkoin.offsets(topic, partition, offset) VALUES ('block', 0, 0);
 
+CREATE TABLE IF NOT EXISTS sparkoin.transactions(
+    id varchar primary key,
+    when timestamp,
+    sender varchar,
+    receiver varchar,
+    amount decimal
+);

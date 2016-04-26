@@ -1,7 +1,8 @@
-import _root_.kafka.serializer.StringDecoder
+import kafka.serializer.StringDecoder
 import org.apache.log4j.{Level, Logger}
-import org.apache.spark.streaming.kafka.{OffsetRange, KafkaUtils}
 import org.apache.spark.{SparkConf, SparkContext}
+//import _root_.kafka.serializer.StringDecoder
+import org.apache.spark.streaming.kafka.{OffsetRange, KafkaUtils}
 
 /**
   * Created by msciab on 25/03/16.
