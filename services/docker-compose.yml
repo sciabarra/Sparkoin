@@ -1,0 +1,96 @@
+zookeeper:
+  hostname: zookeeper
+  domainname: loc
+  image: sparkoin/kafka:2
+  ports:
+    - "2181:2181"
+  restart: always
+  command: bash zookeper.sh
+
+kafka:
+  hostname: kafka
+  domainname: loc
+  image: sparkoin/kafka:2
+  links:
+    - "zookeeper:zookeeper.loc"
+  expose:
+    - 9092
+  ports:
+    - "9092:9092"
+  restart: always
+  command: bash kafka.sh
+  volumes: 
+    - "kafka:/app/data/kafka" 
+
+bitcore:
+  hostname: bitcore
+  domainname: loc
+  image: sparkoin/bitcore:3
+  links:
+   - "zookeeper:zookeeper.loc"
+   - "kafka:kafka.loc"
+  restart: always
+  volumes: 
+    - "./apps/bitcore:/app/apps/bitcore"
+    - "bitcore:/app/data/bitcore" 
+  environment:
+    BITCOIN_NETWORK: livenet 
+  ports: [ "5858:5858", "3001:3001" ]
+    
+hadoop:
+  hostname: hadoop
+  domainname: loc
+  image: sparkoin/hadoop:1
+ 
+spark:
+  hostname: spark
+  domainname: loc
+  image: sparkoin/spark:2
+  ports:
+    - "8180:8080"
+    - "7077:7077"
+  command: bash master.sh
+  links:
+    - "cassandra:cassandra.loc"
+    - "zookeeper:zookeper.loc"
+    - "kafka:kafka.loc"
+  restart: always
+  volumes: 
+     - "./apps/spark:/app/apps/spark" 
+
+cassandra:
+  hostname: cassandra
+  image: sparkoin/cassandra:2
+  domainname: loc
+  expose:
+   - "9042"
+   - "9160"
+   - "8080"
+  ports:
+    - "8080:8080"
+    - "9160:9160"
+    - "9042:9042"
+  environment:
+    JAVA_OPTS: -Ddefault.host=cassandra:9160 -Dfile.encoding=UTF8
+    CQLSH_HOST: cassandra
+  restart: always
+  volumes: 
+    - cassandra:/app/data/cassandra 
+    - ./apps/cassandra:/app/apps/cassandra
+
+jupyter:
+  hostname: jupyter
+  domainname: loc
+  image: sparkoin/jupyter:4
+  ports:
+    - "80:8888"
+  links:
+    - "spark:spark.loc"
+    - "cassandra:cassandra.loc"
+    - "zookeeper:zookeper.loc"
+    - "kafka:kafka.loc"
+  volumes:
+    - "./apps/jupyter:/app/apps/jupyter"
+    - "cassandra:/app/data/cassandra"
+    - "bitcore:/app/data/bitcore" 
+    - "kafka:/app/data/kafka" 

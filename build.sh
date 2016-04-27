@@ -5,5 +5,11 @@ then docker-machine start sparkoin
      yes | docker-compose rm
 fi
 cd services
-sh download.sh
-sh build.sh 
+if test -z "$1"
+then 
+  sh download.sh
+  sh build.sh 
+else
+  sh build-one.sh "$1"
+fi
+cd -

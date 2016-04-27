@@ -1,5 +1,0 @@
-shared:
-  volumes:
-    - /app/data/bitcore
-    - /app/data/cassandra
-    - /app/data/kafka
