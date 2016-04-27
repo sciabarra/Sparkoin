@@ -23,3 +23,5 @@ apps/bitcore/server.pid
 .machine
 apps/spark/project/repo
 apps/spark/project/boot
+services/ssh/id_rsa
+services/ssh/id_rsa.pub

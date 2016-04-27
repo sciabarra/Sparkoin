@@ -20,5 +20,6 @@ else
 fi
 echo $MYID >services/java/uid.txt
 echo $IP >services/java/ip.txt
+test -e services/ssh/id_rsa ||  ssh-keygen -t rsa -f services/ssh/id_rsa -N ''
 cp services/java/uid.txt services/jupyter/uid.txt
 echo You can now build your enviroment running build.sh
