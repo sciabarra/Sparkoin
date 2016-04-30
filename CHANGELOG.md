@@ -1,6 +1,6 @@
 # 0.0.16
 
-* new importer
+* new importer based on hadoop
 * updated configurator
 * switched to livenet by default
 * cql kernel

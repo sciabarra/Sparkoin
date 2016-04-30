@@ -7,15 +7,18 @@
 
 # Prerequisites for Devel
 
-In addition to the prerequisites, you also need: a JDK 1.8,  SBT, all available in the path, and an IDE (Intellij preferred)
+In addition to the prerequisites in README, you also need: 
+- a JDK 1.8,  
+- SBT
+- an IDE (Intellij preferred)
 
 # DEVEL WITH DOCKER
 
 You can enter in the virtual machines with `./enter.sh <substring>`
 
-example `./enter.sh cass` , `./enter.sh bitcore`
+example  `./enter.sh bitcore`
 
-In the vms there is `sbt`, `amm` (scala shell)
+In the containers there is `sbt` (build tool) and  `amm` (scala shell)
 
 The apps folder is accessible under /app/apps
 
@@ -29,7 +32,7 @@ There is also a script to remove all the images (but not the volumes):
 
 ./services/remove-images.sh
 
-Both asks for confirmation. 
+Both ask for confirmation before destroying data.
 
 You can then enter in the containers with the script "enter.sh <service>"
 

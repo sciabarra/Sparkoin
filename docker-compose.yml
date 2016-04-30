@@ -4,6 +4,7 @@ hadoop:
   image: sparkoin/hadoop:1
   volumes:
     - "hadoop:/app/data/hadoop"
+  ports: [ "8020:8020" ]
 
 bitcore:
   hostname: bitcore

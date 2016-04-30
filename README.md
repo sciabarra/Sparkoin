@@ -20,7 +20,8 @@ If you are developing please also check  [development documentatin](DEVEL.md).
 
 ## Prerequisites
 
-Tested under 
+Tested under :
+
 - OSX 10.10  with Docker Toolbox 1.10.3
 - Windows 10 with Docker Toolbox 1.10.3
 - CoreOS with Docker 1.10.x
@@ -31,12 +32,13 @@ On windows you have also to download wget for win32 and place it in the PATH.
 
 Open the docker bash prompt and use the bash shell (also on windows).
 
-You also need: a JDK 1.8, and SBT, all available in the path.
+More prerequisites for development. Check DEVEL.md
 
 ### Installation of the services
 
 First, configure. If you have `docker-machine` (then you are on docker toolbox) you have to tell the ip where your want docker and the size of the virtual disk. 
-If you want to import the whole Blockchain and store it in Cassandra you need at least 200 GB.
+
+If you want to import the whole Blockchain and store it in Hadoop you need at least 200 GB.
 
 NOTE! If you use docker toolbox, you can use any ip in the range 192.168.99.2 - 192.168.99.99
 
@@ -68,13 +70,19 @@ It will start in background (omit -d if you want a foreground start):
 
 - jupyter with toree and cql in port 80
 - spark in port 7077 with the UI in port 8180
-- cassandra in port 9042 and 9160
-- kafka in port 9092 with zookeper in port 2818
+- hadoop in port 8020 
 - bitcore sending transactions to kafka
 
 ### Execute Apps
 
 - `control-bitcore.sh {start|stop|restart|kill|debug}` controls bitcore.
+
+- `exec-hfs.sh <args>` execute filesystem commands against hadoop
+
+
+## SUSPENDED
+
+Note: Cassandra is currently disabled, however this script is still available
 
 `exec-cql.sh <args>` execute cql
 
@@ -85,7 +93,6 @@ in particular:
 `start-jobs.sh <job>` execute a  spark job inside the container
 
 The important job is: `ImportTransactionsFromOffset`
-
 
 So:
 
