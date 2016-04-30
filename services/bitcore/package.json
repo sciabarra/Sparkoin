@@ -5,6 +5,6 @@
     "bitcore-node": "^2.1.0",
     "insight-api": "^0.3.2",
     "insight-ui": "^0.3.1",
-    "kafka-node": "^0.3.2"
+    "webhdfs": "^0.3.0"
   }
 }

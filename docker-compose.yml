@@ -2,6 +2,8 @@ hadoop:
   hostname: hadoop
   domainname: loc
   image: sparkoin/hadoop:1
+  volumes:
+    - "hadoop:/app/data/hadoop"
 
 bitcore:
   hostname: bitcore
@@ -36,7 +38,7 @@ jupyter:
   domainname: loc
   image: sparkoin/jupyter:4
   ports:
-    - "80:8888"
+    - "8888"
   links:
     - "spark:spark.loc"
     - "hadoop:hadoop.loc"
