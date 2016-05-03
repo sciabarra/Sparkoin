@@ -2,29 +2,16 @@ var process = require("process")
 var fs = require("fs")
 var bitcore = require("bitcore")
 var index = require('bitcore-node');
-
-
-// api
 var InsightAPI = require('insight-api')
 var InsightUI = require('insight-ui/bitcore-node')
 
-// connessione hdfs
-var WebHDFS = require('webhdfs');
-var hdfs = WebHDFS.createClient({
-   user: 'app',
-   host: 'hadoop.loc',
-   port: 50070,
-   path: '/webhdfs/v1'
-});
-
-// setup the server
 var Node = index.Node;
 var Bitcoin = index.services.Bitcoin;
 var Address = index.services.Address;
 var DB = index.services.DB;
 var Web = index.services.Web;
 
-// configure and start bitcon and other services
+// configure and start bitcon
 var configuration = {
     datadir: '/app/data/bitcore',
     network: process.env.BITCOIN_NETWORK,
@@ -71,31 +58,24 @@ node.on('ready', function () {
     console.log('Bitcoin Node Ready');
 });
 
-// init counters
+// configure and start kafka
+
+var kafka = require('kafka-node'),
+    Producer = kafka.Producer,
+    client = new kafka.Client(process.env.KAFKA_CONNECT),
+    producer = new Producer(client);
+
+producer.on('ready', function () {
+    producer.createTopics(['tx', "block"], true, function (err, data) {
+        console.log("Topics Created");
+    });
+})
+
 var beginInterval = Date.now();
 var countBlock = 0;
 var countTransactions = 0;
 
-/**
- * Check control requests and log status
- */
-function checkControlRequest(interval) {
-  // check if we need to exit
-  fs.exists('/tmp/server.off', function(exists)  {
-    if(exists)
-     node.services.bitcoind.stop(
-       function() { process.exit(0); })
-   })
-   // check need of restart
-   fs.exists('/tmp/server.restart', function(exists)  {
-    if(exists) {
-     try { fs.unlinkSync('/tmp/server.restart') } catch(err) {}
-     node.services.bitcoind.stop(
-       function() { process.exit(0); })
-    }
-   })
-
-  // display status message
+function countBlocksInInterval(interval) {
   var now = Date.now()
   if( now - beginInterval > interval) {
     console.log("*** seen "+countBlock+" blocks "+countTransactions+" transactions  in latest "+interval+" milliseconds")
@@ -105,6 +85,20 @@ function checkControlRequest(interval) {
   } else {
     countBlock = countBlock + 1;
   }
+  // check if we need to exit
+  fs.exists('/tmp/server.off', function(exists)  {
+    if(exists) 
+     node.services.bitcoind.stop( 
+       function() { process.exit(0); })
+   })
+   // check need of restart
+   fs.exists('/tmp/server.restart', function(exists)  {
+    if(exists) {
+     try { fs.unlinkSync('/tmp/server.restart') } catch(err) {}
+     node.services.bitcoind.stop( 
+       function() { process.exit(0); })
+    }
+   })
 }
 
 // load transactions
@@ -112,30 +106,24 @@ var currentBlock = -1
 var currentHeight = -1
 
 function loadTransactions() {
-
     if (currentBlock < currentHeight) {
-        currentBlock++;
-
-        node.services.bitcoind.getBlock(currentBlock,
-          function (err, blockBuffer) {
+        ++currentBlock;
+        node.services.bitcoind.getBlock(currentBlock, function (err, blockBuffer) {
             if (err) throw err;
-            checkControlRequest(10000) // check status at every block received
-
-            // gather block
             var block = bitcore.Block.fromBuffer(blockBuffer);
+            countBlocksInInterval(10000)
+            payloads = []
+
             var blockHeader = block.header.toJSON()
             var blockData = {
                 block_id: blockHeader.hash,
                 block_height: currentBlock,
                 tx_number: block.transactions.length,
                 difficulty: block.header.getDifficulty(),
-                header: blockHeader,
-                payloads: []
+                header: blockHeader
             }
 
-
-            // gather transactions
-            payloads = []
+            payloads.push({topic: 'block', messages: JSON.stringify(blockData)});
 
             for (var i in block.transactions) {
                 ++countTransactions;
@@ -171,16 +159,17 @@ function loadTransactions() {
                 transactionData["block_time"] = blockHeader.time
                 transactionData["tx_out_list"] = outputs
                 transactionData["tx_in_list"] = inputs
+                var data = JSON.stringify(transactionData);
                 //console.log(transactionData)
-                payloads.push(transactionData)
+                payloads.push(
+                    {topic: 'tx', messages: data}
+                );
             }
-            // store transactions
-            blockData.payloads = payloads
-            // write in hadoop
-            hdfs.writeFile('/blockchain/'+currentBlock+'.json', JSON.stringify(blockData),  function(err) {
-                if(err) console.log(err)
-                else  loadTransactions()
-            })
+
+            producer.send(payloads, function (err, data) {
+                //console.log(data);
+                loadTransactions()
+            });
         })
     }
 }
@@ -188,11 +177,7 @@ function loadTransactions() {
 node.services.bitcoind.on('tip', function (height) {
     //console.log("tip " + height)
     currentHeight = height
-    hdfs.mkdir('/blockchain', function(err) {
-      if(err)
-        console.log(err)
-      loadTransactions()
-    })
+    loadTransactions()
 });
 
 
@@ -210,3 +195,7 @@ node.services.bitcoind.on('tx', function (txInfo) {
     console.log("txleave " + JSON.stringify(txLeaveInfo))
  })
 */
+
+  
+
+
