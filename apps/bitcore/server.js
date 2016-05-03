@@ -2,14 +2,16 @@ var process = require("process")
 var fs = require("fs")
 var bitcore = require("bitcore")
 var index = require('bitcore-node');
-var InsightAPI = require('insight-api')
-var InsightUI = require('insight-ui/bitcore-node')
+
+// disabled as they are slowing down a lot
+//var InsightAPI = require('insight-api')
+//var InsightUI = require('insight-ui/bitcore-node')
 
 var Node = index.Node;
 var Bitcoin = index.services.Bitcoin;
 var Address = index.services.Address;
 var DB = index.services.DB;
-var Web = index.services.Web;
+//var Web = index.services.Web;
 
 // configure and start bitcon
 var configuration = {
@@ -28,7 +30,7 @@ var configuration = {
         name: 'db',
         module: DB,
         config: {}
-    }, {
+    } /*, {
         name: 'web',
         module: Web,
         config: {
@@ -42,7 +44,7 @@ var configuration = {
         name: 'insight-ui',
         module: InsightUI ,
         config: {}
-    } ]
+    } */ ]
 };
 
 fs.writeFile("server.pid", process.pid)
@@ -60,22 +62,21 @@ node.on('ready', function () {
 
 // configure and start kafka
 
-var kafka = require('kafka-node'),
-    Producer = kafka.Producer,
-    client = new kafka.Client(process.env.KAFKA_CONNECT),
-    producer = new Producer(client);
+// connessione hdfs
+var WebHDFS = require('webhdfs');
+var hdfs = WebHDFS.createClient({
+    user: 'app',
+    host: 'hadoop.loc',
+    port: 50070,
+    path: '/webhdfs/v1'
+});
 
-producer.on('ready', function () {
-    producer.createTopics(['tx', "block"], true, function (err, data) {
-        console.log("Topics Created");
-    });
-})
 
 var beginInterval = Date.now();
 var countBlock = 0;
 var countTransactions = 0;
 
-function countBlocksInInterval(interval) {
+function checkStatus(interval) {
   var now = Date.now()
   if( now - beginInterval > interval) {
     console.log("*** seen "+countBlock+" blocks "+countTransactions+" transactions  in latest "+interval+" milliseconds")
@@ -86,15 +87,15 @@ function countBlocksInInterval(interval) {
     countBlock = countBlock + 1;
   }
   // check if we need to exit
-  fs.exists('/tmp/server.off', function(exists)  {
+  fs.exists('/app/data/bitcore/server.off', function(exists)  {
     if(exists) 
      node.services.bitcoind.stop( 
        function() { process.exit(0); })
    })
    // check need of restart
-   fs.exists('/tmp/server.restart', function(exists)  {
+   fs.exists('/app/data/bitcore/server.restart', function(exists)  {
     if(exists) {
-     try { fs.unlinkSync('/tmp/server.restart') } catch(err) {}
+     try { fs.unlinkSync('/app/data/bitcore/server.restart') } catch(err) {}
      node.services.bitcoind.stop( 
        function() { process.exit(0); })
     }
@@ -106,13 +107,12 @@ var currentBlock = -1
 var currentHeight = -1
 
 function loadTransactions() {
+    checkStatus(10000);
     if (currentBlock < currentHeight) {
         ++currentBlock;
         node.services.bitcoind.getBlock(currentBlock, function (err, blockBuffer) {
             if (err) throw err;
             var block = bitcore.Block.fromBuffer(blockBuffer);
-            countBlocksInInterval(10000)
-            payloads = []
 
             var blockHeader = block.header.toJSON()
             var blockData = {
@@ -123,8 +123,7 @@ function loadTransactions() {
                 header: blockHeader
             }
 
-            payloads.push({topic: 'block', messages: JSON.stringify(blockData)});
-
+            payloads = []
             for (var i in block.transactions) {
                 ++countTransactions;
                 var transaction = block.transactions[i];
@@ -136,11 +135,12 @@ function loadTransactions() {
                     var address = script.toAddress()
                     outputs.push({
                         script_pub_key: script.toString(),
-                        address:address.toString(),
-                        value: output.satoshis})
+                        address: address.toString(),
+                        value: output.satoshis
+                    })
                 }
                 for (var ii in transaction.inputs) {
-                    if (! transaction.isCoinbase()) {
+                    if (!transaction.isCoinbase()) {
                         var input = transaction.inputs[ii]
                         var script = input.script
                         var address = script.toAddress()
@@ -150,7 +150,8 @@ function loadTransactions() {
                             output_tx_id: input.outputIndex,
                             sequence_no: input.sequenceNumber,
                             script_sig: script.toString(),
-                            address:address.toString()})
+                            address: address.toString()
+                        })
                     }
                 }
                 //console.log(transaction)
@@ -159,17 +160,18 @@ function loadTransactions() {
                 transactionData["block_time"] = blockHeader.time
                 transactionData["tx_out_list"] = outputs
                 transactionData["tx_in_list"] = inputs
-                var data = JSON.stringify(transactionData);
+                var data = transactionData;
                 //console.log(transactionData)
-                payloads.push(
-                    {topic: 'tx', messages: data}
-                );
+                payloads.push(data);
             }
 
-            producer.send(payloads, function (err, data) {
-                //console.log(data);
-                loadTransactions()
-            });
+            var toSave = {block: blockData, tx: payloads}
+            hdfs.writeFile('/blockchain/' + currentBlock + '.json', JSON.stringify(toSave),
+                function () {
+                    if (err)
+                        console.log(err)
+                    loadTransactions()
+                })
         })
     }
 }
@@ -177,7 +179,11 @@ function loadTransactions() {
 node.services.bitcoind.on('tip', function (height) {
     //console.log("tip " + height)
     currentHeight = height
-    loadTransactions()
+    hdfs.mkdir('/blockchain', function(err) {
+        if(err)
+            console.log(err)
+        loadTransactions()
+    })
 });
 
 

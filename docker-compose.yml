@@ -20,28 +20,13 @@ bitcore:
     BITCOIN_NETWORK: livenet 
   ports: [ "5858:5858", "3001:3001" ]
 
-spark:
-  hostname: spark
-  domainname: loc
-  image: sparkoin/spark:2
-  ports:
-    - "8180:8080"
-    - "7077:7077"
-  command: bash master.sh
-  links:
-    - "hadoop:hadoop.loc"
-  restart: always
-  volumes:
-     - "./apps/spark:/app/apps/spark"
-
 jupyter:
   hostname: jupyter
   domainname: loc
   image: sparkoin/jupyter:4
   ports:
-    - "8888"
+    - "8888:8888"
   links:
-    - "spark:spark.loc"
     - "hadoop:hadoop.loc"
   volumes:
     - "./apps/jupyter:/app/apps/jupyter"

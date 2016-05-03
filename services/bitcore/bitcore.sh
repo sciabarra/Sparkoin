@@ -2,7 +2,7 @@
 sudo chown -Rf app /app/bitcore /app/data/bitcore
 while true 
 do sleep 10  
-  if test -e /tmp/server.off
+  if test -e /app/data/bitcore/server.off
   then echo "Bitcore Off - checking again in 10 seconds"
   else if test -e /tmp/server.debug
        then echo "*** debugging enabled ***"
