@@ -102,22 +102,37 @@ function checkStatus(interval) {
    })
 }
 
-// load transactions
+// load transactions and write them in hadoop
+
 var currentBlock = -1
 var currentHeight = -1
+var currentRetrievedBlock = -1;
 
 function loadTransactions() {
     checkStatus(10000);
     if (currentBlock < currentHeight) {
         ++currentBlock;
+
+        // limiting the number of blocks to retrieve
+        if (process.env.BITCORE_STOP_AT) {
+            if (currentBlock >= process.env.BITCORE_STOP_AT) {
+                fs.writeFile("/app/data/bitcore/server.off", "")
+                node.services.bitcoind.stop(function () { process.exit(0);})
+            }
+        }
+
+        console.log("retrieving "+currentBlock)
         node.services.bitcoind.getBlock(currentBlock, function (err, blockBuffer) {
-            if (err) throw err;
+            if (err)
+                console.log(err);
+
+            ++currentRetrievedBlock
             var block = bitcore.Block.fromBuffer(blockBuffer);
 
             var blockHeader = block.header.toJSON()
             var blockData = {
                 block_id: blockHeader.hash,
-                block_height: currentBlock,
+                block_height: currentRetrievedBlock,
                 tx_number: block.transactions.length,
                 difficulty: block.header.getDifficulty(),
                 header: blockHeader
@@ -166,7 +181,8 @@ function loadTransactions() {
             }
 
             var toSave = {block: blockData, tx: payloads}
-            hdfs.writeFile('/blockchain/' + currentBlock + '.json', JSON.stringify(toSave),
+            console.log("writing "+currentBlock)
+            hdfs.writeFile('/blockchain/' + currentRetrievedBlock + '.json', JSON.stringify(toSave),
                 function () {
                     if (err)
                         console.log(err)

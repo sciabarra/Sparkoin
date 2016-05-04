@@ -1,12 +1,10 @@
-FROM debian:jessie
-RUN sed -i -e 's/httpredir.debian.org/ftp.us.debian.org/' /etc/apt/sources.list
+FROM sparkoin/spark:2
 USER root
+RUN sed -i -e 's/httpredir.debian.org/ftp.it.debian.org/' /etc/apt/sources.list
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install -yq --no-install-recommends \
+RUN apt-get update && apt-get install -yq --force-yes --no-install-recommends \
     git \
     vim \
-    jed \
-    emacs \
     wget \
     build-essential \
     python-dev \
@@ -16,11 +14,6 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     unzip \
     libsm6 \
     pandoc \
-    texlive-latex-base \
-    texlive-latex-extra \
-    texlive-fonts-extra \
-    texlive-fonts-recommended \
-    texlive-generic-recommended \
     sudo \
     locales \
     libxrender1 \
@@ -28,8 +21,7 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
-    locale-gen
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen
 
 # Install Tini
 RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.9.0/tini && \
@@ -43,14 +35,9 @@ ENV SHELL /bin/bash
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
-ENV APACHE_SPARK_VERSION 1.6.0
-COPY uid.txt /etc/
-RUN useradd -m -s /bin/bash -u $(cat /etc/uid.txt) -d /app -m app 
 
 USER app
-RUN mkdir -p /app/apps/jupyter && \
-    mkdir /app/.jupyter && \
-    mkdir /app/.local && \
+RUN mkdir -p /app/apps/jupyter/conf /app/apps/jupyter/local && \
     mkdir /app/conda && \
     echo "cacert=/etc/ssl/certs/ca-certificates.crt" > /app/.curlrc
 
@@ -68,24 +55,17 @@ RUN conda install --quiet --yes \
     && conda clean -tipsy
 
 RUN pip install 'jupyterhub==0.5'
-WORKDIR /app/apps/jupyter
+
 USER root
-RUN python2 -m pip install jupyter cql_kernel
-ENV APACHE_SPARK_VERSION 1.6.0
-RUN apt-get -y update && \
-    apt-get install -y --no-install-recommends openjdk-7-jre-headless && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-RUN cd /tmp && \
-        wget -q http://d3kbcqa49mib13.cloudfront.net/spark-${APACHE_SPARK_VERSION}-bin-hadoop2.6.tgz && \
-        echo "439fe7793e0725492d3d36448adcd1db38f438dd1392bffd556b58bb9a3a2601 *spark-${APACHE_SPARK_VERSION}-bin-hadoop2.6.tgz" | sha256sum -c - && \
-        tar xzf spark-${APACHE_SPARK_VERSION}-bin-hadoop2.6.tgz -C /usr/local && \
-        rm spark-${APACHE_SPARK_VERSION}-bin-hadoop2.6.tgz
-RUN cd /usr/local && ln -s spark-${APACHE_SPARK_VERSION}-bin-hadoop2.6 spark
-ENV SPARK_HOME /usr/local/spark
+RUN python2 -m pip install jupyter cql_kernel && ln -sf /app/spark /usr/local/spark
+
+USER app
+ENV JAVA_HOME=/usr/java/jdk1.8.0_65
+ENV SPARK_HOME /app/spark
 ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.9-src.zip
 ENV SPARK_OPTS --driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info
-USER app
+WORKDIR /app/apps/jupyter
+
 RUN conda install --quiet --yes \
     'ipywidgets=4.1*' \
     'pandas=0.17*' \
@@ -98,5 +78,6 @@ RUN conda install --quiet --yes \
     && pip install toree \
     && jupyter toree install --user --kernel_name='Toree' \
     && python2 -m cql_kernel.install  cassandra.loc
+RUN pip install https://github.com/ipython-contrib/IPython-notebook-extensions/archive/master.zip --user
 ENTRYPOINT ["tini", "--"]
 CMD jupyter notebook --ip=$(hostname -i) --no-browser

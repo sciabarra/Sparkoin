@@ -5,8 +5,8 @@ then
 docker-compose kill
 yes | docker-compose rm
 docker volume rm bitcore hadoop #cassandra kafka 
-docker volume create --name bitcore 
-docker volume create --name hadoop
 #docker volume create --name cassandra 
 #docker volume create --name kafka
+docker volume create --name bitcore 
+docker volume create --name hadoop
 fi
