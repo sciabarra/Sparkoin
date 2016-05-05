@@ -5,4 +5,8 @@
   <name>fs.defaultFS</name>
   <value>hdfs://hadoop.loc/</value>
 </property>
+<property>
+  <name>hadoop.tmp.dir</name>
+  <value>/app/data/hadoop</value>
+</property>
 </configuration>

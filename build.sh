@@ -13,3 +13,6 @@ else
   sh build-one.sh "$1"
 fi
 cd -
+cd apps
+sh build.sh
+cd -

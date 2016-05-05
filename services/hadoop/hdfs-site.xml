@@ -7,6 +7,6 @@
 </property>
 <property>
   <name>dfs.data.dir</name>
-  <value>/app/data/hadoop</value>
+  <value>file:///app/data/hadoop/dfs/data</value>
 </property>
 </configuration>

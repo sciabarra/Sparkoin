@@ -14,7 +14,7 @@ Spark-based Bitcoin Blockchain Analyzer, aka BigData for BitCoin.
 
 ## Status
 
-Work in progress - not yet usable.
+Work in progress.
 
 If you are developing please also check  [development documentatin](DEVEL.md).
 
@@ -69,7 +69,6 @@ sh start-services.sh -d
 It will start in background (omit -d if you want a foreground start):
 
 - jupyter with toree and cql in port 80
-- spark in port 7077 with the UI in port 8180
 - hadoop in port 8020 
 - bitcore sending transactions to kafka
 
@@ -79,24 +78,3 @@ It will start in background (omit -d if you want a foreground start):
 
 - `exec-hfs.sh <args>` execute filesystem commands against hadoop
 
-
-## SUSPENDED
-
-Note: Cassandra is currently disabled, however this script is still available
-
-`exec-cql.sh <args>` execute cql
-
-in particular:
-
-`run-cql.sh -f  sparkcoin.cql` will create the schema in cassandra
-
-`start-jobs.sh <job>` execute a  spark job inside the container
-
-The important job is: `ImportTransactionsFromOffset`
-
-So:
-
-- initialize with `exec-cql -f sparkoin.cql`
-- run `./start-jobs.sh ImportTransactionsFromOffset`
-
-you will end up with the transactions (and the blocks) imported in Cassandra.

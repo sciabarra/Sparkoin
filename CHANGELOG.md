@@ -1,3 +1,8 @@
+# 0.0.18
+
+* fixed jupyter - can now load assemblies
+* added sparkoin library
+
 # 0.0.17
 
 * new importer based on hadoop
