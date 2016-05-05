@@ -18,7 +18,7 @@ bitcore:
     - "bitcore:/app/data/bitcore" 
   environment:
     BITCOIN_NETWORK: livenet 
-    BITCORE_STOP_AT: 1000
+    #BITCORE_STOP_AT: 1000
   ports: [ "5858:5858", "3001:3001" ]
 
 jupyter:

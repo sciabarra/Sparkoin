@@ -1,0 +1,8 @@
+target/
+.ensime
+.ensime_cache/
+.ipynb_checkpoints/
+.atom/
+project/repo/
+project/boot/
+project/atom/
