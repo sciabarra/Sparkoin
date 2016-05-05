@@ -4,7 +4,7 @@ docker volume create --name cassandra
 docker volume create --name bitcore
 docker build -t sparkoin/java:2 java
 docker build -t sparkoin/ssh:1 ssh
-docker build -t sparkoin/hadoop:1 hadoop
+docker build -t sparkoin/hadoop:2 hadoop
 docker build -t sparkoin/spark:2 spark
 #docker build -t sparkoin/kafka:2 kafka
 #docker build -t sparkoin/cassandra:2 cassandra
