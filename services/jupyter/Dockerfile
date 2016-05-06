@@ -64,8 +64,12 @@ ENV JAVA_HOME=/usr/java/jdk1.8.0_65
 ENV SPARK_HOME /app/spark
 ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.9-src.zip
 ENV SPARK_OPTS --driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info
-WORKDIR /app/apps/jupyter
 
+WORKDIR /app
+COPY jupyter.sh /app/jupyter.sh 
+RUN curl -L -o jupyter-scala https://git.io/vzhRi && chmod +x jupyter-scala && ./jupyter-scala && rm -f jupyter-scala ; dos2unix /app/*.sh 
+
+WORKDIR /app/apps/jupyter
 RUN conda install --quiet --yes \
     'ipywidgets=4.1*' \
     'pandas=0.17*' \
@@ -77,7 +81,7 @@ RUN conda install --quiet --yes \
     && conda clean -tipsy \
     && pip install toree \
     && jupyter toree install --user --kernel_name='Toree' \
-    && python2 -m cql_kernel.install  cassandra.loc
+    && python2 -m cql_kernel.install cassandra.loc
 RUN pip install https://github.com/ipython-contrib/IPython-notebook-extensions/archive/master.zip --user
 ENTRYPOINT ["tini", "--"]
-CMD jupyter notebook --ip=$(hostname -i) --no-browser
+CMD bash /app/jupyter.sh
