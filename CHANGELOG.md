@@ -1,4 +1,4 @@
-# 0.0.18
+# 0.1
 
 * fixed hadoop in order to format datanode
 * fixed jupyter - can now load assemblies
