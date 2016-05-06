@@ -15,6 +15,11 @@ Spark-based Bitcoin Blockchain Analyzer, aka BigData for BitCoin.
 ## Status
 
 Work in progress.
+In the current status
+- it limits to downloading only the first 10k transactions from the blockchain
+- there is not yet a cluster - only a single node hadoop is deployed
+- you are expected to use jupyter to write your scala based analisys
+
 
 If you are developing please also check  [development documentatin](DEVEL.md).
 
@@ -70,7 +75,8 @@ It will start in background and build extra components.
 
 Bitcore will load all the blockchain transactions in hadoop.
 
-You can then access http://YOUR-IP:8888 to jupyter to perform your analysis
+You can then access http://YOUR-IP:8888 to jupyter to perform your analysis.
+There is a first example running.
 
 ### Execute Apps
 
