@@ -11,4 +11,4 @@ libraryDependencies ++= Seq(
     .exclude("org.scala-lang", "scalap")
 )
 
-assemblyJarName := "sparkoin.jar"
+assemblyOutputPath in assembly := baseDirectory.value.getParentFile / "jupyter" / "sparkoin.jar"
