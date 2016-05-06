@@ -1,4 +1,9 @@
 #!/bin/bash
+sudo chown -R app /app/data/hadoop
+if ! test -d /app/data/hadoop/dfs/name
+then mkdir -p /app/data/hadoop/dfs/data
+     /app/hadoop/bin/hdfs namenode -format
+fi
 echo "*** Starting SSHD"
 sudo /etc/init.d/ssh start
 echo "*** Starting DFS"

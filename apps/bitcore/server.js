@@ -121,7 +121,7 @@ function loadTransactions() {
             }
         }
 
-        console.log("retrieving "+currentBlock)
+        //console.log("retrieving "+currentBlock)
         node.services.bitcoind.getBlock(currentBlock, function (err, blockBuffer) {
             if (err)
                 console.log(err);
@@ -181,7 +181,7 @@ function loadTransactions() {
             }
 
             var toSave = {block: blockData, tx: payloads}
-            console.log("writing "+currentBlock)
+            //console.log("writing "+currentBlock)
             hdfs.writeFile('/blockchain/' + currentRetrievedBlock + '.json', JSON.stringify(toSave),
                 function () {
                     if (err)

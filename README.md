@@ -63,14 +63,14 @@ It will download all the required software and create the docker images.
 Then execute:
 
 ```
-sh start-services.sh -d
+sh start.sh 
 ```
 
-It will start in background (omit -d if you want a foreground start):
+It will start in background and build extra components.
 
-- jupyter with toree and cql in port 80
-- hadoop in port 8020 
-- bitcore sending transactions to kafka
+Bitcore will load all the blockchain transactions in hadoop.
+
+You can then access http://YOUR-IP:8888 to jupyter to perform your analysis
 
 ### Execute Apps
 
