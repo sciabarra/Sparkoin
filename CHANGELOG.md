@@ -1,3 +1,6 @@
+# 0.0.19
+- refactored services in order to eliminate download 
+
 # 0.0.18
 
 * fixed hadoop in order to format datanode

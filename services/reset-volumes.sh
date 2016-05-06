@@ -1,12 +1,13 @@
+#!/bin/bash
 read -p "Resetting all data from volumes - Are you sure? " -n 1 -r
 echo
-if [[ $REPLY =~ ^[Yy]$ ]]
+if test $REPLY == "y"
 then
 docker-compose kill
-yes | docker-compose rm
+yes | docker-compose rm --all
 docker volume rm bitcore hadoop #cassandra kafka 
+fi
+docker volume create --name hadoop
+docker volume create --name bitcore 
 #docker volume create --name cassandra 
 #docker volume create --name kafka
-docker volume create --name bitcore 
-docker volume create --name hadoop
-fi

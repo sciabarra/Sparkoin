@@ -1,7 +1,7 @@
 hadoop:
   hostname: hadoop
   domainname: loc
-  image: sparkoin/hadoop:2
+  image: sparkoin/hadoop:4
   volumes:
     - "hadoop:/app/data/hadoop"
   ports: [ "8020:8020" ]
@@ -9,7 +9,7 @@ hadoop:
 bitcore:
   hostname: bitcore
   domainname: loc
-  image: sparkoin/bitcore:3
+  image: sparkoin/bitcore:4
   links:
    - "hadoop:hadoop.loc"
   restart: always

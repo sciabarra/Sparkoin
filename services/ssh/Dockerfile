@@ -1,5 +1,4 @@
-FROM sparkoin/java:2
-RUN apt-get install -y openssh-client openssh-server
+FROM sparkoin/ssh-base:4
 COPY config id_rsa id_rsa.pub /root/.ssh/ 
 RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys ;\
  cp -Rvf /root/.ssh /app/.ssh ;\
