@@ -1,11 +1,12 @@
 package sparkoin
 
-import org.json4s._
-import org.json4s.jackson.JsonMethods._
-
 object Sparkoin {
 
-  def prettify(jstr: String): String = { pretty(render(parse(jstr))) }
+  import org.json4s._, jackson.JsonMethods._
+  import Model._
 
-  def prettify(tag: String, jstr: String): String = { s"<${tag}>${prettify(jstr)}</${tag}>" }
+  def prettify(jstr: String): String = pretty(render(parse(jstr)))
+
+  def extract(jstr: String): FullBlock = parse(jstr).extract[FullBlock]
+
 }
