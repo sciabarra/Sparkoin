@@ -104,7 +104,7 @@ function checkStatus(interval) {
 
 var currentBlock = -1
 var currentHeight = -1
-var currentRetrievedBlock = 0;
+var currentRetrievedBlock = -1;
 var started = false
 
 function loadTransactions() {
@@ -194,21 +194,25 @@ function loadTransactions() {
 
             var toSave = {block: blockData, tx: payloads}
             //console.log("writing "+currentBlock)
+            ++currentRetrievedBlock
             hdfs.writeFile('/blockchain/' + currentRetrievedBlock + '.json', JSON.stringify(toSave),
                 function () {
                     if (err)
                         console.log(err)
-                    ++currentRetrievedBlock
-                    loadTransactions()
                 })
+            loadTransactions()
         })
     }
 }
 
+var loading = false
 node.services.bitcoind.on('tip', function (height) {
     //console.log("tip " + height)
     currentHeight = height
-    loadTransactions()
+    if(!loading) {
+        loading = true
+        loadTransactions()
+    }
 });
 
 
