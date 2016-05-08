@@ -104,7 +104,7 @@ function checkStatus(interval) {
 
 var currentBlock = -1
 var currentHeight = -1
-var currentRetrievedBlock = -1;
+var currentRetrievedBlock = 0;
 var started = false
 
 function loadTransactions() {
@@ -112,10 +112,12 @@ function loadTransactions() {
         hdfs.mkdir('/blockchain', function (err) {
             if (err) {
                 console.log(err)
+                setTimeout(loadTransactions, 1000)
             } else {
                 started = true
+                loadTransactions()
             }
-            loadTransactions()
+
         })
         return;
     }
@@ -137,7 +139,6 @@ function loadTransactions() {
             if (err)
                 console.log(err);
 
-            ++currentRetrievedBlock
             var block = bitcore.Block.fromBuffer(blockBuffer);
 
             var blockHeader = block.header.toJSON()
@@ -197,6 +198,7 @@ function loadTransactions() {
                 function () {
                     if (err)
                         console.log(err)
+                    ++currentRetrievedBlock
                     loadTransactions()
                 })
         })
