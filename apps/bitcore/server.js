@@ -105,8 +105,21 @@ function checkStatus(interval) {
 var currentBlock = -1
 var currentHeight = -1
 var currentRetrievedBlock = -1;
+var started = false
 
 function loadTransactions() {
+    if(!started) {
+        hdfs.mkdir('/blockchain', function (err) {
+            if (err) {
+                console.log(err)
+            } else {
+                started = true
+            }
+            loadTransactions()
+        })
+        return;
+    }
+
     checkStatus(10000);
     if (currentBlock < currentHeight) {
         ++currentBlock;
@@ -193,11 +206,7 @@ function loadTransactions() {
 node.services.bitcoind.on('tip', function (height) {
     //console.log("tip " + height)
     currentHeight = height
-    hdfs.mkdir('/blockchain', function(err) {
-        if(err)
-            console.log(err)
-        loadTransactions()
-    })
+    loadTransactions()
 });
 
 
