@@ -14,9 +14,10 @@ Spark-based Bitcoin Blockchain Analyzer, aka BigData for BitCoin.
 
 ## Status
 
-Work in progress.
+Currently it is a development kit.
+
 In the current status
-- it limits to downloading only the first 10k transactions from the blockchain
+- it limits to downloading only the first 1000 transactions from the blockchain
 - there is not yet a cluster - only a single node hadoop is deployed
 - you are expected to use jupyter to write your scala based analisys
 
@@ -27,13 +28,12 @@ If you are developing please also check  [development documentatin](DEVEL.md).
 
 Tested under :
 
-- OSX 10.10  with Docker Toolbox 1.10.3
+- OSX 10.10  with Docker for OSX Beta 
 - Windows 10 with Docker Toolbox 1.10.3
-- CoreOS with Docker 1.10.x
+- Boot2Docker with Docker 1.10.1
 
 First, on Windows and Mac, Install Docker Toolbox.
-
-On windows you have also to download wget for win32 and place it in the PATH.
+Or, if you are so lucky to get an invitatation, use docker beta.
 
 Open the docker bash prompt and use the bash shell (also on windows).
 
@@ -41,7 +41,11 @@ More prerequisites for development. Check DEVEL.md
 
 ### Installation of the services
 
-First, configure. If you have `docker-machine` (then you are on docker toolbox) you have to tell the ip where your want docker and the size of the virtual disk. 
+First, configure. If you have the toolbox use `./configure-toolbox.sh` otherwise `./configure.sh`
+
+You have to tell the ip of your docker, that is usually the ip of your machine for docker standalone, or 192.168.99.99 for the docker-toolbox.
+
+Docker toolbox wants also to know the size of the virtual disk for your virtual machine.
 
 If you want to import the whole Blockchain and store it in Hadoop you need at least 200 GB.
 
@@ -52,7 +56,7 @@ Otherwise in a live docker installation you have to use the "real" IP (detected 
 Example:
 
 ```
-sh configure 192.168.99.99 2000000
+sh configure-toolbox.sh 192.168.99.99 2000000
 ```
 
 # Build
@@ -71,14 +75,15 @@ Then execute:
 sh start.sh 
 ```
 
-It will start in background and build extra components.
+It will start your images in background.
 
 Bitcore will load all the blockchain transactions in hadoop.
 
 You can then access http://YOUR-IP:8888 to jupyter to perform your analysis.
-There is a first example running.
 
-### Execute Apps
+As a starting point there is a sparkoin.ipynb notebook that will use the beginning of a sparkoin library for analyzing the data.
+
+### Extras
 
 - `control-bitcore.sh {start|stop|restart|kill|debug}` controls bitcore.
 

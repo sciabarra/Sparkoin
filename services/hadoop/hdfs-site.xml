@@ -9,4 +9,8 @@
   <name>dfs.data.dir</name>
   <value>file:///app/data/hadoop/dfs/data</value>
 </property>
+<property>
+  <name>dfs.namenode.name.dir</name>
+  <value>file:///app/data/hadoop/name,file:///tmp/name</value>
+</property>
 </configuration>

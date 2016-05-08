@@ -9,7 +9,7 @@ ENV LANGUAGE en_US.UTF-8
 ENV JAVA_HOME=/usr/java/jdk1.8.0_65
 ENV SPARK_HOME /app/spark
 ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.9-src.zip
-ENV SPARK_OPTS --driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info
+ENV SPARK_OPTS --driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info 
 
 RUN mkdir -p /app/apps/jupyter/conf /app/apps/jupyter/local && \
     mkdir /app/conda && \
@@ -32,7 +32,7 @@ RUN pip install 'jupyterhub==0.5'
 
 WORKDIR /app
 COPY jupyter.sh /app/jupyter.sh 
-RUN curl -L -o jupyter-scala https://git.io/vzhRi &&\
+RUN curl -L -o jupyter-scala https://git.io/vzhR7 &&\
  chmod +x jupyter-scala &&\
  PATH=/usr/java/jdk1.8.0_65/bin:$PATH ./jupyter-scala &&\
  rm -f jupyter-scala 

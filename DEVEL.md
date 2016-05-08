@@ -1,3 +1,9 @@
+# Development
+
+So you want to partecipate to development?
+
+Ok here there are the rules.
+
 # VERSION CONTROL RULES
 
 - do not break the master.... *always work in a branch*
@@ -12,13 +18,13 @@ In addition to the prerequisites in README, you also need:
 - SBT
 - an IDE (Intellij preferred)
 
-# DEVEL WITH DOCKER
+# DOCKER TIPS
 
 You can enter in the virtual machines with `./enter.sh <substring>`
 
 example  `./enter.sh bitcore`
 
-In the containers there is `sbt` (build tool) and  `amm` (scala shell)
+In the containers (except bitcore) there is  `sbt` (build tool) and  `amm` (scala shell)
 
 The apps folder is accessible under /app/apps
 
@@ -36,7 +42,7 @@ Both ask for confirmation before destroying data.
 
 You can then enter in the containers with the script "enter.sh <service>"
 
-# DEVEL WITH SCALA
+# SCALA TIPS
 
 In your host machine, install an IDE (IntelliJ recommended) and SBT
 
@@ -46,7 +52,7 @@ Import the project apps and go coding...
 
 - `sbt jobs/runMain <job>` runs your spark jobs.
 
-# DEVEL WITH NODE
+# NODE TIPS
 
 You do not need to install node.
 

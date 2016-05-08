@@ -1,4 +1,5 @@
 #!/bin/bash
+cd $(dirname $0)
 V=4
 if test -n "$1"
 then BUILD="$@"
@@ -9,3 +10,4 @@ do
    docker build -t sparkoin/$i-base:$V $i/base
    docker build -t sparkoin/$i:$V $i
 done
+cd -

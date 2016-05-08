@@ -12,6 +12,8 @@ libraryDependencies ++= Seq(
     //.exclude("org.scala-lang", "scala-compiler")
     //.exclude("org.scala-lang", "scala-reflect")
     .exclude("org.scala-lang", "scalap")
+    //, ("com.github.nikita-volkov" % "sext" % "0.2.4")
+    // .exclude("org.scala-lang", "scala-reflect")
 )
 
 assemblyOutputPath in assembly := baseDirectory.value / "sparkoin.jar"

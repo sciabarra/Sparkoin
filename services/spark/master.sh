@@ -1,4 +1,3 @@
 #!/bin/bash
-source /etc/profile.d/java.sh
-tail -f $(/app/spark/sbin/start-master.sh | awk '{ print $5 }')
+tail -f $(JAVA_HOME=/usr/java/jdk1.8.0_65 /app/spark/sbin/start-master.sh | awk '{ print $5 }')
 

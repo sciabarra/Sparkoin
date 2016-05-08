@@ -60,8 +60,6 @@ node.on('ready', function () {
     console.log('Bitcoin Node Ready');
 });
 
-// configure and start kafka
-
 // connessione hdfs
 var WebHDFS = require('webhdfs');
 var hdfs = WebHDFS.createClient({

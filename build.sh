@@ -5,4 +5,4 @@ then docker-machine start sparkoin
      yes | docker-compose rm
 fi
 cd services
-sh build.sh java ssh hadoop spark cassandra kafka
+sh build.sh java ssh bitcore hadoop spark jupyter

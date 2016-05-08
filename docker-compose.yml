@@ -29,6 +29,8 @@ jupyter:
     - "8888:8888"
   links:
     - "hadoop:hadoop.loc"
+    - "spark:spark.loc"
   volumes:
+    - "bitcore:/app/data/bitcore" 
     - "./apps/jupyter:/app/apps/jupyter"
     - "./apps/sparkoin:/app/apps/sparkoin"
