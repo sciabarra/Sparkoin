@@ -8,7 +8,7 @@ if test -z "$2"
 then echo "Please specify your image size, for the whole blockchain you need at least 200000" ; exit 1
 else SIZE=$2
 fi
-docker-machine create --driver virtualbox --virtualbox-memory 4096 --virtualbox-disk-size $SIZE sparkoin 
+docker-machine create --driver virtualbox --virtualbox-memory 3096 --virtualbox-disk-size $SIZE sparkoin 
 docker-machine start sparkoin
 docker-machine ssh sparkoin "echo ifconfig eth1:0 $IP | sudo tee /var/lib/boot2docker/bootlocal.sh"
 docker-machine stop sparkoin ; docker-machine start sparkoin
@@ -16,5 +16,6 @@ echo $MYID >services/java/uid.txt
 echo $IP >services/java/ip.txt
 test -e services/ssh/id_rsa ||  ssh-keygen -t rsa -f services/ssh/id_rsa -N ''
 cp services/java/uid.txt services/jupyter/uid.txt
-sh services/reset-volumes.sh
+docker volume create --name hadoop
+docker volume create --name bitcore 
 echo You can now build your enviroment running build.sh
