@@ -69,21 +69,7 @@ var hdfs = WebHDFS.createClient({
     path: '/webhdfs/v1'
 });
 
-
-var beginInterval = Date.now();
-var countBlock = 0;
-var countTransactions = 0;
-
-function checkStatus(interval) {
-  var now = Date.now()
-  if( now - beginInterval > interval) {
-    console.log("*** seen "+countBlock+" blocks "+countTransactions+" transactions  in latest "+interval+" milliseconds")
-    beginInterval = now;
-    countBlock = 0;
-    countTransactions = 0;
-  } else {
-    countBlock = countBlock + 1;
-  }
+function checkStatus() {
   // check if we need to exit
   fs.exists('/app/data/bitcore/server.off', function(exists)  {
     if(exists) 
@@ -117,12 +103,10 @@ function loadTransactions() {
                 started = true
                 loadTransactions()
             }
-
         })
         return;
     }
 
-    checkStatus(10000);
     if (currentBlock < currentHeight) {
         ++currentBlock;
 
@@ -152,7 +136,6 @@ function loadTransactions() {
 
             payloads = []
             for (var i in block.transactions) {
-                ++countTransactions;
                 var transaction = block.transactions[i];
                 var outputs = []
                 var inputs = []
@@ -213,6 +196,7 @@ node.services.bitcoind.on('tip', function (height) {
         loading = true
         loadTransactions()
     }
+    checkStatus();
 });
 
 
