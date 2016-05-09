@@ -1,4 +1,4 @@
-#  Sparkoin v0.1
+#  Sparkoin v0.1.1
 
 Spark-based Bitcoin Blockchain Analyzer, aka BigData for BitCoin.
 
