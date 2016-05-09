@@ -1,6 +1,8 @@
-# 0.1.1
+# 0.2
 
-
+- refactored server to be incremental and download the entire blockchain 
+- adding redis to the setup
+- separating toolbox scripts from others
 
 # 0.1
 

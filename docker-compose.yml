@@ -33,3 +33,12 @@ jupyter:
     - "bitcore:/app/data/bitcore" 
     - "./apps/jupyter:/app/apps/jupyter"
     - "./apps/sparkoin:/app/apps/sparkoin"
+
+redis:
+  hostname: redis
+  domainname: loc
+  image: sparkoin/redis:4
+  ports:
+   - "6379:6379"
+  volumes:
+   - "redis:/app/data/redis"
