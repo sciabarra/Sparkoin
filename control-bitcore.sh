@@ -1,3 +1,3 @@
 #!/bin/bash
-bash enter.sh sparkoin_bitcore "cd /app; ./control.sh $*"
+bash enter.sh bitcore "cd /app; ./control.sh $*"
 

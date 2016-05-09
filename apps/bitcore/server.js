@@ -1,5 +1,6 @@
 function debug(msg) { /*
-  console.log(msg)/**/ }
+ console.log(msg)/**/
+}
 
 var process = require("process")
 var fs = require("fs")
@@ -79,7 +80,6 @@ lastCheck = new Date().getTime()
 function checkStatus(currentBlockChecked) {
 
     debug("checkstatus for " + currentBlockChecked)
-
 
     // check if we need to exit
     fs.exists('/app/data/bitcore/server.off', function (exists) {
@@ -194,21 +194,24 @@ function retrieveBlock() {
         JSON.stringify(toSave),
         function (err) {
             var now = new Date().getTime()
-            if(now - lastCheck > 10000) {
+            if (now - lastCheck > 10000) {
                 lastCheck = now
-                console.log("*** read #"+countBlocks + " blocks #"+countTransactions+" transactions" )
+                // salve checkpoint
+                hdfs.writeFile('/blockchain.last', ""+currentBlockChecked, function () {
+                    console.log("*** (at "+currentBlockChecked+") read #" + countBlocks + " blocks #" + countTransactions + " transactions")
+                })
             }
             if (err)
                 console.log(err)
             // limiting the number of blocks to retrieve
             if (process.env.BITCORE_STOP_AT)
-             if (currentBlockChecked == process.env.BITCORE_STOP_AT) {
-                fs.writeFile("/app/data/bitcore/server.off", "")
-                node.services.bitcoind.stop(function () {
-                   process.exit(0);
-            })
-            return
-        }
+                if (currentBlockChecked == process.env.BITCORE_STOP_AT) {
+                    fs.writeFile("/app/data/bitcore/server.off", "")
+                    node.services.bitcoind.stop(function () {
+                        process.exit(0);
+                    })
+                    return
+                }
         })
 
     // block retrieved, go for the next
@@ -224,11 +227,21 @@ var started = false
 function loadTransactions() {
     // wait until properly hadoop it starts
     if (!started) {
-        hdfs.mkdir('/blockchain', function (err) {
+        hdfs.readFile("/blockchain.last", function (err, data) {
             if (err) {
                 console.log(err)
-                setTimeout(loadTransactions, 1000)
+                hdfs.mkdir('/blockchain', function (err) {
+                    if (err) {
+                        console.log(err)
+                        setTimeout(loadTransactions, 1000)
+                    } else {
+                        started = true
+                        loadTransactions()
+                    }
+                })
             } else {
+                currentBlock = data
+                console.log("*** restarting from " + currentBlock)
                 started = true
                 loadTransactions()
             }
@@ -238,11 +251,8 @@ function loadTransactions() {
 
     if (currentBlock < currentHeight) {
         ++currentBlock;
-
         checkStatus(currentBlock);
-
-        debug("asking for " + currentBlock)
-
+        debug("asking for " + currentBlock);
         var context = {"currentBlock": currentBlock}
         node.services.bitcoind.getBlock(currentBlock, function (err, blockBuffer) {
             context.err = err
@@ -255,7 +265,6 @@ function loadTransactions() {
 node.services.bitcoind.on('tip', function (height) {
     debug("tip " + height)
     currentHeight = height
-
     // block retrieved, go for the next
     loadTransactions()
 })
