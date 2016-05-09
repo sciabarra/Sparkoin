@@ -80,15 +80,6 @@ function checkStatus(currentBlockChecked) {
 
     debug("checkstatus for " + currentBlockChecked)
 
-    // limiting the number of blocks to retrieve
-    if (process.env.BITCORE_STOP_AT)
-        if (currentBlockChecked >= process.env.BITCORE_STOP_AT) {
-            fs.writeFile("/app/data/bitcore/server.off", "")
-            node.services.bitcoind.stop(function () {
-                process.exit(0);
-            })
-            return
-        }
 
     // check if we need to exit
     fs.exists('/app/data/bitcore/server.off', function (exists) {
@@ -198,7 +189,7 @@ function retrieveBlock() {
 
     var toSave = decodeBlockBuffer(this.blockBuffer)
     //console.log("writing "+currentBlock)
-
+    var currentBlockChecked = this.currentBlock
     hdfs.writeFile('/blockchain/' + this.currentBlock + '.json',
         JSON.stringify(toSave),
         function (err) {
@@ -209,6 +200,15 @@ function retrieveBlock() {
             }
             if (err)
                 console.log(err)
+            // limiting the number of blocks to retrieve
+            if (process.env.BITCORE_STOP_AT)
+             if (currentBlockChecked == process.env.BITCORE_STOP_AT) {
+                fs.writeFile("/app/data/bitcore/server.off", "")
+                node.services.bitcoind.stop(function () {
+                   process.exit(0);
+            })
+            return
+        }
         })
 
     // block retrieved, go for the next
