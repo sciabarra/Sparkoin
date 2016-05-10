@@ -1,4 +1,4 @@
-# v0.1.1
+# v0.1.2
 
 - refactored server to be incremental and download the entire blockchain 
 - adding redis to the setup
