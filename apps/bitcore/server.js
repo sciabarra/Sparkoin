@@ -64,14 +64,10 @@ node.start(function () {
     console.log(node.services.bitcoind.getInfo())
 });
 
-// connessione hdfs
-var WebHDFS = require('webhdfs');
-var hdfs = WebHDFS.createClient({
-    user: 'app',
-    host: 'hadoop.loc',
-    port: 50070,
-    path: '/webhdfs/v1'
-});
+// connessione cassandra
+var cassandra = require('cassandra-driver')
+var client = new cassandra.Client({contactPoints: ['cassandra'], keyspace: 'sparkoin'})
+var insertQuery = 'INSERT INTO sparkoin.blockchain(id, block_json) VALUES(?,?)'
 
 countBlocks = 0
 countTransactions = 0
@@ -189,29 +185,28 @@ function retrieveBlock() {
 
     var toSave = decodeBlockBuffer(this.blockBuffer)
     //console.log("writing "+currentBlock)
-    var currentBlockChecked = this.currentBlock
-    hdfs.writeFile('/blockchain/' + this.currentBlock + '.json',
-        JSON.stringify(toSave),
+    var data = [this.currentBlock, JSON.stringify(toSave)]
+    client.execute(insertQuery, data, {prepare: true},
         function (err) {
+            if (err)
+                console.log(err)
+
+            // display informative message
             var now = new Date().getTime()
             if (now - lastCheck > 10000) {
                 lastCheck = now
-                // salve checkpoint
-                hdfs.writeFile('/blockchain.last', ""+currentBlockChecked, function () {
-                    console.log("*** (at "+currentBlockChecked+") read #" + countBlocks + " blocks #" + countTransactions + " transactions")
-                })
+                console.log("*** (at " + data[0] + ") read #" + countBlocks + " blocks #" + countTransactions + " transactions")
             }
-            if (err)
-                console.log(err)
-            // limiting the number of blocks to retrieve
-            if (process.env.BITCORE_STOP_AT)
-                if (currentBlockChecked == process.env.BITCORE_STOP_AT) {
-                    fs.writeFile("/app/data/bitcore/server.off", "")
-                    node.services.bitcoind.stop(function () {
-                        process.exit(0);
-                    })
-                    return
-                }
+
+            // terminate if error OR reached a limit
+            if (err || (process.env.BITCORE_STOP_AT &&
+                (currentBlockChecked == process.env.BITCORE_STOP_AT))) {
+                fs.writeFile("/app/data/bitcore/server.off", "")
+                node.services.bitcoind.stop(function () {
+                    process.exit(0);
+                })
+                return
+            }
         })
 
     // block retrieved, go for the next
@@ -227,37 +222,23 @@ var started = false
 function loadTransactions() {
     // wait until properly hadoop it starts
     if (!started) {
-        hdfs.readdir("/blockchain", function (err, files) {
-            if (err) {
+        client.stream('SELECT id FROM blockchain')
+            .on('error', function (err) {
                 console.log(err)
-                hdfs.mkdir('/blockchain', function (err) {
-                    if (err) {
-                        console.log(err)
-                        setTimeout(loadTransactions, 1000)
-                    } else {
-                        started = true
-                        loadTransactions()
-                    }
-                })
-            } else {
-                // find the highest non-empty loaded file named XXX.json
-                for(var i = 0 ; i < files.length; i++) {
-                    var file = files[i]
-                    var n = parseInt(file.pathSuffix.split(".")[0])
-                    //console.log(file)
-                    if(file.length >0 && n==n) {
-                        currentBlock = Math.max(currentBlock, n)
-                    }
+                loadTransactions()
+            })
+            .on('readable', function () {
+                var row
+                while (row = this.read()) {
+                    currentBlock = Math.max(currentBlock, row.id)
                 }
+            })
+            .on('end', function () {
                 console.log("*** restarting from " + currentBlock)
                 started = true
                 loadTransactions()
-            }
-        })
-        return;
-    }
-
-    if (currentBlock < currentHeight) {
+            })
+    } else if (currentBlock < currentHeight) {
         ++currentBlock;
         checkStatus(currentBlock);
         debug("asking for " + currentBlock);

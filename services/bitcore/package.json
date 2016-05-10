@@ -3,6 +3,7 @@
     "bitcore": "^3.0.0",
     "bitcore-lib": "^0.13.14",
     "bitcore-node": "^2.1.0",
+    "cassandra-driver": "^3.0.2",
     "insight-api": "^0.3.2",
     "insight-ui": "^0.3.1",
     "webhdfs": "^0.3.0"
