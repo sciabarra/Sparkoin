@@ -1,17 +1,29 @@
-hadoop:
-  hostname: hadoop
+cassandra:
+  hostname: cassandra
+  image: sparkoin/cassandra:4
   domainname: loc
-  image: sparkoin/hadoop:4
+  expose:
+   - "9042"
+   - "9160"
+   - "8080"
+  ports:
+    - "8180:8080"
+    - "9160:9160"
+    - "9042:9042"
+  environment:
+    JAVA_OPTS: -Ddefault.host=cassandra:9160 -Dfile.encoding=UTF8
+    CQLSH_HOST: cassandra
+  restart: always
   volumes:
-    - "hadoop:/app/data/hadoop"
-  ports: [ "8020:8020" ]
+    - cassandra:/app/data/cassandra
+    - ./apps/cassandra:/app/apps/cassandra
 
 bitcore:
   hostname: bitcore
   domainname: loc
   image: sparkoin/bitcore:4
   links:
-   - "hadoop:hadoop.loc"
+   - "cassandra:cassandra.loc"
   restart: always
   volumes: 
     - "./apps/bitcore:/app/apps/bitcore"
@@ -27,7 +39,7 @@ jupyter:
   ports:
     - "8888:8888"
   links:
-    - "hadoop:hadoop.loc"
+    - "cassandra:cassandra.loc"
   volumes:
     - "bitcore:/app/data/bitcore" 
     - "./apps/jupyter:/app/apps/jupyter"
