@@ -227,7 +227,7 @@ var started = false
 function loadTransactions() {
     // wait until properly hadoop it starts
     if (!started) {
-        hdfs.readFile("/blockchain.last", function (err, data) {
+        hdfs.readdir("/blockchain", function (err, files) {
             if (err) {
                 console.log(err)
                 hdfs.mkdir('/blockchain', function (err) {
@@ -240,7 +240,15 @@ function loadTransactions() {
                     }
                 })
             } else {
-                currentBlock = data
+                // find the highest non-empty loaded file named XXX.json
+                for(var i = 0 ; i < files.length; i++) {
+                    var file = files[i]
+                    var n = parseInt(file.pathSuffix.split(".")[0])
+                    //console.log(file)
+                    if(file.length >0 && n==n) {
+                        currentBlock = Math.max(currentBlock, n)
+                    }
+                }
                 console.log("*** restarting from " + currentBlock)
                 started = true
                 loadTransactions()

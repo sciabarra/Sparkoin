@@ -11,6 +11,6 @@
 </property>
 <property>
   <name>dfs.namenode.name.dir</name>
-  <value>file:///app/data/hadoop/name,file:///tmp/name</value>
+  <value>file:///app/data/hadoop/name</value>
 </property>
 </configuration>
