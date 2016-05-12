@@ -3,13 +3,14 @@ package sparkoin
 import org.apache.spark.{SparkContext, SparkConf}
 import org.scalatest.{Matchers, FunSpec}
 import com.datastax.spark.connector._
+import sparkoin._, Sparkoin._
 
 /**
   * Created by msciab on 11/05/16.
   */
 class CassandraSpec extends FunSpec with Matchers {
   val conf = new SparkConf()
-    .set("spark.cassandra.connection.host", "127.0.0.1")
+    .set("spark.cassandra.connection.host", "cassandra.loc")
     .set("spark.cassandra.connection.port", "9042")
 
   //.setMaster("local")
@@ -22,9 +23,6 @@ class CassandraSpec extends FunSpec with Matchers {
       println(r.first)
     }
 
-    it("displays one row") {
-      pending
-    }
   }
 
 }
