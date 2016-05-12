@@ -6,7 +6,7 @@ Using this kit and merging branchs you can quickly build your enviroment with ad
 
 To use:
 
-1. git merge <feature>
-1. read the REAME-<feature>
-1. bin/install.sh
+1. `git merge` {feature}
+1. read the README-{feature}.md
+1. `bin/install.sh`
 
