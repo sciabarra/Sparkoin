@@ -27,7 +27,8 @@
       "group": "spark",
       "properties": {
         "spark.cores.max": "",
-        "master": "spark://spark.loc:7077",
+        "master": "local",
+        "spark.cassandra.connection.host": "cassandra.loc",
         "zeppelin.spark.maxResult": "1000",
         "zeppelin.dep.localrepo": "local-repo",
         "spark.app.name": "Zeppelin",

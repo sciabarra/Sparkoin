@@ -188,24 +188,28 @@ function retrieveBlock() {
     var data = [this.currentBlock, JSON.stringify(toSave)]
     client.execute(insertQuery, data, {prepare: true},
         function (err) {
-            if (err)
-                console.log(err)
 
-            // display informative message
+            // display an informative message every 10 seconds
             var now = new Date().getTime()
             if (now - lastCheck > 10000) {
                 lastCheck = now
                 console.log("*** (at " + data[0] + ") read #" + countBlocks + " blocks #" + countTransactions + " transactions")
             }
 
-            // terminate if error OR reached a limit
-            if (err || (process.env.BITCORE_STOP_AT &&
+            // terminate if a write error, hoping a restart can solve
+            if (err) {
+                console.log(err)
+                node.services.bitcoind.stop(function () {
+                    process.exit(0);
+                })
+            }
+            // terminate and stop if reached a limit
+            else if ((process.env.BITCORE_STOP_AT &&
                 (currentBlockChecked == process.env.BITCORE_STOP_AT))) {
                 fs.writeFile("/app/data/bitcore/server.off", "")
                 node.services.bitcoind.stop(function () {
                     process.exit(0);
                 })
-                return
             }
         })
 
@@ -225,7 +229,7 @@ function loadTransactions() {
         client.stream('SELECT id FROM blockchain')
             .on('error', function (err) {
                 console.log(err)
-                loadTransactions()
+                setTimeout(loadTransactions, 1000)
             })
             .on('readable', function () {
                 var row

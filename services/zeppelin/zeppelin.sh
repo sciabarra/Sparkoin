@@ -1,3 +1,3 @@
 #!/bin/bash
-source /etc/profile.d/java.sh
+source /etc/profile
 zeppelin/bin/zeppelin.sh run

@@ -5,10 +5,10 @@ if test $REPLY == "y"
 then
 docker-compose kill 
 yes | docker-compose rm --all
-docker volume rm bitcore redis cassandra # kafka  hadoop
+docker volume rm bitcore cassandra # kafka  hadoop redis
 fi
 docker volume create --name cassandra
 docker volume create --name bitcore 
-docker volume create --name redis
+#docker volume create --name redis
 #docker volume create --name hadoop
 #docker volume create --name kafka
