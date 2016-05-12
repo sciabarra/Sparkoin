@@ -10,3 +10,6 @@ To use:
 1. read the README-{feature}.md
 1. `bin/install.sh`
 
+## Features
+
+- `sbt-embedded` embedded sbt kit
