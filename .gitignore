@@ -6,3 +6,5 @@ target/
 project/repo/
 project/boot/
 project/atom/
+bin/sbt-launch.jar
+project/ivy2/
