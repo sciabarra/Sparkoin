@@ -1,7 +1,7 @@
 #!/bin/bash
 sudo chown -Rf app /app/bitcore /app/data/bitcore
 while true 
-do sleep 10  
+do node wait4cassandra.js 
   if test -e /app/data/bitcore/server.off
   then echo "Bitcore Off - checking again in 10 seconds"
   else if test -e /tmp/server.debug
@@ -11,4 +11,5 @@ do sleep 10
        else node /app/apps/bitcore/server.js | tee server.log
        fi
   fi
+  sleep 10
 done

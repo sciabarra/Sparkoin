@@ -4,7 +4,7 @@ RUN echo "app ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers ; sed -i 's/requiretty/!re
 COPY uid.txt /etc/uid.txt
 RUN groupadd -g $(cat /etc/uid.txt) app && useradd -g $(cat /etc/uid.txt) -u $(cat /etc/uid.txt) -d /app app -m -s /bin/bash ; mkdir -p /app/bitcore/data ; chown -Rv app:app /app
 WORKDIR /app
-COPY package.json /app/
+COPY package.json wait4cassandra.js /app/
 RUN npm install 
 COPY bitcore.sh control.sh  /app/
 RUN dos2unix /app/*.sh ; chmod +x /app/*.sh ; chown -Rf app /app 
