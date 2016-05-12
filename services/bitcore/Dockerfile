@@ -1,7 +1,8 @@
 FROM sparkoin/bitcore-base:4
 ENV BITCOIN_NETWORK=livenet
 RUN echo "app ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers ; sed -i 's/requiretty/!requiretty/' /etc/sudoers
-RUN useradd -d /app -m app ; mkdir -p /app/bitcore/data
+COPY uid.txt /etc/uid.txt
+RUN groupadd -g $(cat /etc/uid.txt) app && useradd -g $(cat /etc/uid.txt) -u $(cat /etc/uid.txt) -d /app app -m -s /bin/bash ; mkdir -p /app/bitcore/data ; chown -Rv app:app /app
 WORKDIR /app
 COPY package.json /app/
 RUN npm install 

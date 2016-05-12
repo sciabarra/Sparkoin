@@ -16,7 +16,6 @@ function dkb {
  docker build -t $DOCKER_MACHINE_NAME/$1 $1
 } 
 
-
 alias u="cd .. ; ls"
 alias uu="cd ../.. ; ls"
 alias ll="ls -l"
@@ -27,3 +26,13 @@ alias gca="git commit -a -m"
 alias gpo="git push origin"
 alias gbr="git branch -a"
 
+
+alias a1="awk '{print \$1 }'"
+alias a2="awk '{print \$2 }'"
+alias a3="awk '{print \$3 }'"
+alias a4="awk '{print \$4 }'"
+alias a5="awk '{print \$5 }'"
+alias a6="awk '{print \$6 }'"
+alias a7="awk '{print \$7 }'"
+alias a8="awk '{print \$8 }'"
+alias a9="awk '{print \$9 }'"
