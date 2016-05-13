@@ -17,7 +17,7 @@ libraryDependencies ++= Seq(
     .exclude("org.scala-lang", "scala-reflect")
 )
 
-assemblyOutputPath in assembly := baseDirectory.value / "sparkoin.jar"
+assemblyOutputPath in assembly := baseDirectory.value.getParentFile / "jupyter" / "sparkoin.jar"
 
 assemblyMergeStrategy in assembly := {
   case PathList("META-INF", "io.netty.versions.properties") => MergeStrategy.first

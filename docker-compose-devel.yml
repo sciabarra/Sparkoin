@@ -1,0 +1,13 @@
+cassandra:
+  volumes:
+    - ./apps/cassandra:/app/apps/cassandra
+
+bitcore:
+  volumes:
+    - "./apps/bitcore:/app/apps/bitcore"
+
+jupyter:
+  volumes:
+    - "./apps/jupyter:/app/apps/jupyter"
+
+
