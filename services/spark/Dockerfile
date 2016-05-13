@@ -1,4 +1,4 @@
-FROM sparkoin/spark-base:4
+FROM sparkoin/spark-base:5
 COPY master.sh slave.sh /app/
 RUN chown -Rvf app:app /app ; chmod -R 0755 /app ; dos2unix /app/*.sh
 USER app

@@ -7,4 +7,4 @@ RUN FILE=$(cat url.txt) ; test -e $(basename $FILE)  || wget --progress=dot:giga
 RUN wget -nc -O/usr/local/bin/sbt-launch.jar https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar && \
     wget -nc -O/usr/local/bin/amm https://github.com/lihaoyi/Ammonite/releases/download/0.5.7/ammonite-repl-0.5.7-2.10.5 && \
     wget -nc -O/usr/local/bin/sbt https://raw.githubusercontent.com/paulp/sbt-extras/master/sbt
-RUN mkdir /usr/java ; tar xzvf /tmp/jdk-8u65-linux-x64.tar.gz -C /usr/java/ ; chmod +x /usr/local/bin/* ; rm -rvf /tmp/*
+RUN mkdir /usr/java ; chmod +x /usr/local/bin/* ; tar xzvf /sw/jdk* -C /usr/java ; ln -sf /usr/java/jdk1* /usr/java/jdk ;  rm -Rvf /sw ; rm -Rvf /usr/java/jdk/db /usr/java/jdk/lib/missioncontrol /usr/java/jdk/lib/visualvm /usr/java/jdk/*.zip
