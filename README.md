@@ -12,4 +12,5 @@ To use:
 
 ## Features
 
-- `sbt-embedded` embedded sbt kit
+- `sbt-embedded` Embedded sbt kit
+- `ensime-atom`  Ensime and Atom
