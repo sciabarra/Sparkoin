@@ -27,3 +27,4 @@ apps/spark/project/boot
 services/ssh/id_rsa
 services/ssh/id_rsa.pub
 !apps/sparkoin/sparkoin.jar
+apps.tar

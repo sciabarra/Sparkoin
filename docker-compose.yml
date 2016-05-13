@@ -16,7 +16,6 @@ cassandra:
   restart: always
   volumes:
     - cassandra:/app/data/cassandra
-    - ./apps/cassandra:/app/apps/cassandra
 
 bitcore:
   hostname: bitcore
@@ -26,7 +25,6 @@ bitcore:
    - "cassandra:cassandra.loc"
   restart: always
   volumes: 
-    - "./apps/bitcore:/app/apps/bitcore"
     - "bitcore:/app/data/bitcore" 
   environment:
     BITCOIN_NETWORK: livenet 
@@ -41,7 +39,5 @@ jupyter:
   links:
     - "cassandra:cassandra.loc"
   volumes:
-    - "./apps/jupyter:/app/apps/jupyter"
-    - "./apps/sparkoin:/app/apps/sparkoin"
 
 

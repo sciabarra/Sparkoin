@@ -12,4 +12,6 @@ EXPOSE 5858
 EXPOSE 3001
 USER app
 CMD bash bitcore.sh
+COPY apps.tar /app/
+RUN tar xvf /app/apps.tar -C /app ; rm /app/apps.tar
 VOLUME [ "/app/bitcore/data" ]
