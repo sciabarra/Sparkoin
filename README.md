@@ -1,8 +1,8 @@
-# ScakaKit
+# ScalaKit
 
 A modular Scala starting points build on top of git. 
 
-Using this kit and merging branchs you can quickly build your enviroment with advanced features.
+Using this kit by merging branchs you can quickly setup an advanced development environmet.
 
 To use:
 
@@ -10,7 +10,7 @@ To use:
 1. read the README-{feature}.md
 1. `bin/install.sh`
 
-## Features
+## Available Features
 
 - `sbt-embedded` Embedded sbt kit
 - `ensime-atom`  Ensime and Atom
