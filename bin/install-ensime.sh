@@ -9,7 +9,7 @@ mkdir -p $ATOM_HOME
 if test -n "$ERR"
 then echo "$ERR"
 else 
-  echo '"*":' >$BASE/project/atom/config.cson
+  test -e $BASE/project/atom/config.cson || echo '"*":' >$BASE/project/atom/config.cson
   if apm install ensime 
   then cat >>$BASE/project/atom/config.cson <<EOF
   Ensime:
