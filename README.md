@@ -14,3 +14,4 @@ To use:
 
 - `sbt-embedded` Embedded sbt kit
 - `ensime-atom`  Ensime and Atom
+- `hydrogen-jupyter` Hydrogen and Jupyter
