@@ -1,6 +1,6 @@
 #!/bin/bash
 cd $(dirname $0)
-V=4
+V=5
 if test -n "$1"
 then BUILD="$@"
 else echo "Usage: $0 <images...>"
