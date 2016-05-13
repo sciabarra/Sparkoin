@@ -1,4 +1,6 @@
-FROM sparkoin/java:4
+FROM sparkoin/java:5
+RUN apt-get -y install python-pip python-dev netcat && pip install trireme
 WORKDIR /app
-RUN wget -Ocassandra.tgz http://www-us.apache.org/dist/cassandra/3.5/apache-cassandra-3.5-bin.tar.gz && \
-  tar xzvf cassandra.tgz  ; mv apache-cassandra-* cassandra  ; rm cassandra.tgz
+COPY url.txt *.tar.gz /app/
+RUN FILE=$(cat url.txt) ; test -e $(basename $FILE)  || wget $FILE
+RUN tar xzvf apache-cassandra-*.tar.gz  ; rm *.tar.gz ; mv apache-cassandra-* cassandra

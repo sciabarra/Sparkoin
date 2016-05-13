@@ -1,4 +1,6 @@
-FROM sparkoin/java:4
+FROM sparkoin/java:5
 WORKDIR /app
-RUN wget http://www-eu.apache.org/dist/incubator/zeppelin/0.5.6-incubating/zeppelin-0.5.6-incubating-bin-all.tgz 
-RUN wget http://central.maven.org/maven2/com/google/guava/guava/16.0.1/guava-16.0.1.jar 
+COPY url.txt *.tgz /app/
+RUN FILE=$(cat url.txt) ; test -e $(basename $FILE)  || wget $FILE
+RUN tar xzvf zeppelin-*.tgz  ; rm *.tgz ; mv zeppelin-* zeppelin
+RUN wget http://central.maven.org/maven2/com/google/guava/guava/16.0.1/guava-16.0.1.jar

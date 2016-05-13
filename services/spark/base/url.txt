@@ -1,0 +1,1 @@
+http://www-eu.apache.org/dist/spark/spark-1.6.1/spark-1.6.1-bin-without-hadoop.tgz

@@ -1,0 +1,1 @@
+http://www-us.apache.org/dist/cassandra/3.5/apache-cassandra-3.5-bin.tar.gz
