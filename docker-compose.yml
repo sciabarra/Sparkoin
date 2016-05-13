@@ -32,16 +32,16 @@ bitcore:
     BITCOIN_NETWORK: livenet 
   ports: [ "5858:5858", "3001:3001" ]
 
-zeppelin:
-  hostname: zeppelin 
+jupyter:
+  hostname: jupyter
   domainname: loc
-  image: sparkoin/zeppelin:4
+  image: sparkoin/jupyter:4
   ports:
-    - "8280:8080"
+    - "8888:8888"
   links:
     - "cassandra:cassandra.loc"
   volumes:
-    - "./apps/zeppelin:/app/zeppelin/notebook"
+    - "./apps/jupyter:/app/apps/jupyter"
     - "./apps/sparkoin:/app/apps/sparkoin"
 
 
