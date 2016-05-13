@@ -1,13 +1,14 @@
 package sparkoin
 
 import org.apache.spark.{SparkContext, SparkConf}
-import org.scalatest.{Matchers, FunSpec}
+import org.scalatest.{Ignore, Matchers, FunSpec}
 import com.datastax.spark.connector._
 import sparkoin._, Sparkoin._
 
 /**
   * Created by msciab on 11/05/16.
   */
+@Ignore
 class CassandraSpec extends FunSpec with Matchers {
   val conf = new SparkConf()
     .set("spark.cassandra.connection.host", "cassandra.loc")

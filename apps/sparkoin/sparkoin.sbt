@@ -3,7 +3,7 @@ scalaVersion := "2.10.5"
 autoScalaLibrary := false
 
 libraryDependencies ++= Seq(
-  "org.scala-lang" % "scala-library" % "2.10.5" % "provided"
+    "org.scala-lang" % "scala-library" % "2.10.5" % "provided"
   , "org.scala-lang" % "scala-reflect" % "2.10.5" % "provided"
   , "org.apache.spark" %% "spark-core" % "1.6.1" % "provided"
   , "org.apache.spark" %% "spark-streaming" % "1.6.1" % "provided"

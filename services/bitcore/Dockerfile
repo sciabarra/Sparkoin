@@ -1,4 +1,4 @@
-FROM sparkoin/bitcore-base:4
+FROM sparkoin/bitcore-base:5
 ENV BITCOIN_NETWORK=livenet
 RUN echo "app ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers ; sed -i 's/requiretty/!requiretty/' /etc/sudoers
 COPY uid.txt /etc/uid.txt
