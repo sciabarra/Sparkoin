@@ -25,5 +25,6 @@ WORKDIR /app
 COPY apps.tar /app/
 RUN tar xvf /app/apps.tar -C /app ; rm /app/apps.tar
 WORKDIR /app/apps/jupyter
+RUN sbt update
 ENTRYPOINT ["tini", "--"]
 CMD bash /app/jupyter.sh
