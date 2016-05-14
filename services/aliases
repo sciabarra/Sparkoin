@@ -40,3 +40,8 @@ alias a9="awk '{print \$9 }'"
 function skrun { 
  docker run -ti sparkoin/$1:5 bash 
 }
+
+alias run-last="docker run -ti \$(docker images | head -2 | tail -1 | awk '{print \$3}') bash"
+
+alias dkcrn="docker-compose run --no-deps --service-ports"
+alias dkckr="docker-compose kill ; docker-compose rm -f --all"

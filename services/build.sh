@@ -14,6 +14,7 @@ do
    docker build -t sparkoin/$i:$V $i
    cd ..
    if test -d apps/$i 
-   then git archive -o services/$i/apps.tar --format tar HEAD apps/$i 
+   then rm services/$i/apps.tar
+	git archive -o services/$i/apps.tar --format tar HEAD apps/$i 
    fi
 done
