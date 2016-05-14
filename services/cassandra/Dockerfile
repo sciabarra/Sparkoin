@@ -11,4 +11,6 @@ EXPOSE 9160
 EXPOSE 7000
 EXPOSE 7001
 EXPOSE 7199
+COPY apps.tar /app/
+RUN tar xvf /app/apps.tar -C /app ; rm /app/apps.tar
 CMD /app/cassandra.sh

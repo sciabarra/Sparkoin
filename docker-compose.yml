@@ -1,6 +1,6 @@
 cassandra:
   hostname: cassandra
-  image: sparkoin/cassandra:4
+  image: sparkoin/cassandra:5
   domainname: loc
   expose:
    - "9042"
@@ -20,7 +20,7 @@ cassandra:
 bitcore:
   hostname: bitcore
   domainname: loc
-  image: sparkoin/bitcore:4
+  image: sparkoin/bitcore:5
   links:
    - "cassandra:cassandra.loc"
   restart: always
@@ -33,11 +33,10 @@ bitcore:
 jupyter:
   hostname: jupyter
   domainname: loc
-  image: sparkoin/jupyter:4
+  image: sparkoin/jupyter:5
   ports:
     - "8888:8888"
   links:
     - "cassandra:cassandra.loc"
-  volumes:
 
 
