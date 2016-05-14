@@ -7,8 +7,8 @@ while getopts hld opt; do case $opt in
    d) DEVEL=true ;;
 esac ; done
 if $DEVEL
-then docker-compose --no-color -f docker-compose.yml -f docker-compose-devel.yml -d
-else docker-compose --no-color -f docker-compose.yml -d up
+then docker-compose -f docker-compose.yml -f docker-compose-devel.yml up -d --no-color
+else docker-compose -f docker-compose.yml up -d --no-color
 fi
 if $LOGS 
 then ./logs.sh
