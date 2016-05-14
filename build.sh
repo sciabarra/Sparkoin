@@ -1,9 +1,8 @@
 set -x 
 docker-compose kill
-yes | docker-compose rm
-cd services
+yes | docker-compose rm --all
 if test -z "$1"
-then BUILD="java ssh bitcore cassandra spark zeppelin jupyter"
+then BUILD="java ssh bitcore cassandra spark jupyter"
 else BUILD="$@"
 fi
-sh build.sh $BUILD
+bash -x services/build.sh $BUILD

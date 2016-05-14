@@ -36,3 +36,7 @@ alias a6="awk '{print \$6 }'"
 alias a7="awk '{print \$7 }'"
 alias a8="awk '{print \$8 }'"
 alias a9="awk '{print \$9 }'"
+
+function skrun { 
+ docker run -ti sparkoin/$1:5 bash 
+}
