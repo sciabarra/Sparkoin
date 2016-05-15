@@ -1,3 +1,4 @@
 #!/bin/bash
-HERE=`dirname $0`
-docker-compose -f $HERE/docker-compose.yml logs -f "$@" 
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT=sparkoin
+docker-compose -p $PROJECT -f $HERE/docker-compose.yml logs -f "$@" 

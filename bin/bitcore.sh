@@ -1,3 +1,4 @@
 #!/bin/bash
-bash `dirname $0`/enter.sh bitcore "cd /app; ./control.sh $*"
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+bash $HERE/enter.sh bitcore "cd /app; ./control.sh $*"
 
