@@ -1,4 +1,4 @@
-FROM sparkoin/redis-base:4
+FROM sparkoin/redis-base:5
 COPY uid.txt /etc/
 RUN adduser -u $(cat /etc/uid.txt) -h /app app -s /bin/bash -D ;\
     mkdir -p /app/data/redis ; chown -Rv app:app /app ;\

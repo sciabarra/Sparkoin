@@ -10,4 +10,10 @@ jupyter:
   volumes:
     - "../apps/jupyter:/app/apps/jupyter"
 
+redis:
+  hostname: redis
+  domainname: loc
+  image: sparkoin/redis:5
+  ports:
+   - "6379:6379"
 
