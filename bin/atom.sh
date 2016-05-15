@@ -1,6 +1,7 @@
 #!/bin/bash
-cd $(dirname $0)
-BASE=$(dirname $PWD)
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE=$(dirname $HERE)
 export ATOM_HOME=$BASE/project/atom
 cd $BASE
+bin/esbt.sh ensimeConfig
 atom .
