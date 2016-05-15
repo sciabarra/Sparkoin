@@ -8,6 +8,5 @@ WORKDIR /app
 COPY apps.tar /app/
 RUN tar xvf /app/apps.tar -C /app ; rm /app/apps.tar
 WORKDIR /app/apps/java
-RUN sbt -java-home /usr/java/jdk update
 USER root
 

@@ -1,10 +1,12 @@
 #!/bin/bash
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE=$(dirname $HERE)
 read -p "Resetting all data from volumes - Are you sure? " -n 1 -r
 echo
 if test $REPLY == "y"
 then
-docker-compose kill 
-yes | docker-compose rm --all
+docker-compose -p sparkoin -f $BASE/bin/docker-compose.yml kill 
+docker-compose -p sparkoin -f $BASE/bin/docker-compose.yml rm -f --all
 docker volume rm bitcore cassandra # kafka  hadoop redis
 fi
 docker volume create --name cassandra
