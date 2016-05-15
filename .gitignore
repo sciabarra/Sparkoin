@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 services/java/ip.txt
 frontend/js/src/main/resources/bundle.js
 apps/jupyter/.ipynb_checkpoints/
@@ -35,5 +34,3 @@ project/ivy2/
 bin/sbt-launch.jar
 .ensime
 .ensime_cache/
-.ipynb_checkpoints/
-.atom/
