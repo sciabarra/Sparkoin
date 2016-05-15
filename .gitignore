@@ -1,9 +1,0 @@
-.ensime
-.ensime_cache/
-.ipynb_checkpoints/
-.atom/
-project/repo/
-project/boot/
-project/atom/
-bin/sbt-launch.jar
-project/ivy2/
