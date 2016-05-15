@@ -13,7 +13,7 @@ else
   if apm install ensime 
   then cat >>$BASE/project/atom/config.cson <<EOF
   Ensime:
-    "$BASE/bin/sbt.sh"
+    "$BASE/bin/esbt.sh"
 EOF
   # remove useless .ensime
   find $BASE/project/atom -name .ensime | xargs rm  
