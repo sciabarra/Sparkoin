@@ -125,26 +125,30 @@ function decodeBlockBuffer(blockBuffer) {
         for (var io in transaction.outputs) {
             var output = transaction.outputs[io]
             var script = output.script
-            var address = script.toAddress()
-            outputs.push({
-                script_pub_key: script.toString(),
-                address: address.toString(),
-                value: output.satoshis
-            })
+            if(script) {
+               var address = script.toAddress()
+               outputs.push({
+                  script_pub_key: script.toString(),
+                  address: address.toString(),
+                  value: output.satoshis
+               })
+            }
         }
         for (var ii in transaction.inputs) {
             if (!transaction.isCoinbase()) {
                 var input = transaction.inputs[ii]
                 var script = input.script
-                var address = script.toAddress()
-                var prevTxId = input.toObject().prevTxId
-                inputs.push({
+                if(script) {
+                  var address = script.toAddress()
+                  var prevTxId = input.toObject().prevTxId
+                  inputs.push({
                     previous_tx_hash: prevTxId,
                     output_tx_id: input.outputIndex,
                     sequence_no: input.sequenceNumber,
                     script_sig: script.toString(),
                     address: address.toString()
-                })
+                  })
+                }
             }
         }
 
@@ -224,7 +228,6 @@ function retrieveBlock() {
  */
 var started = false
 function loadTransactions() {
-    // wait until properly hadoop it starts
     if (!started) {
         client.stream('SELECT id FROM blockchain')
             .on('error', function (err) {
@@ -234,6 +237,8 @@ function loadTransactions() {
             .on('readable', function () {
                 var row
                 while (row = this.read()) {
+                     if( (row.id % 1000) == 0)
+                       console.log(row.id)
                     currentBlock = Math.max(currentBlock, row.id)
                 }
             })
