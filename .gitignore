@@ -34,3 +34,4 @@ project/ivy2/
 bin/sbt-launch.jar
 .ensime
 .ensime_cache/
+apps/jupyter/magrathea

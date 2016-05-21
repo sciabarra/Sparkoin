@@ -6,9 +6,6 @@ bitcore:
   volumes:
     - "../apps/bitcore:/app/apps/bitcore"
 
-jupyter:
-  volumes:
-    - "../apps/jupyter:/app/apps/jupyter"
 
 redis:
   hostname: redis
@@ -16,4 +13,11 @@ redis:
   image: sparkoin/redis:5
   ports:
    - "6379:6379"
+
+jupyter:
+  volumes:
+    - "../apps/jupyter:/app/apps/jupyter"
+    - "../apps/magrathea:/app/apps/jupyter/magrathea"
+  links:
+    - "redis:redis.loc"
 
