@@ -17,17 +17,6 @@ redis:
 jupyter:
   volumes:
     - "../apps/jupyter:/app/apps/jupyter"
-<<<<<<< HEAD
-
-redis:
-  hostname: redis
-  domainname: loc
-  image: sparkoin/redis:5
-  ports:
-   - "6379:6379"
-=======
-    - "../apps/magrathea:/app/apps/jupyter/magrathea"
   links:
     - "redis:redis.loc"
->>>>>>> 69f08277796ed561080a494ec095a42cedce4474
 
