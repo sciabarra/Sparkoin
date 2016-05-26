@@ -283,3 +283,4 @@ node.services.bitcoind.on('tip', function (height) {
  */
 
 
+//memwatch.on('stats', function (stats) { console.log(stats); })
