@@ -13,5 +13,5 @@ then docker-compose -p $PROJECT -f $HERE/docker-compose.yml -f $HERE/docker-comp
 else docker-compose -p $PROJECT -f $HERE/docker-compose.yml -f $HERE/docker-compose-devel.yml stop "$@"
 fi
 if $REMOVE
-then docker-compose -p $PROJECT -f $HERE/docker-compose.yml -f $HERE/docker-compse-devel.yml rm --all -f
+then docker-compose -p $PROJECT -f $HERE/docker-compose.yml -f $HERE/docker-compose-devel.yml rm --all -f
 fi

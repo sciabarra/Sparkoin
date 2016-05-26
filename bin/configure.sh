@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+if ! which sbt 2>&1 >/dev/null
+then echo "You need to install sbt" ; exit 1
+fi
 if ! which docker-compose 2>&1 >/dev/null
 then echo "You need to install docker-compose" ; exit 1
 fi
