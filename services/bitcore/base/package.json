@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "bitcore": "^3.0.0",
+    "bitcore-lib": "^0.13.14",
+    "bitcore-node": "^2.1.1",
+    "cassandra-driver": "^3.0.2"
+  }
+}
