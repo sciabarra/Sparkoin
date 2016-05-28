@@ -1,4 +1,6 @@
 var cassandra = require('cassandra-driver')
+var BitSet = require("bit-set")
+
 var client = new cassandra.Client({contactPoints: ['cassandra.loc'], keyspace: 'sparkoin'})
 var ok = false
 

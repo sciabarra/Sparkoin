@@ -7,16 +7,7 @@ bitcore:
     - "../apps/bitcore:/app/apps/bitcore"
 
 
-redis:
-  hostname: redis
-  domainname: loc
-  image: sparkoin/redis:5
-  ports:
-   - "6379:6379"
-
 jupyter:
   volumes:
     - "../apps/jupyter:/app/apps/jupyter"
-  links:
-    - "redis:redis.loc"
 
