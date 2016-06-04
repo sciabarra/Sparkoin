@@ -1,11 +1,18 @@
 cassandra:
   volumes:
     - ../apps/cassandra:/app/apps/cassandra
+   
+cassandra2:
+  volumes:
+    - ../apps/cassandra:/app/apps/cassandra
+
+cassandra3:
+  volumes:
+    - ../apps/cassandra:/app/apps/cassandra
 
 bitcore:
   volumes:
     - "../apps/bitcore:/app/apps/bitcore"
-
 
 jupyter:
   volumes:

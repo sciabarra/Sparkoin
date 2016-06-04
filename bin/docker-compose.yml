@@ -6,16 +6,51 @@ cassandra:
    - "9042"
    - "9160"
    - "8080"
-  ports:
-    - "8180:8080"
-    - "9160:9160"
-    - "9042:9042"
   environment:
+    CASSANDRA_HOSTS: "cassandra.loc,cassandra2.loc,cassandra3.loc"
+    CASSANDRA_MASTER: "1"
     JAVA_OPTS: -Ddefault.host=cassandra:9160 -Dfile.encoding=UTF8
     CQLSH_HOST: cassandra
+    CASSANDRA_MASTER: 1
   restart: always
   volumes:
     - cassandra:/app/data/cassandra
+
+cassandra2:
+  hostname: cassandra2
+  image: sparkoin/cassandra:5
+  domainname: loc
+  expose:
+   - "9042"
+   - "9160"
+   - "8080"
+  environment:
+    CASSANDRA_HOSTS: "cassandra.loc,cassandra2.loc,cassandra3.loc"
+    JAVA_OPTS: -Ddefault.host=cassandra2.loc:9160 -Dfile.encoding=UTF8
+    CQLSH_HOST: cassandra2.loc
+  restart: always
+  volumes:
+    - cassandra2:/app/data/cassandra
+  links:
+    - "cassandra:cassandra.loc"
+
+cassandra3:
+  hostname: cassandra3
+  image: sparkoin/cassandra:5
+  domainname: loc
+  expose:
+   - "9042"
+   - "9160"
+   - "8080"
+  environment:
+    CASSANDRA_HOSTS: "cassandra.loc,cassandra2.loc,cassandra3.loc"
+    JAVA_OPTS: -Ddefault.host=cassandra3.loc:9160 -Dfile.encoding=UTF8
+    CQLSH_HOST: cassandra3.loc
+  restart: always
+  volumes:
+    - cassandra3:/app/data/cassandra
+  links:
+    - "cassandra:cassandra.loc"
 
 bitcore:
   hostname: bitcore
@@ -23,10 +58,13 @@ bitcore:
   image: sparkoin/bitcore:5
   links:
    - "cassandra:cassandra.loc"
+   - "cassandra2:cassandra2.loc"
+   - "cassandra3:cassandra3.loc"
   restart: always
   volumes: 
     - "bitcore:/app/data/bitcore" 
   environment:
+    CASSANDRA_HOSTS: "cassandra.loc,cassandra2.loc,cassandra3.loc"
     BITCOIN_NETWORK: livenet 
   ports: [ "5858:5858", "3001:3001" ]
 

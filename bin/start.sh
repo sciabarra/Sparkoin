@@ -14,7 +14,7 @@ then EXTRA="--no-deps"
 else EXTRA=""
 fi	
 if $DEVEL
-then CMD="docker-compose -p $PROJECT -f $HERE/docker-compose.yml -f $HERE/docker-compose-devel.yml up -d --no-color $EXTRA"
+then CMD="docker-compose -p $PROJECT -f $HERE/docker-compose.yml -f $HERE/docker-compose-devel.yml up  -d --no-color $EXTRA"
 else CMD="docker-compose -p $PROJECT -f $HERE/docker-compose.yml up -d --no-color $EXTRA"
 fi
 $CMD "$@"

@@ -28,5 +28,7 @@ cp services/java/uid.txt services/redis/uid.txt
 cp services/java/uid.txt services/bitcore/uid.txt
 echo "Volumes created:"
 docker volume create --name cassandra
+docker volume create --name cassandra2
+docker volume create --name cassandra3
 docker volume create --name bitcore
 echo You can now build your enviroment running build.sh

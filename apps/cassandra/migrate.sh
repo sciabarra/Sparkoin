@@ -1,6 +1,8 @@
 #!/bin/bash
-source /etc/profile
 cd $(dirname $0)
-inv trireme.cassandra.create
-inv trireme.cassandra.migrate
+source /etc/profile
+if ! [ -z ${CASSANDRA_MASTER+x} ]
+then inv trireme.cassandra.create
+     inv trireme.cassandra.migrate
+fi
 

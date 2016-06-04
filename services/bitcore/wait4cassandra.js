@@ -1,7 +1,6 @@
 var cassandra = require('cassandra-driver')
-var BitSet = require("bit-set")
 
-var client = new cassandra.Client({contactPoints: ['cassandra.loc'], keyspace: 'sparkoin'})
+var client = new cassandra.Client({contactPoints: process.env.CASSANDRA_HOSTS.split(","), keyspace: 'sparkoin'})
 var ok = false
 
 function wait4cassandra() {
@@ -24,8 +23,8 @@ function checkTable() {
       if(err) {
            console.log("*** metadata not yet ready")
       } else {
+           console.log("*** metadata ready")
            client.shutdown()
-           //console.log("*** metadata successul")
            process.exit(0);
        }
        //console.log("recurse checkTable")
