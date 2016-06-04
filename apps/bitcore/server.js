@@ -77,21 +77,11 @@ function meminfo() {
   var max = mem.rss
   var total = mem.heapTotal
   var used = mem.heapUsed
-  debug("MEM: avail="+mb(total - used)+" total="+mb(total)+" used="+mb(used)+" max="+mb(max))
+  //"MEM: avail="+mb(total - used)+
+  return " tot="+mb(total)+" use="+mb(used)+" max="+mb(max)
 }
 
 var node = new Node(configuration);
-
-node.on('ready', function () {
-    info('Bitcoin Node Ready');
-});
-
-node.start(function () {
-    var data = node.services.bitcoind.getInfo()
-    currentHeight = data.blocks
-    info('Bitcoin Node Start '+JSON.stringify(data))
-    loadTransactions()
-});
 
 // connessione cassandra
 var cassandra = require('cassandra-driver')
@@ -229,11 +219,10 @@ function retrieveBlock() {
 
             // display an informative message every 10 seconds
             if (now - lastCheck > 10000) {
-                info("*** (at " + data[0] + ") blk#" + (countBlocks-lastCountBlocks) + " tx#" + (countTransactions-lastCountTransactions) + " maxWrite:"+lastCheckMaxTime+"ms")
+                info(data[0] + ") blk#" + (countBlocks-lastCountBlocks) +  " tx#" + (countTransactions-lastCountTransactions) + " maxTime:"+lastCheckMaxTime+"ms |"+meminfo())
                 lastCountBlocks = countBlocks
                 lastCountTransactions = countTransactions
-                meminfo()
-                if(lastCheckMaxTime >5000) {
+                if(lastCheckMaxTime >10000) {
                   info("!!! writes are too slow, restarting")
                   node.services.bitcoind.stop(
                       function () {
@@ -278,12 +267,13 @@ function findMissingBlocks() {
       if(err) {
        console.log(err)
        blockSet = new BitSet()
-       setTimeout(1000, findMissingBlocks)
+       setTimeout(findMissingBlocks, 1000)
      } else {
        console.log("resync final count="+rowCount+ " maxId="+maxId)
-       for(i=0; i<=rowCount; i++) {
+       for(i=0; i<=maxId; i++) {
          if(!blockSet.get(i)) {
            console.log("missing "+i)
+           askForBlock(i)
          }
        }
        currentHeight = Math.max(currentHeight, maxId)
@@ -293,33 +283,47 @@ function findMissingBlocks() {
     })
 }
 
+function askForBlock(blockNum, callback) {
+  notrace("asking for block #" + currentBlock);
+  var context = {"currentBlock": currentBlock}
+  node.services.bitcoind.getBlock(currentBlock,
+    function (err, blockBuffer) {
+        context.err = err
+        context.blockBuffer = blockBuffer
+        retrieveBlock.call(context)
+        ++currentBlock;
+        if(callback) callback()
+    })
+}
+
 function loadTransactions() {
     if (!started)
        return;
-
     if (currentBlock <= currentHeight) {
         while(blockSet.get(currentBlock)) {
           ++currentBlock;
         }
-        notrace("asking for block #" + currentBlock);
-        var context = {"currentBlock": currentBlock}
-        node.services.bitcoind.getBlock(currentBlock, function (err, blockBuffer) {
-              context.err = err
-              context.blockBuffer = blockBuffer
-              retrieveBlock.call(context)
-              ++currentBlock;
-              loadTransactions()
-        })
+        askForBlock(currentBlock, loadTransactions)
         checkStatus(currentBlock);
     } else {
       setTimeout(loadTransactions, 1000)
     }
 }
 
+
+node.on('ready', function () {
+    //info('Bitcoin Node Ready');
+});
+
+node.start(function () {
+    var data = node.services.bitcoind.getInfo()
+    currentHeight = data.blocks
+    info('Bitcoin Node Started '+JSON.stringify(data))
+    findMissingBlocks()
+});
+
 node.services.bitcoind.on('tip', function (height) {
-    debug("tip " + height)
+    info("tip " + height)
     // block retrieved, go for the next
     loadTransactions()
 })
-
-findMissingBlocks()

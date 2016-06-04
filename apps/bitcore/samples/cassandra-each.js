@@ -23,11 +23,10 @@ function findMissingBlocks() {
        }
     },
     function (err, result) {
-      console.log("sono qui")
       if(err) {
        console.log(err)
        blockSet = new BitSet()
-       setTimeout(1000, findMissingBlocks)
+       setTimeout(findMissingBlocks, 1000)
      } else {
        console.log("final read count="+rowCount+ " maxId="+maxId)
        for(i=0; i<=rowCount; i++) {
