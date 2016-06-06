@@ -1,4 +1,4 @@
-var MAX_WRITE_WAIT = 60000
+var MAX_WRITE_WAIT = 600000
 
 // logging
 function error(msg) {//*
@@ -201,7 +201,7 @@ function retrieveBlock() {
                 info(data[0] + ") blk#" + (countBlocks-lastCountBlocks) +  " tx#" + (countTransactions-lastCountTransactions) + " maxTime:"+lastCheckMaxTime+"ms |"+meminfo())
                 lastCountBlocks = countBlocks
                 lastCountTransactions = countTransactions
-                if(lastCheckMaxTime >MAX_WRITE_WAIT) {
+                if(started && lastCheckMaxTime >MAX_WRITE_WAIT) {
                   info("!!! writes are too slow, terminate (to restart)")
                   terminate()
                 }
