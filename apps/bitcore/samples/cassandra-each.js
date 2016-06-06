@@ -10,10 +10,13 @@ function loadTransactions() {
   console.log("finito")
 }
 
+var fetchSize=4096
+
 function findMissingBlocks() {
   var rowCount = 0;
   var maxId = -1;
-  client.eachRow('SELECT id FROM blockchain', [], {autoPage: true},
+  client.eachRow('SELECT id FROM blockchain', [],
+    {fetchSize: fetchSize, autoPage: true, prepare: true, readTimeout: 0},
     function (n, row) {
        ++rowCount;
        blockSet.set(row.id)
@@ -25,7 +28,11 @@ function findMissingBlocks() {
     function (err, result) {
       if(err) {
        console.log(err)
+       console.log(rowCount)
        blockSet = new BitSet()
+       fetchSize= Math.floor(fetchSize / 2)
+       if(fetchSize < 1) fetchSize = 1
+       console.log("retring with fetchSize="+fetchSize)
        setTimeout(findMissingBlocks, 1000)
      } else {
        console.log("final read count="+rowCount+ " maxId="+maxId)

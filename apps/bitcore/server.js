@@ -1,36 +1,25 @@
-function trace(msg) {//*
-  console.log("TRACE: "+msg)/**/
-}
-function debug(msg) {//*
-  console.log("DEBUG: "+msg)/**/
+var MAX_WRITE_WAIT = 60000
+
+// logging
+function error(msg) {//*
+  console.log("ERROR: "+msg)/**/
 }
 function info(msg) {//*
   console.log("INFO : "+msg)/**/
 }
-function error(msg) {//*
-  console.log("ERROR: "+msg)/**/
+function trace(msg) {//*
+  console.log("TRACE: "+msg)/**/
 }
-function notrace() {}
-function nodebug() {}
 
 var process = require("process")
 var fs = require("fs")
 var bitcore = require("bitcore")
 var index = require('bitcore-node');
 
-// disabled as they are slowing down a lot
-//var InsightAPI = require('insight-api')
-//var InsightUI = require('insight-ui/bitcore-node')
-
 var Node = index.Node;
 var Bitcoin = index.services.Bitcoin;
 var Address = index.services.Address;
 var DB = index.services.DB;
-
-
-var currentBlock = 0
-var currentHeight = 0
-
 
 // configure and start bitcon
 var configuration = {
@@ -49,25 +38,34 @@ var configuration = {
             name: 'db',
             module: DB,
             config: {}
-        } /*, {
-         name: 'web',
-         module: Web,
-         config: {
-         port: 3001
-         }
-         } , {
-         name: 'insight-api',
-         module: InsightAPI ,
-         config: {}
-         }, {
-         name: 'insight-ui',
-         module: InsightUI ,
-         config: {}
-         } */]
+        } ]
 };
 
-fs.writeFile("server.pid", process.pid)
+var node = new Node(configuration);
 
+// connessione cassandra
+var cassandra = require('cassandra-driver')
+var client = new cassandra.Client({contactPoints: process.env.CASSANDRA_HOSTS.split(","), keyspace: 'sparkoin'})
+var insertQuery = 'INSERT INTO sparkoin.blockchain(id, block_json) VALUES(?,?)'
+
+// status
+var currentBlock = 0
+var currentHeight = 0
+var started = false
+var fetchSize = 4096
+
+// stats
+var BitSet = require("bit-set")
+var blockSet = new BitSet()
+var countBlocks = 0
+var countTransactions = 0
+var lastCheck = new Date().getTime()
+var lastCheckMinTime = 1000000
+var lastCheckMaxTime = 0
+var lastCountBlocks = 0
+var lastCountTransactions = 0
+
+// info memory usage
 function meminfo() {
   function mb(n) {
     var n1 = n / (1024*1024)
@@ -81,45 +79,33 @@ function meminfo() {
   return " tot="+mb(total)+" use="+mb(used)+" max="+mb(max)
 }
 
-var node = new Node(configuration);
-
-// connessione cassandra
-var cassandra = require('cassandra-driver')
-var client = new cassandra.Client({contactPoints: process.env.CASSANDRA_HOSTS.split(","), keyspace: 'sparkoin'})
-var insertQuery = 'INSERT INTO sparkoin.blockchain(id, block_json) VALUES(?,?)'
-
-// stats
-var countBlocks = 0
-var countTransactions = 0
-var lastCheck = new Date().getTime()
-var lastCheckMinTime = 1000000
-var lastCheckMaxTime = 0
-var lastCountBlocks = 0
-var lastCountTransactions = 0
+// graceful terminate
+function terminate() {
+  started = 0
+  node.services.bitcoind.stop(function() {
+      setTimeout(function () {
+        process.exit(0)
+      }, MAX_WRITE_WAIT)
+  })
+}
 
 function checkStatus(currentBlockChecked) {
 
-    notrace("checkstatus for " + currentBlockChecked)
+    //notrace("checkstatus for " + currentBlockChecked)
 
     // check if we need to exit
-    fs.exists('/app/data/bitcore/server.off', function (exists) {
-        if (exists)
-            node.services.bitcoind.stop(
-                function () {
-                    process.exit(0);
-                })
+    fs.exists('/app/data/bitcore/server.off', function(exists){
+      if(exists)
+        terminate()
     })
 
-    // check need of restart
+    // check if we need to restart
     fs.exists('/app/data/bitcore/server.restart', function (exists) {
         if (exists) {
             try {
                 fs.unlinkSync('/app/data/bitcore/server.restart')
             } catch (err) { }
-            node.services.bitcoind.stop(
-                function () {
-                    process.exit(0);
-                })
+            terminate()
         }
     })
 }
@@ -188,31 +174,24 @@ function decodeBlockBuffer(blockBuffer) {
 }
 
 // load transactions and write them in cassandra
-
-
-/**
- * Block retrieval function
- * Expect in this:
- *  - blockBuffer
- *  - currentBlock
- *  - err
- */
 function retrieveBlock() {
 
     // write the block
-    notrace("retrieved " + this.currentBlock)
+    //trace("retrieved " + this.currentBlock)
 
     if (this.err)
         error(this.err);
 
     var toSave = decodeBlockBuffer(this.blockBuffer)
-    //console.log("writing "+currentBlock)
+    //trace("writing "+currentBlock)
     var data = [this.currentBlock, JSON.stringify(toSave)]
     var beginInsert = Date.now()
     client.execute(insertQuery, data, {prepare: true},
         function (err) {
-            var now = new Date().getTime()
+            if (err)  error(err)
 
+            // collect stats
+            var now = new Date().getTime()
             var insertTime = (now-beginInsert)
             lastCheckMinTime = Math.min(lastCheckMinTime, insertTime)
             lastCheckMaxTime = Math.max(lastCheckMaxTime, insertTime)
@@ -222,12 +201,9 @@ function retrieveBlock() {
                 info(data[0] + ") blk#" + (countBlocks-lastCountBlocks) +  " tx#" + (countTransactions-lastCountTransactions) + " maxTime:"+lastCheckMaxTime+"ms |"+meminfo())
                 lastCountBlocks = countBlocks
                 lastCountTransactions = countTransactions
-                if(lastCheckMaxTime >10000) {
-                  info("!!! writes are too slow, restarting")
-                  node.services.bitcoind.stop(
-                      function () {
-                          process.exit(0);
-                      })
+                if(lastCheckMaxTime >MAX_WRITE_WAIT) {
+                  info("!!! writes are too slow, terminate (to restart)")
+                  terminate()
                 }
                 lastCheck = now
                 lastCheckMinTime = 1000000
@@ -235,48 +211,33 @@ function retrieveBlock() {
             }
             data[0].currentBlock = null
             data = null
-
-            // if a write error, notify and go on
-            if (err) {
-                error(err)
-            }
         })
 }
 
-/**
- * Note function calls retrieveBlock
- * which in turn calls loadTransactions recursively
- */
-var started = false
-var BitSet = require("bit-set")
-var blockSet = new BitSet()
-
 function findMissingBlocks() {
-  var rowCount = 0;
-  var maxId = -1;
-  client.eachRow('SELECT id FROM blockchain', [], {autoPage: true},
+  var resyncRowCount = 0
+  var resyncMaxId = -1
+
+  client.eachRow('SELECT id FROM blockchain', [],
+    {autoPage: true, fetchSize: fetchSize},
     function (n, row) {
-       ++rowCount;
+       ++resyncRowCount;
        blockSet.set(row.id)
-       maxId = Math.max(maxId, row.id)
-       if( (rowCount % 10000) == 0) {
-            console.log("resync count="+rowCount+ " maxId="+maxId)
+       resyncMaxId = Math.max(resyncMaxId, row.id)
+       if( (resyncRowCount % 10000) == 0) {
+         checkStatus()
+         info("resync count="+resyncRowCount+ " maxId="+resyncMaxId+" fetchSize="+fetchSize)
        }
     },
     function (err, result) {
-      if(err) {
-       console.log(err)
-       blockSet = new BitSet()
-       setTimeout(findMissingBlocks, 1000)
+      // even if there is an error... best effort done
+      if(err && fetchSize >1) {
+        console.log(err)
+        fetchSize = Math.floor(fetchSize / 2)
+        findMissingBlocks()
      } else {
-       console.log("resync final count="+rowCount+ " maxId="+maxId)
-       for(i=0; i<=maxId; i++) {
-         if(!blockSet.get(i)) {
-           console.log("missing "+i)
-           askForBlock(i)
-         }
-       }
-       currentHeight = Math.max(currentHeight, maxId)
+       info("resync final count="+resyncRowCount+ " maxId="+resyncMaxId)
+       currentHeight = Math.max(currentHeight, resyncMaxId)
        started = 1
        loadTransactions()
      }
@@ -284,14 +245,13 @@ function findMissingBlocks() {
 }
 
 function askForBlock(blockNum, callback) {
-  notrace("asking for block #" + currentBlock);
-  var context = {"currentBlock": currentBlock}
-  node.services.bitcoind.getBlock(currentBlock,
+  //trace("asking for block #" + blockNum);
+  var context = {"currentBlock": blockNum}
+  node.services.bitcoind.getBlock(blockNum,
     function (err, blockBuffer) {
         context.err = err
         context.blockBuffer = blockBuffer
         retrieveBlock.call(context)
-        ++currentBlock;
         if(callback) callback()
     })
 }
@@ -300,10 +260,14 @@ function loadTransactions() {
     if (!started)
        return;
     if (currentBlock <= currentHeight) {
-        while(blockSet.get(currentBlock)) {
+        while(blockSet.get(currentBlock))
           ++currentBlock;
-        }
-        askForBlock(currentBlock, loadTransactions)
+        var blockWriting = currentBlock
+        askForBlock(currentBlock, function() {
+          blockSet.set(blockWriting)
+          ++currentBlock;
+          loadTransactions()
+        })
         checkStatus(currentBlock);
     } else {
       setTimeout(loadTransactions, 1000)
@@ -312,7 +276,7 @@ function loadTransactions() {
 
 
 node.on('ready', function () {
-    //info('Bitcoin Node Ready');
+    info('Bitcoin Node Ready');
 });
 
 node.start(function () {
@@ -327,3 +291,5 @@ node.services.bitcoind.on('tip', function (height) {
     // block retrieved, go for the next
     loadTransactions()
 })
+
+fs.writeFile("server.pid", process.pid)
