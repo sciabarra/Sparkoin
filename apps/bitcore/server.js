@@ -1,4 +1,9 @@
-var MAX_WRITE_WAIT = 600000
+var process = require("process")
+
+// how many concurrent inserts ? servers * 10
+var cassandraHosts = process.env.CASSANDRA_HOSTS.split(",")
+var CONCURRENT_INSERTS = 100 * cassandraHosts.length
+var MAX_WRITE_WAIT = 60000 // a minute it is a bit too much - tune the concurrent inserts
 
 // logging
 function error(msg) {//*
@@ -11,7 +16,6 @@ function trace(msg) {//*
   console.log("TRACE: "+msg)/**/
 }
 
-var process = require("process")
 var fs = require("fs")
 var bitcore = require("bitcore")
 var index = require('bitcore-node');
@@ -64,6 +68,7 @@ var lastCheckMinTime = 1000000
 var lastCheckMaxTime = 0
 var lastCountBlocks = 0
 var lastCountTransactions = 0
+var countRunningInserts = 0
 
 // info memory usage
 function meminfo() {
@@ -83,13 +88,11 @@ function meminfo() {
 function terminate() {
   started = 0
   node.services.bitcoind.stop(function() {
-      setTimeout(function () {
-        process.exit(0)
-      }, MAX_WRITE_WAIT)
+      process.exit(0)
   })
 }
 
-function checkStatus(currentBlockChecked) {
+function checkStatus() {
 
     //notrace("checkstatus for " + currentBlockChecked)
 
@@ -186,9 +189,18 @@ function retrieveBlock() {
     //trace("writing "+currentBlock)
     var data = [this.currentBlock, JSON.stringify(toSave)]
     var beginInsert = Date.now()
+    ++countRunningInserts
+    var context = this
     client.execute(insertQuery, data, {prepare: true},
         function (err) {
-            if (err)  error(err)
+            --countRunningInserts
+
+            if (err) {
+              error("write error! retrying "+data[0])
+              askForBlock(data[0])
+              data = null
+              return
+            }
 
             // collect stats
             var now = new Date().getTime()
@@ -198,18 +210,19 @@ function retrieveBlock() {
 
             // display an informative message every 10 seconds
             if (now - lastCheck > 10000) {
-                info(data[0] + ") blk#" + (countBlocks-lastCountBlocks) +  " tx#" + (countTransactions-lastCountTransactions) + " maxTime:"+lastCheckMaxTime+"ms |"+meminfo())
+                info(data[0] + ") ins#"+countRunningInserts+" blk#" + (countBlocks-lastCountBlocks) +  " tx#" + (countTransactions-lastCountTransactions) + " maxTime:"+lastCheckMaxTime+"ms |"+meminfo())
                 lastCountBlocks = countBlocks
                 lastCountTransactions = countTransactions
                 if(started && lastCheckMaxTime >MAX_WRITE_WAIT) {
-                  info("!!! writes are too slow, terminate (to restart)")
-                  terminate()
+                  CONCURRENT_INSERTS = Math.floor(CONCURRENT_INSERTS/2)
+                  info("!!! writes are too slow, lowering concurrent writes to "+CONCURRENT_INSERTS)
+                  if(CONCURRENT_INSERTS==1)
+                    terminate()
                 }
                 lastCheck = now
                 lastCheckMinTime = 1000000
                 lastCheckMaxTime = 0
             }
-            data[0].currentBlock = null
             data = null
         })
 }
@@ -232,8 +245,9 @@ function findMissingBlocks() {
     function (err, result) {
       // even if there is an error... best effort done
       if(err && fetchSize >1) {
-        console.log(err)
+        //console.log(err)
         fetchSize = Math.floor(fetchSize / 2)
+        info("!!! read error, reducing fetch size to "+fetchSize)
         findMissingBlocks()
      } else {
        info("resync final count="+resyncRowCount+ " maxId="+resyncMaxId)
@@ -257,8 +271,16 @@ function askForBlock(blockNum, callback) {
 }
 
 function loadTransactions() {
+    checkStatus();
     if (!started)
        return;
+
+    // too many running transactions retry later
+    if(countRunningInserts > CONCURRENT_INSERTS) {
+      setTimeout(loadTransactions, CONCURRENT_INSERTS*100)
+      return;
+    }
+
     if (currentBlock <= currentHeight) {
         while(blockSet.get(currentBlock))
           ++currentBlock;
@@ -268,10 +290,11 @@ function loadTransactions() {
           ++currentBlock;
           loadTransactions()
         })
-        checkStatus(currentBlock);
-    } else {
-      setTimeout(loadTransactions, 1000)
+        return;
     }
+
+    // retry later
+    setTimeout(loadTransactions, 1000)
 }
 
 
