@@ -11,8 +11,8 @@ DIR=$(hostname -f)
 sudo chown  app /app/data 
 mkdir -p "/app/data/$DIR/data" "/app/data/$DIR/commit_log" "/app/data/$DIR/saved_caches"
 printf "\ndata_file_directories: [ \"/app/data/$DIR/data\" ]\ncommitlog_directory: /app/data/$DIR/commitlog\nsaved_caches_directory: /app/data/$DIR/saved_caches\nhints_directory: /app/data/$DIR/hints\n" >>/app/cassandra/conf/cassandra.yaml 
-#sed -i -e "s/^#MAX_HEAP_SIZE=.*/MAX_HEAP_SIZE=1G/" /app/cassandra/conf/cassandra-env.sh
-#sed -i -e "s/^#HEAP_NEWSIZE=.*/HEAP_NEWSIZE=100M/" /app/cassandra/conf/cassandra-env.sh
+sed -i -e "s/^#MAX_HEAP_SIZE=.*/MAX_HEAP_SIZE=1G/" /app/cassandra/conf/cassandra-env.sh
+sed -i -e "s/^#HEAP_NEWSIZE=.*/HEAP_NEWSIZE=100M/" /app/cassandra/conf/cassandra-env.sh
 /app/cassandra/bin/cassandra >/dev/null
 while ! nc -z $(hostname -i)  9160
 do echo wait local cassandra ; sleep 5

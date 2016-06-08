@@ -9,15 +9,15 @@ while getopts hld opt; do case $opt in
    d) DEVEL=true ;;
 esac ; done
 shift "$((OPTIND - 1))"
-if test -n "$1"
-then EXTRA="--no-deps" 
-else EXTRA=""
-fi	
 if $DEVEL
-then CMD="docker-compose -p $PROJECT -f $HERE/docker-compose.yml -f $HERE/docker-compose-devel.yml up  -d --no-color $EXTRA"
-else CMD="docker-compose -p $PROJECT -f $HERE/docker-compose.yml up -d --no-color $EXTRA"
+then CMD="docker-compose -p $PROJECT -f $HERE/docker-compose.yml -f $HERE/docker-compose-devel.yml"
+else CMD="docker-compose -p $PROJECT -f $HERE/docker-compose.yml"
 fi
-$CMD "$@"
+if test -z "$1"
+then $CMD up -d --no-color
+     $CMD scale cassandra=3
+else $CMD up -d --no-color --no-deps "$@"
+fi
 if $LOGS 
 then bash $HERE/logs.sh "$@"
 fi
