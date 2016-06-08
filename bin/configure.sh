@@ -30,5 +30,7 @@ echo "Volumes created:"
 docker volume create --name cassandra
 docker volume create --name cassandra2
 docker volume create --name cassandra3
+docker volume create --name cassandra4
+docker volume create --name cassandra5
 docker volume create --name bitcore
 echo You can now build your enviroment running build.sh

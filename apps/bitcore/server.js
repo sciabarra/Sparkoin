@@ -1,8 +1,7 @@
 var process = require("process")
 
 // how many concurrent inserts ? servers * 10
-var cassandraHosts = process.env.CASSANDRA_HOSTS.split(",")
-var CONCURRENT_INSERTS = 100 * cassandraHosts.length
+var CONCURRENT_INSERTS = 1024
 var MAX_WRITE_WAIT = 60000 // a minute it is a bit too much - tune the concurrent inserts
 
 // logging
@@ -244,11 +243,15 @@ function findMissingBlocks() {
     },
     function (err, result) {
       // even if there is an error... best effort done
-      if(err && fetchSize >1) {
-        //console.log(err)
+      if(err) {
         fetchSize = Math.floor(fetchSize / 2)
-        info("!!! read error, reducing fetch size to "+fetchSize)
-        findMissingBlocks()
+        if(fetchSize <= 1) {
+          terminate()
+        } else { 
+          error(err)
+          info("!!! read error, reducing fetch size to "+fetchSize)
+          findMissingBlocks()
+        }
      } else {
        info("resync final count="+resyncRowCount+ " maxId="+resyncMaxId)
        currentHeight = Math.max(currentHeight, resyncMaxId)
