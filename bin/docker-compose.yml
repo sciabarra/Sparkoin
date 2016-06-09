@@ -52,6 +52,40 @@ cassandra3:
   links:
     - "cassandra:cassandra.loc"
 
+cassandra4:
+  hostname: cassandra4
+  image: sparkoin/cassandra:5
+  domainname: loc
+  expose:
+   - "9042"
+   - "9160"
+   - "8080"
+  environment:
+    JAVA_OPTS: -Ddefault.host=cassandra4.loc:9160 -Dfile.encoding=UTF8
+    CQLSH_HOST: cassandra3.loc
+  restart: always
+  volumes:
+    - cassandra4:/app/data/cassandra
+  links:
+    - "cassandra:cassandra.loc"
+
+cassandra5:
+  hostname: cassandra5
+  image: sparkoin/cassandra:5
+  domainname: loc
+  expose:
+   - "9042"
+   - "9160"
+   - "8080"
+  environment:
+    JAVA_OPTS: -Ddefault.host=cassandra5.loc:9160 -Dfile.encoding=UTF8
+    CQLSH_HOST: cassandra5.loc
+  restart: always
+  volumes:
+    - cassandra5:/app/data/cassandra
+  links:
+    - "cassandra:cassandra.loc"
+
 bitcore:
   hostname: bitcore
   domainname: loc
@@ -60,11 +94,13 @@ bitcore:
    - "cassandra:cassandra.loc"
    - "cassandra2:cassandra2.loc"
    - "cassandra3:cassandra3.loc"
+   - "cassandra4:cassandra4.loc"
+   - "cassandra5:cassandra5.loc"
   restart: always
   volumes: 
     - "bitcore:/app/data/bitcore" 
   environment:
-    CASSANDRA_HOSTS: "cassandra.loc,cassandra2.loc,cassandra3.loc"
+    CASSANDRA_HOSTS: "cassandra.loc,cassandra2.loc,cassandra3.loc,cassandra4.loc,cassandra5.loc"
     BITCOIN_NETWORK: livenet 
   ports: [ "5858:5858", "3001:3001" ]
 

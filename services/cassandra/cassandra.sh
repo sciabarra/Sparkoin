@@ -9,10 +9,5 @@ sed -i -e 's/seeds: "127.0.0.1"/seeds: "cassandra.loc"/' /app/cassandra/conf/cas
 sed -i -e "s/^#MAX_HEAP_SIZE=.*/MAX_HEAP_SIZE=1G/" /app/cassandra/conf/cassandra-env.sh
 sed -i -e "s/^#HEAP_NEWSIZE=.*/HEAP_NEWSIZE=100M/" /app/cassandra/conf/cassandra-env.sh
 sudo chown -Rvf app /app/data/cassandra
-/app/cassandra/bin/cassandra >/dev/null
-while ! nc -z cassandra 9042
-do sleep 1
-done
-cd /app/apps/cassandra
-bash migrate.sh
-tail -f /app/cassandra/logs/system.log
+bash /app/apps/cassandra/migrate.sh &
+/app/cassandra/bin/cassandra -f
