@@ -2,6 +2,8 @@
 
 This is the documentation of Sparkoin v0.2
 
+It is alpha quality, it can download the blockchain in cassandra but there can be performance issues if you do not have enough memory (a lot ) and disk space (a lot too).
+
 ## Prerequisites
 
 Before building you need:
