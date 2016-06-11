@@ -56,7 +56,6 @@ var insertQuery = 'INSERT INTO sparkoin.blockchain(id, block_json) VALUES(?,?)'
 var currentBlock = 0
 var currentHeight = 0
 var started = false
-var fetchSize = 4096
 
 // stats
 var BitSet = require("bit-set")
@@ -215,9 +214,10 @@ function retrieveBlock() {
                 lastCountTransactions = countTransactions
                 if(started && lastCheckMaxTime >MAX_WRITE_WAIT) {
                   CONCURRENT_INSERTS = Math.floor(CONCURRENT_INSERTS/2)
-                  info("!!! writes are too slow, lowering concurrent writes to "+CONCURRENT_INSERTS)
-                  if(CONCURRENT_INSERTS==1)
+                  if(CONCURRENT_INSERTS<=2)
                     terminate()
+                  else
+                    info("!!! writes are too slow, lowering concurrent writes to "+CONCURRENT_INSERTS)
                 }
                 lastCheck = now
                 lastCheckMinTime = 1000000
@@ -227,33 +227,44 @@ function retrieveBlock() {
         })
 }
 
-function findMissingBlocks() {
-  var resyncRowCount = 0
-  var resyncMaxId = -1
 
-  client.eachRow('SELECT id FROM blockchain', [],
-    {autoPage: true, fetchSize: fetchSize},
+var resyncRowCount = 0
+var resyncMaxId = -1
+var resyncLastId = 0;
+var resyncFetchSize = 1024
+
+function findMissingBlocks() {
+  var found = false;
+  client.eachRow('SELECT id FROM blockchain where token(id) > token(?)', [resyncLastId],
+    {autoPage: true, prepare: true, fetchSize: resyncFetchSize},
     function (n, row) {
        ++resyncRowCount;
+       resyncLastId = row.id
        blockSet.set(row.id)
        resyncMaxId = Math.max(resyncMaxId, row.id)
-       if( (resyncRowCount % 10000) == 0) {
+       found = true
+       if(resyncRowCount % 10000 ==0 ) {
          checkStatus()
-         info("resync count="+resyncRowCount+ " maxId="+resyncMaxId+" fetchSize="+fetchSize)
+         info("resync count="+resyncRowCount+ " maxId="+resyncMaxId+" fetchSize="+resyncFetchSize)
        }
     },
     function (err, result) {
       // even if there is an error... best effort done
-      if(err && fetchSize >1) {
+      if(err) {
         //console.log(err)
-        fetchSize = Math.floor(fetchSize / 2)
-        info("!!! read error, reducing fetch size to "+fetchSize)
-        findMissingBlocks()
-     } else {
-       info("resync final count="+resyncRowCount+ " maxId="+resyncMaxId)
+        if(resyncFetchSize >16) {
+          resyncFetchSize = Math.floor(resyncFetchSize / 2)
+          info("!!! read error, reducing fetch size to "+resyncFetchSize)
+        }
+        setTimeout(findMissingBlocks, 0)
+     } else /*if(found) {
+       resyncFetchSize = 1024
+       setTimeout(findMissingBlocks, 0)
+     } else */ {
+       info("**** resync final count="+resyncRowCount+ " maxId="+resyncMaxId+" bitSet#"+blockSet.cardinality())
        currentHeight = Math.max(currentHeight, resyncMaxId)
        started = 1
-       loadTransactions()
+       setTimeout(loadTransactions, 0)
      }
     })
 }
